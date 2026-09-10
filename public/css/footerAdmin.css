@@ -1,0 +1,25 @@
+
+:root {
+    --footer-admin-bg: #181b1f;
+    --footer-admin-text: #fff;
+    --footer-admin-link: #EA4E2D;
+    --footer-admin-muted: #bdbdbd;
+    --footer-admin-border: #23272b;
+}
+
+    background: var(--footer-admin-bg);
+    color: var(--footer-admin-text);
+    border-top: 1px solid var(--footer-admin-border);
+    font-family: 'Montserrat', Arial, sans-serif;
+    padding: 2.5rem 0 1.5rem;
+}
+
+    color: var(--footer-admin-link);
+    font-size: 1.5rem;
+    letter-spacing: 1px;
+    font-weight: 900;
+}
+
+    color: var(--footer-admin-muted);
+    font-size: 1.20rem;
+} 

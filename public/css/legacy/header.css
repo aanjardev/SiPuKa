@@ -1,0 +1,115 @@
+/* Header-specific CSS variables */
+:root {
+    --header-primary: #020405;
+    --header-secondary: #EA4E2D;
+    --header-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --header-transition: all 0.3s ease;
+}
+
+/* Scoped header styles */
+#main-header.navbar {
+    background-color: var(--header-primary) !important;
+    padding: 1rem 0;
+    box-shadow: var(--header-shadow);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 2000;
+}
+
+#main-header .navbar-brand {
+    padding: 0;
+    display: flex;
+    align-items: center;
+}
+
+#main-header .navbar-brand img {
+    max-width: 90px;
+    height: auto;
+    transition: var(--header-transition);
+}
+
+#main-header .brand-text {
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    margin-left: 1rem;
+    transition: var(--header-transition);
+}
+
+#main-header .navbar-toggler {
+    border: none;
+    padding: 0.5rem;
+}
+
+#main-header .navbar-toggler:focus {
+    box-shadow: none;
+}
+
+#main-header .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.75%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+#main-header .nav-item {
+    margin: 0 0.5rem;
+}
+
+#main-header .nav-link {
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-weight: 500;
+    padding: 0.5rem 1rem !important;
+    border-radius: 6px;
+    transition: var(--header-transition);
+}
+
+#main-header .nav-link.active {
+    color: #ffffff !important;
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+#main-header .btn-admin {
+    background-color: var(--header-secondary);
+    color: white !important;
+    padding: 0.5rem 1.25rem !important;
+    border-radius: 6px;
+    margin-left: 1rem;
+    transition: var(--header-transition);
+}
+
+#main-header .btn-admin:hover {
+    background-color: #d23f1f;
+    transform: translateY(-1px);
+}
+
+/* Responsive styles */
+@media (max-width: 991px) {
+    #main-header .navbar-collapse {
+        background-color: var(--header-primary);
+        padding: 1rem;
+        border-radius: 8px;
+        margin-top: 1rem;
+    }
+
+    #main-header .nav-item {
+        margin: 0.25rem 0;
+    }
+
+    #main-header .btn-admin {
+        margin: 0.5rem 0 0 0;
+        text-align: center;
+        display: inline-block;
+    }
+}
+
+/* Mobile responsive brand text */
+@media (max-width: 576px) {
+    #main-header .brand-text {
+        font-size: 1.25rem;
+    }
+
+    #main-header .navbar-brand img {
+        max-width: 70px;
+    }
+} 

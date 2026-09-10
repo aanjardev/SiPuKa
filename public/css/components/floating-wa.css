@@ -1,0 +1,50 @@
+
+:root {
+    --wa-color: #25D366;
+    --wa-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --wa-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+    --wa-transition: all 0.3s ease;
+}
+
+.floating-wa {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background-color: var(--wa-color);
+    color: white;
+    padding: 0.5rem 1.5rem;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: var(--wa-shadow-md);
+    transition: var(--wa-transition);
+    z-index: 1000;
+}
+
+.floating-wa:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--wa-shadow-lg);
+    color: white;
+    text-decoration: none;
+}
+
+.floating-wa i {
+    font-size: 1.25rem;
+}
+
+
+@media (max-width: 576px) {
+    .floating-wa {
+        bottom: 1rem;
+        right: 1rem;
+        padding: 0.75rem 1.25rem;
+        font-size: 0.9rem;
+    }
+    
+    .floating-wa i {
+        font-size: 1.1rem;
+    }
+} 

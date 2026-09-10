@@ -1,0 +1,1 @@
+document.addEventListener("DOMContentLoaded",function(){const e=document.querySelector('input[name="search"]'),t=document.getElementById("searchForm");let n;e&&t&&(e.addEventListener("input",function(){clearTimeout(n),n=setTimeout(function(){t.submit()},500)}),e.addEventListener("keypress",function(o){o.key==="Enter"&&(o.preventDefault(),clearTimeout(n),t.submit())}))});

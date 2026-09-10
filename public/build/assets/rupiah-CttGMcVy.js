@@ -1,0 +1,1 @@
+function n(e){return"Rp"+Number(e||0).toLocaleString("id-ID")}function a(e=""){const r=e.toString().replace(/\D/g,"");return Number(r||0)}function t(e){const r=a(e.value);return e.value=r?new Intl.NumberFormat("id-ID").format(r):"",e.dataset.raw=r,r}export{a as c,n as f,t as m};

@@ -1,0 +1,813 @@
+/* Variables */
+:root {
+    --primary-color: #2F353F;
+    --secondary-color: #EA4E2D;
+    --text-color: #333333;
+    --gray-100: #f8f9fa;
+    --gray-200: #e9ecef;
+    --gray-300: #dee2e6;
+    --gray-400: #ced4da;
+    --gray-500: #adb5bd;
+    --gray-600: #6c757d;
+    --gray-700: #495057;
+    --gray-800: #343a40;
+    --gray-900: #212529;
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+    --transition-base: all 0.3s ease;
+}
+
+/* Base Styles */
+body {
+    font-family: 'Montserrat', sans-serif;
+    color: var(--text-color);
+    line-height: 1.6;
+    background-color: var(--gray-100);
+}
+
+/* Typography */
+.section-title {
+    color: var(--primary-color);
+    font-size: 2rem;
+    font-weight: 700;
+    position: relative;
+    padding-bottom: 0.5rem;
+    margin-bottom: 2rem;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 60px;
+    height: 3px;
+}
+
+/* Carousel Styles - FIXED */
+#promotion {
+    position: relative;
+    overflow: hidden;
+}
+
+#promotion .carousel {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    background-color: #f8f9fa;
+}
+
+.carousel-inner {
+    width: 100%;
+    aspect-ratio: 7 / 3;
+    height: auto;
+    min-height: 220px;
+    max-height: 70vh;
+    position: relative;
+}
+
+.carousel-item {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.carousel-item.active {
+    opacity: 1;
+}
+
+.banner-frame {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 12px;
+    background: center / cover no-repeat var(--banner-url, #111);
+}
+
+.banner-frame::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: inherit;
+    filter: blur(18px);
+    transform: scale(1.08);
+    opacity: 0.65;
+    z-index: 0;
+}
+
+.banner-img {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    display: block;
+}
+
+/* Carousel Controls */
+.carousel-control-prev,
+.carousel-control-next {
+    width: 50px;
+    height: 50px;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 50%;
+    top: 50%;
+    transform: translateY(-50%);
+    margin: 0 20px;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+.carousel-control-prev:hover,
+.carousel-control-next:hover {
+    opacity: 1;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.carousel-control-prev {
+    left: 10px;
+}
+
+.carousel-control-next {
+    right: 10px;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    width: 25px;
+    height: 25px;
+}
+
+/* Carousel Indicators */
+.carousel-indicators {
+    margin-bottom: 15px;
+}
+
+.carousel-indicators [data-bs-target] {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.3);
+    border: none;
+    margin: 0 5px;
+}
+
+.carousel-indicators .active {
+    background-color: var(--secondary-color);
+}
+
+/* Responsive Adjustments for Carousel */
+@media (max-width: 991px) and (min-width: 768px) {
+    .carousel-inner {
+        max-height: 60vh;
+    }
+
+    .carousel-control-prev,
+    .carousel-control-next {
+        width: 45px;
+        height: 45px;
+        margin: 0 15px;
+    }
+
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+@media (max-width: 767px) {
+    .carousel-inner {
+        max-height: 55vh;
+    }
+
+    .carousel-control-prev,
+    .carousel-control-next {
+        width: 40px;
+        height: 40px;
+        margin: 0 10px;
+        opacity: 0.8;
+    }
+
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        width: 18px;
+        height: 18px;
+    }
+
+    .carousel-indicators {
+        margin-bottom: 10px;
+    }
+
+    .carousel-indicators [data-bs-target] {
+        width: 10px;
+        height: 10px;
+        margin: 0 3px;
+    }
+}
+
+@media (max-width: 576px) {
+    .carousel-inner {
+        max-height: 50vh;
+        min-height: 200px;
+    }
+
+    #promotion .carousel {
+        border-radius: 8px;
+    }
+
+    .carousel-control-prev,
+    .carousel-control-next {
+        width: 35px;
+        height: 35px;
+        margin: 0 5px;
+    }
+
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        width: 16px;
+        height: 16px;
+    }
+}
+
+/* Categories */
+
+a{
+    color: #070D0D;
+    font-weight: 700;
+}
+
+a:hover{
+    color: #EA4E2D;
+}
+#Kategori-Display .col img {
+    border-radius: 10px;
+    transition: var(--transition-base);
+}
+
+#Kategori-Display .col img:hover {
+    transform: translateY(-5px);
+}
+
+/* Product Cards */
+.produk-baru-item {
+    transition: var(--transition-base);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.produk-baru-item:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.img-wrapper {
+    height: 200px;
+    overflow: hidden;
+}
+
+.img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: var(--transition-base);
+}
+
+.produk-baru-item:hover .img-wrapper img {
+    transform: scale(1.05);
+}
+
+.card-title {
+    font-size: 0.9rem;
+    color: var(--primary-color);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* YouTube Section */
+.youtube-section {
+    background-color: white;
+    padding: 4rem 0;
+    position: relative;
+}
+
+.youtube-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    background: linear-gradient(45deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    opacity: 0.05;
+}
+
+.youtube-container {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+}
+
+.youtube-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.youtube-title {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.youtube-title h2 {
+    color: var(--primary-color);
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.youtube-title p {
+    color: var(--gray-600);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .carousel-item img {
+        height: 300px;
+    }
+
+    .section-title {
+        font-size: 1.75rem;
+    }
+
+    .img-wrapper {
+        height: 150px;
+    }
+}
+
+@media (max-width: 576px) {
+    .carousel-item img {
+        height: 200px;
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+    }
+
+    .youtube-section {
+        padding: 2rem 0;
+    }
+}
+
+* {
+    font-family: "Montserrat", sans-serif;
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+/* Prevent content hiding behind fixed navbar */
+body {
+    padding-top: 110px;
+}
+
+/* Navigation */
+.navbar {
+    padding:1rem 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 2000;
+}
+
+.navbar-brand img {
+    max-width: 90px;
+}
+
+.navbar-nav .nav-link {
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    transition: border-bottom 0.3s ease;
+}
+
+/* Search bar & suggestions */
+.home-search-section {
+    position: relative;
+    z-index: 1200;
+    overflow: visible;
+}
+
+.search-suggest-wrapper {
+    position: relative;
+    z-index: 1050;
+}
+
+.search-input-container,
+form.d-flex {
+    position: relative;
+    z-index: 1040;
+}
+
+.search-suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border: 1px solid var(--gray-300);
+    border-top: none;
+    box-shadow: var(--shadow-md);
+    z-index: 1060;
+    display: none;
+    overflow: visible;
+}
+
+.search-suggestions.show {
+    display: block;
+}
+
+.btn-search-plain {
+    background: #fff;
+    color: var(--gray-700);
+    border: 0;
+    border-left: 1px solid var(--gray-300);
+    padding: 0.65rem 1rem;
+    font-weight: 600;
+}
+
+.btn-search-plain:hover,
+.btn-search-plain:focus {
+    background: var(--gray-100);
+    color: var(--primary-color);
+}
+
+.suggestion-item {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.6rem 0.9rem;
+    text-decoration: none;
+    color: var(--text-color);
+}
+
+.suggestion-item:hover {
+    background: var(--gray-100);
+}
+
+.suggestion-media {
+    width: 44px;
+    height: 44px;
+    flex: 0 0 44px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--gray-200);
+    background: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.suggestion-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.suggestion-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    min-width: 0;
+    flex: 1;
+}
+
+.suggestion-name {
+    font-weight: 600;
+    color: var(--primary-color);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.suggestion-meta {
+    font-size: 0.85rem;
+    color: var(--gray-600);
+    white-space: nowrap;
+}
+
+
+/* .navbar-toggler.always-visible {
+    display: block !important;
+} */
+
+@media (min-width: 992px) {
+    .navbar-collapse {
+        display: flex;
+    }
+}
+
+@media (max-width: 991px) {
+    .navbar-nav {
+        margin-top: 1rem;
+        text-align: center;
+    }
+}
+
+/* Section Titles */
+.section-title {
+    font-size: 1.25rem;
+    font-weight: 800;
+    padding-bottom: 0.5rem;
+    border-bottom: 4px solid #070D0D;
+}
+
+@media (min-width: 768px) {
+    .section-title {
+        font-size: 1.5rem;
+    }
+}
+
+/* Categories */
+#Kategori-Display img {
+    width: 100%;
+    height: auto;
+    transition: transform 0.3s ease;
+}
+
+#Kategori-Display img:hover {
+    transform: none;
+}
+
+.whatsapp-float {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+.whatsapp-float img {
+    width: 60px;
+    height: 60px;
+    transition: transform 0.3s ease;
+}
+.whatsapp-float:hover img {
+    transform: scale(1.1);
+}
+.whatsapp-float span {
+    display: none;
+    position: absolute;
+    bottom: 70px;
+    right: 0;
+    background-color: #25D366;
+    color: white;
+    padding: 5px 15px;
+    border-radius: 5px;
+    font-size: 14px;
+}
+.whatsapp-float:hover span {
+    display: block;
+    transition-duration: 500ms;
+}
+
+@media (max-width: 576px) {
+    #Kategori-Display .row {
+        row-gap: 1rem;
+    }
+}
+
+/* Products */
+.produk-baru-item {
+    /* aspect-ratio: 4 / 3; */
+    border: 1px solid rgba(7, 13, 13, 0.1);
+    border-radius: 10px;
+    box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.5s ease;
+}
+
+.produk-baru-item:hover {
+    border: 2px solid #070D0D;
+    transform: translateY(-5px);
+}
+
+.ratio-box {
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+}
+
+.produk-baru-item img {
+    width: 100%;
+    margin: 0 auto;
+    object-fit: contain;
+}
+
+.produk-baru-item .card-title {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.produk-baru-item .card-text {
+    font-size: 0.9375rem;
+    font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    .produk-baru-item .card-title {
+        font-size: 0.875rem;
+    }
+    .produk-baru-item .card-text {
+        font-size: 0.8125rem;
+    }
+}
+
+/* Horizontal Product List on Mobile */
+@media (max-width: 576px) {
+    .product-list {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        gap: 1rem;
+    }
+    .product-list .col {
+        flex: 0 0 auto;
+        width: 80%;
+    }
+}
+
+/* Brands */
+#Kategori-Display-Brand .col {
+    display: flex;
+}
+
+#Kategori-Display-Brand .brand-card {
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 20px 25px;
+}
+
+#Kategori-Display-Brand .brand-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+}
+
+#Kategori-Display-Brand .row {
+    justify-content: center;
+}
+
+#Kategori-Display-Brand {
+    margin-bottom: 3rem;
+}
+
+/* Benefits */
+#Benefit {
+    margin-bottom: 2rem;
+}
+
+#Benefit-Item {
+    margin-bottom: 4rem;
+}
+
+#Benefit-Item .col {
+    transition: none;
+}
+
+#Benefit-Item img {
+    margin-bottom: 1rem;
+}
+
+.benefit-title {
+    font-size: 0.75rem;
+    font-weight: 650;
+}
+
+@media (min-width: 768px) {
+    .benefit-title {
+        font-size: 0.875rem;
+    }
+}
+
+/* Footer */
+.footer-title {
+    font-size: 0.9375rem;
+    font-weight: 700;
+}
+
+footer a {
+    font-size: 0.75rem;
+    color: white;
+    text-decoration: none;
+    transition: border-bottom 0.3s ease;
+}
+
+footer a:hover {
+    border-bottom: 1px solid white;
+}
+
+.logo-medplace img {
+    max-width: 60px;
+}
+
+#Logo-Medsos img {
+    max-width: 30px;
+}
+
+@media (max-width: 576px) {
+    .footer-title {
+        font-size: 0.8125rem;
+    }
+    footer a {
+        font-size: 0.6875rem;
+    }
+    .logo-medplace img {
+        max-width: 50px;
+    }
+    #Logo-Medsos img {
+        max-width: 25px;
+    }
+}
+
+.category-link {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    border-radius: 16px;
+    transition: all 0.3s ease;
+    padding: 15px;
+    background: white;
+    border: 2px solid var(--gray-300);
+}
+
+.category-link:hover {
+    transform: translateY(-5px);
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow-md);
+}
+
+.category-image {
+    width: 100%;
+    height: auto;
+    transition: all 0.3s ease;
+    display: block;
+}
+
+.category-text {
+    text-align: center;
+    margin-top: 10px;
+    color: var(--primary-color);
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+#Kategori-Display .row {
+    --bs-gutter-x: 1.5rem;
+    --bs-gutter-y: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .category-link {
+        padding: 12px;
+    }
+
+    .category-text {
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .category-link {
+        padding: 10px;
+    }
+
+    #Kategori-Display .row {
+        --bs-gutter-x: 1rem;
+        --bs-gutter-y: 1rem;
+    }
+}
