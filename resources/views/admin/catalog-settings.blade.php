@@ -214,7 +214,7 @@
                                     $path = $cat_setting->logo_path;
                                     $url = Str::startsWith($path, 'photos/') ? asset('storage/' . $path) : asset($path);
                         @endphp
-                        <img src="{{ $cat_setting->logo_url }}" class="img-fluid">
+                        <img src="{{ asset('mainIMG/logopk.png') }}" class="img-fluid" alt="Logo Pusat Kamera Malang" style="background: #111;">
                     </div>
                     <input type="file" class="form-control form-control-sm" name="photo_logo" accept="image/png,image/jpeg,image/jpg,image/webp" data-max-bytes="2097152" data-max-label="2MB">
                     <div class="invalid-feedback">Ukuran file terlalu besar. Maksimal 2MB.</div>

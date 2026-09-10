@@ -1,217 +1,120 @@
 @extends('layouts.customer')
 
-@section('title', 'Hubungi Kami - ' . ($cat_setting->nama_website ?? 'Dinoyo Kamera'))
+@php
+    $rawPhone = preg_replace('/\D+/', '', $store['telepon'] ?? $cat_setting?->nomor_telfon ?? '');
+    if ($rawPhone && str_starts_with($rawPhone, '0')) {
+        $rawPhone = '62' . substr($rawPhone, 1);
+    } elseif ($rawPhone && str_starts_with($rawPhone, '8')) {
+        $rawPhone = '62' . $rawPhone;
+    }
+    $whatsAppUrl = $rawPhone ? 'https://wa.me/' . $rawPhone : null;
+    $mapsUrl = $store['link_maps'] ?? $store['embed'] ?? null;
+    $socials = [
+        ['url' => $cat_setting?->instagram_link, 'icon' => 'fa-instagram', 'label' => 'Instagram'],
+        ['url' => $cat_setting?->tiktok_link, 'icon' => 'fa-tiktok', 'label' => 'TikTok'],
+        ['url' => $cat_setting?->youtube_link, 'icon' => 'fa-youtube', 'label' => 'YouTube'],
+        ['url' => $cat_setting?->facebook_link, 'icon' => 'fa-facebook-f', 'label' => 'Facebook'],
+    ];
+@endphp
+
+@section('title', 'Hubungi Kami — Pusat Kamera Malang')
 
 @push('styles')
-    <link rel="stylesheet" href="{{ \App\Helpers\CssAssetHelper::css('css/legacy/contactStore.css') }}">
+    <link rel="stylesheet" href="{{ \App\Helpers\CssAssetHelper::css('css/legacy/contact-brutal.css') }}?v=1">
 @endpush
 
 @section('content')
-
-    <!-- Main Content -->
-    <main class="contact-page">
+<main class="contact-brutal">
+    {{-- <header class="contact-hero">
         <div class="container">
-
-            <!-- Social Media & Marketplace -->
-            <div class="platform-card mb-5" data-aos="fade-up">
-                <div class="text-center mb-4">
-                    <h2 class="platform-title">Temukan Kami di Berbagai Platform</h2>
-                    <p class="platform-subtitle">Ikuti dan belanja di kanal resmi {{ $cat_setting->nama_website }}.</p>
-                </div>
-                <div class="platform-grid">
-                    <a href="{{ $cat_setting->facebook_link }}" class="platform-item" target="_blank" rel="noopener">
-                        <i class="fab fa-facebook-f"></i>
-                        <span>Facebook</span>
-                    </a>
-                    <a href="{{ $cat_setting->instagram_link }}" class="platform-item" target="_blank" rel="noopener">
-                        <i class="fab fa-instagram"></i>
-                        <span>Instagram</span>
-                    </a>
-                    <a href="{{ $cat_setting->youtube_link }}" class="platform-item" target="_blank" rel="noopener">
-                        <i class="fab fa-youtube"></i>
-                        <span>YouTube</span>
-                    </a>
-                    <a href="{{ $cat_setting->tiktok_link }}" class="platform-item" target="_blank" rel="noopener">
-                        <i class="fab fa-tiktok"></i>
-                        <span>TikTok</span>
-                    </a>
-                    <a href="{{ $cat_setting->tokopedia_link }}" class="platform-item" target="_blank" rel="noopener">
-                        <img src="https://raw.githubusercontent.com/aanjardev/assets/main/icon/tokopedia-svgrepo-com.png" alt="Tokopedia">
-                        <span>Tokopedia</span>
-                    </a>
-                    <a href="{{ $cat_setting->shopee_link }}" class="platform-item" target="_blank" rel="noopener">
-                        <img src="https://img.icons8.com/?size=100&id=OO5wGWyvSK0L&format=png&color=000000" alt="Shopee">
-                        <span>Shopee</span>
-                    </a>
+            <span class="contact-kicker">KONSULTASI GRATIS • TANPA BIKIN BINGUNG</span>
+            <div class="contact-hero-grid">
+                <h1>AYO<br><span>NGOBROL.</span></h1>
+                <div>
+                    <p>Ceritakan kebutuhan dan budgetmu. Kami bantu pilih kamera pertama atau paket fotografi yang paling pas.</p>
+                    @if($whatsAppUrl)
+                        <a href="{{ $whatsAppUrl }}?text={{ urlencode('Halo Pusat Kamera Malang, saya ingin konsultasi kamera sesuai kebutuhan dan budget saya.') }}" target="_blank" rel="noopener">CHAT WHATSAPP <i class="bi bi-arrow-up-right"></i></a>
+                    @endif
                 </div>
             </div>
+        </div>
+    </header> --}}
 
-            <!-- Store Locations -->
-            <div class="row g-3 justify-content-center" data-aos="fade-up" data-aos-delay="100">
-                @foreach($branches as $branch)
-                <div class="col-xl-3 col-lg-4 col-md-6">
-                    <div class="location-card h-100 d-flex flex-column">
-                        <div class="map-container">
-                            <iframe src="{{ $branch['embed'] }}" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                        </div>
-                        <div class="card-body d-flex flex-column" style="padding-left: 13px; padding-right: 13px;">
-                            <h3 class="store-name">{{ $branch['nama'] }}</h3>
-                            <div class="info-item">
-                                <i class="bi bi-clock"></i>
+    <section class="contact-main">
+        <div class="container">
+            <div class="contact-grid">
+                <div class="contact-details">
+                    <div class="contact-section-title"><span>01</span><h2>KUNJUNGI TOKO</h2></div>
+                    <article class="store-card">
+                        <span class="store-label">SATU TOKO, SIAP MEMBANTU</span>
+                        <h3>{{ $store['nama'] ?? 'Pusat Kamera Malang' }}</h3>
+                        <ul>
+                            <li><i class="bi bi-geo-alt-fill"></i><div><small>ALAMAT</small><strong>{{ $store['alamat'] ?? 'Alamat toko akan segera diperbarui.' }}</strong></div></li>
+                            <li><i class="bi bi-whatsapp"></i><div><small>WHATSAPP</small>@if($whatsAppUrl)<a href="{{ $whatsAppUrl }}" target="_blank" rel="noopener">{{ $store['telepon'] ?? $cat_setting?->nomor_telfon }}</a>@else<strong>Nomor belum tersedia</strong>@endif</div></li>
+                            <li><i class="bi bi-clock-fill"></i><div><small>HARI INI</small><strong>{{ data_get($store, 'jam.hari_ini.hari', 'Jadwal') }} • {{ data_get($store, 'jam.hari_ini.slot', 'Belum tersedia') }}</strong></div></li>
+                        </ul>
+
+                        @if(data_get($store, 'jam.harian'))
+                            <details class="hours-dropdown">
+                                <summary>LIHAT JAM OPERASIONAL <i class="bi bi-chevron-down"></i></summary>
                                 <div>
-                                    <button class="btn p-0 text-start d-inline-flex align-items-center justify-content-between w-300" style="margin-left:-2px;"
-                                        data-bs-toggle="collapse"
-                                        data-bs-target="#jamLengkap{{ $loop->index }}"
-                                        aria-expanded="false"
-                                        aria-controls="jamLengkap{{ $loop->index }}">
-                                        <span class="fw-semibold text-dark" style="font-size: 14px !important;">Hari ini ({{ $branch['jam']['hari_ini']['hari'] }}): {{ $branch['jam']['hari_ini']['slot'] }}</span>
-                                        <i class="fas fa-chevron-down small toggle-icon text-secondary" style="margin-left:10px; margin-top:-2px;"></i>
-                                    </button>
-                                    @if($branch['jam']['catatan'])
-                                        <div class="store-closed text-muted small">{{ $branch['jam']['catatan'] }}</div>
-                                    @endif
-                                    <div class="collapse mt-1" id="jamLengkap{{ $loop->index }}">
-                                        <ul class="list-unstyled mb-0 small">
-                                            @foreach($branch['jam']['harian'] as $hari)
-                                            <li class="d-flex justify-content-between">
-                                                <span class="text-muted">{{ $hari['hari'] }}</span>
-                                                <span class="text-end">{{ $hari['slot'] }}</span>
-                                            </li>
-                                            @endforeach
-                                        </ul>
-                                    </div>
+                                    @foreach($store['jam']['harian'] as $day)
+                                        <p><span>{{ $day['hari'] }}</span><strong>{{ $day['slot'] }}</strong></p>
+                                    @endforeach
                                 </div>
-                            </div>
-                            <div class="info-item">
-                                <i class="fab fa-whatsapp"></i>
-                                <div>
-                                    @php
-                                        $rawPhone = preg_replace('/\D+/', '', $branch['telepon'] ?? '');
-                                        if ($rawPhone && str_starts_with($rawPhone, '0')) {
-                                            $rawPhone = '62' . substr($rawPhone, 1);
-                                        } elseif ($rawPhone && str_starts_with($rawPhone, '8')) {
-                                            $rawPhone = '62' . $rawPhone;
-                                        }
-                                        $waLink = $rawPhone ? "https://wa.me/{$rawPhone}" : '#';
-                                    @endphp
-                                    <a href="{{ $waLink }}" class="text-decoration-none text-dark" target="_blank" rel="noopener">{{ $branch['telepon'] }}</a>
-                                </div>
-                            </div>
-                            <div class="info-item">
-                                <i class="bi bi-geo-alt"></i>
-                                <div>
-                                    {{ $branch['alamat'] }}
-                                </div>
-                            </div>
-                            <div class="mt-auto pt-2">
-                                <a href="{{ $branch['link_maps'] ?? $branch['embed'] }}" target="_blank" rel="noopener" class="btn btn-outline-primary btn-sm">
-                                    <i class="bi bi-map"></i> Buka di Google Maps
-                                </a>
-                            </div>
+                            </details>
+                        @endif
+                    </article>
+
+                    <div class="contact-socials">
+                        <p>IKUTI KAMI</p>
+                        <div>
+                            @foreach($socials as $social)
+                                @if($social['url'])<a href="{{ $social['url'] }}" target="_blank" rel="noopener"><i class="fab {{ $social['icon'] }}"></i><span>{{ strtoupper($social['label']) }}</span></a>@endif
+                            @endforeach
                         </div>
                     </div>
                 </div>
-                @endforeach
-            </div>
 
-            <!-- Contact Form -->
-            <div class="contact-form-card" data-aos="fade-up" data-aos-delay="200">
-                <div class="row">
-                    <div class="col-lg-8 mx-auto">
-                        <h2 class="text-center mb-4">Kirim Pesan</h2>
-                        <form id="whatsappContactForm" class="needs-validation" novalidate>
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <label for="name" name="name" class="form-label">Nama Lengkap*</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text"><i class="bi bi-person"></i></span>
-                                        <input type="text" class="form-control" id="name" required>
-                                        <div class="invalid-feedback">Mohon isi nama lengkap Anda</div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="email" class="form-label">Email*</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                                        <input type="email" class="form-control" id="email" required>
-                                        <div class="invalid-feedback">Mohon isi alamat email yang valid</div>
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <label for="message" class="form-label">Pesan*</label>
-                                    <textarea class="form-control" id="message" rows="5" required></textarea>
-                                    <div class="invalid-feedback">Mohon isi pesan Anda</div>
-                                </div>
-                                <div class="col-12">
-                                    <button type="submit" class="btn btn-submit w-100">
-                                        <i class="fab fa-whatsapp me-2"></i>
-                                        Kirim Pesan
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
+                <div class="contact-map-wrap">
+                    <div class="contact-section-title"><span>02</span><h2>LOKASI KAMI</h2></div>
+                    <div class="contact-map">
+                        @if($store['embed'] ?? null)
+                            <iframe src="{{ $store['embed'] }}" title="Lokasi Pusat Kamera Malang" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        @else
+                            <div><i class="bi bi-map"></i><strong>PETA SEGERA TERSEDIA</strong></div>
+                        @endif
+                        @if($mapsUrl)<a class="maps-button" href="{{ $mapsUrl }}" target="_blank" rel="noopener">BUKA DI GOOGLE MAPS <i class="bi bi-arrow-up-right"></i></a>@endif
                     </div>
                 </div>
             </div>
         </div>
-    </main>
+    </section>
 
+    <section class="contact-form-section">
+        <div class="container">
+            <div class="contact-form-heading"><span>03 / CERITAKAN KEBUTUHANMU</span><h2>BINGUNG PILIH<br>KAMERA YANG MANA?</h2></div>
+            <form id="whatsappContactForm" class="contact-form">
+                <label><span>NAMA</span><input type="text" id="contactName" placeholder="Nama kamu" required></label>
+                <label><span>BUDGET</span><select id="contactBudget"><option value="Belum menentukan budget">Pilih budget</option><option>500 Ribuan</option><option>1 Jutaan</option><option>2 Jutaan</option><option>3 Jutaan</option><option>4–5 Juta</option><option>6–10 Juta</option><option>Paket lembaga</option></select></label>
+                <label class="full"><span>KEBUTUHAN</span><textarea id="contactMessage" rows="4" placeholder="Contoh: kamera pertama untuk belajar foto dan video..." required></textarea></label>
+                <button type="submit" {{ !$whatsAppUrl ? 'disabled' : '' }}><i class="bi bi-whatsapp"></i> KIRIM VIA WHATSAPP <i class="bi bi-arrow-up-right"></i></button>
+            </form>
+        </div>
+    </section>
+</main>
 @endsection
 
 @push('scripts')
-    <script>
-
-        if (typeof AOS !== 'undefined') {
-            AOS.init({
-                duration: 800,
-                once: true,
-                offset: 100
-            });
-        }
-
-        (function () {
-            'use strict'
-            var forms = document.querySelectorAll('.needs-validation')
-            Array.prototype.slice.call(forms).forEach(function (form) {
-                form.addEventListener('submit', function (event) {
-                    if (!form.checkValidity()) {
-                        event.preventDefault()
-                        event.stopPropagation()
-                    }
-                    form.classList.add('was-validated')
-                }, false)
-            })
-        })()
-
-    document.getElementById('whatsappContactForm').addEventListener('submit', function(event) {
-        event.preventDefault();
-
-        const form = this;
-
-        if (!form.checkValidity()) {
-            form.classList.add('was-validated');
-            return;
-        }
-
-        const name = document.getElementById('name').value;
-        const email = document.getElementById('email').value;
-        const message = document.getElementById('message').value;
-
-        const phoneNumber = '62895411200308'; // Ganti dengan nomor WhatsApp Anda!
-
-        const whatsappMessage = `
-Halo Dinoyo Kamera!%0A
-Saya *${encodeURIComponent(name)}*, ingin bertanya:%0A%0A
-*Pesan:*%0A${encodeURIComponent(message)}%0A%0A
-*Email:* ${encodeURIComponent(email)}%0A%0A
-        `.trim();
-
-        const whatsappUrl = `https://wa.me/${phoneNumber}?text=${whatsappMessage}`;
-
-        window.open(whatsappUrl, '_blank');
-
-        form.reset();
-        form.classList.remove('was-validated');
-    });
-    </script>
+<script>
+document.getElementById('whatsappContactForm')?.addEventListener('submit', (event) => {
+    event.preventDefault();
+    if (!event.currentTarget.reportValidity()) return;
+    const name = document.getElementById('contactName').value.trim();
+    const budget = document.getElementById('contactBudget').value;
+    const need = document.getElementById('contactMessage').value.trim();
+    const text = `Halo Pusat Kamera Malang, saya ${name}.\n\nBudget: ${budget}\nKebutuhan: ${need}\n\nMohon rekomendasinya.`;
+    window.open(`https://wa.me/{{ $rawPhone }}?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
+});
+</script>
 @endpush

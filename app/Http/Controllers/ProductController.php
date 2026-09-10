@@ -71,6 +71,22 @@ class ProductController extends Controller
         $search = $request->query('search');
         $kategoriFilter = $request->query('kategori');
         $sort = $request->query('sort', 'terbaru'); // Default sort: terbaru
+        $budget = $request->query('budget');
+        $sortOptions = [
+            'terbaru' => 'Produk Terbaru',
+            'termurah' => 'Harga Termurah',
+            'termahal' => 'Harga Termahal',
+            'rekomendasi' => 'Rekomendasi',
+        ];
+        $budgetRanges = [
+            '500rb' => ['label' => '500 Ribuan', 'min' => 500000, 'max' => 999999],
+            '1jt' => ['label' => '1 Jutaan', 'min' => 1000000, 'max' => 1999999],
+            '2jt' => ['label' => '2 Jutaan', 'min' => 2000000, 'max' => 2999999],
+            '3jt' => ['label' => '3 Jutaan', 'min' => 3000000, 'max' => 3999999],
+            '4-5jt' => ['label' => '4–5 Juta', 'min' => 4000000, 'max' => 5999999],
+            '6-10jt' => ['label' => '6–10 Juta', 'min' => 6000000, 'max' => 10999999],
+            'diatas-10jt' => ['label' => 'Di Atas 10 Juta', 'min' => 11000000, 'max' => null],
+        ];
 
         $query = Produk::with(['gambarUtama', 'kategori'])
             ->where('is_visible', true)
@@ -91,6 +107,17 @@ class ProductController extends Controller
             $query->where('id_kategori', $kategoriFilter);
         }
 
+        if ($budget && isset($budgetRanges[$budget])) {
+            $range = $budgetRanges[$budget];
+            if ($range['max'] === null) {
+                $query->where('harga_jual', '>=', $range['min']);
+            } else {
+                $query->whereBetween('harga_jual', [$range['min'], $range['max']]);
+            }
+        } else {
+            $budget = null;
+        }
+
         switch ($sort) {
             case 'termurah':
                 $query->orderBy('harga_jual', 'asc');
@@ -108,8 +135,8 @@ class ProductController extends Controller
                 break;
         }
 
-        $products = $query->paginate(16);
+        $products = $query->paginate(12)->withQueryString();
 
-        return view('product', compact('products', 'kategoris', 'search', 'kategoriFilter', 'sort'));
+        return view('product', compact('products', 'kategoris', 'search', 'kategoriFilter', 'sort', 'sortOptions', 'budget', 'budgetRanges'));
         }
 }

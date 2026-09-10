@@ -17,7 +17,7 @@
         'resources/js/utils/phone-format-display.js',
     ])
 
-    <link rel="shortcut icon" href="{{ $setting?->logo_url ?? asset('mainIMG/logoDK.png') }}" type="image/png">
+    <link rel="shortcut icon" href="{{ asset('mainIMG/logopk.png') }}" type="image/png">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -59,9 +59,9 @@
     <aside class="sidebar" id="sidebar">
         <!-- Sidebar Header -->
         <div class="sidebar-header">
-            <img src="{{ $setting->logo_url }}"
-                alt="{{ $setting->nama_website }} Logo"
-                class="sidebar-logo">
+            <img src="{{ asset('mainIMG/logopk.png') }}"
+                alt="Logo Pusat Kamera Malang"
+                class="sidebar-logo" style="background: #111;">
             <div class="sidebar-brand">
                 <h4 class="sidebar-brand-text">{{ $setting->nama_website}}</h4>
                 <span class="sidebar-brand-subtitle">Admin Panel</span>

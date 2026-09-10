@@ -17,7 +17,7 @@ class CatalogSeeder extends Seeder
         }
 
         $catalogId = DB::table('catalog_settings')->insertGetId([
-            'nama_website'    => 'Dinoyo Kamera',
+            'nama_website'    => 'Pusat Kamera Malang',
             'nomor_telfon'    => '082345670014',
             'description'     => 'Toko kamera terpercaya di Malang dan Pasuruan. Menyediakan berbagai kebutuhan fotografi dan videografi dengan kualitas terjamin.',
             'logo_path'       => null,
@@ -31,7 +31,7 @@ class CatalogSeeder extends Seeder
             'updated_at'      => now(),
         ]);
 
-        $logoPath = $this->uploadLocalToR2('logoDinoyo.png', $localDir, 'catalog/logo');
+        $logoPath = $this->uploadLocalToR2('logopk.png', $localDir, 'catalog/logo');
 
         DB::table('catalog_settings')->where('id', $catalogId)->update([
             'logo_path' => $logoPath,
@@ -54,24 +54,7 @@ class CatalogSeeder extends Seeder
             ]);
         }
 
-        $partnerUrls = [
-            'https://admin.focusnusantara.com/media/wysiwyg/brands/Logo_All_Brand_Home_-__sony.jpg',
-            'https://admin.focusnusantara.com/media/wysiwyg/brands/Logo_All_Brand_Home_-__canon_1.jpg',
-            'https://admin.focusnusantara.com/media/wysiwyg/brands/Logo_All_Brand_Home_-__fujifilm.jpg',
-            'https://admin.focusnusantara.com/media/wysiwyg/brands/Logo_All_Brand_Home_-__nikon.jpg',
-            'https://admin.focusnusantara.com/media/wysiwyg/brands/Logo_All_Brand_Home_-__lumix.jpg',
-            'https://admin.focusnusantara.com/media/wysiwyg/brands/Logo_All_Brand_Home_-__DJI.jpg',
-            'https://admin.focusnusantara.com/media/wysiwyg/brands/Logo_All_Brand_Home_-__godox.jpg',
-            'https://admin.focusnusantara.com/media/wysiwyg/brands/Logo_All_Brand_Home_-__hollyland.jpg',
-            'https://admin.focusnusantara.com/media/wysiwyg/brands/Logo_All_Brand_Home_-__phottix.jpg',
-            'https://admin.focusnusantara.com/media/wysiwyg/brands/Logo_All_Brand_Home_-__thinktank.jpg',
-            'https://admin.focusnusantara.com/media/wysiwyg/brands/Logo_All_Brand_Home_-__om_system_update.jpg',
-            'https://admin.focusnusantara.com/media/wysiwyg/brands/Logo_All_Brand_Home_-__tamron.jpg',
-            'https://admin.focusnusantara.com/media/wysiwyg/brands/Logo_All_Brand_Home_-__samyang.jpg',
-            'https://admin.focusnusantara.com/media/wysiwyg/brands/Logo_All_Brand_Home_-__saramonic.jpg',
-            'https://admin.focusnusantara.com/media/wysiwyg/brands/Logo_All_Brand_Home_-__insta360.jpg',
-            'https://admin.focusnusantara.com/media/wysiwyg/brands/Logo_All_Brand_Home_-__sigma.jpg',
-        ];
+        $partnerUrls = [];
 
         foreach ($partnerUrls as $url) {
             $uploaded = $this->uploadUrlToR2($url, 'catalog/partners');

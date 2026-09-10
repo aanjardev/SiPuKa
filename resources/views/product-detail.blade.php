@@ -1,7 +1,7 @@
 @extends('layouts.customer')
 
 @php
-    $setting = $cat_setting ?? $setting ?? \App\Models\CatalogSettings::first();
+    $setting = $cat_setting ?? \App\Models\CatalogSettings::first();
     $rawPhone = preg_replace('/\D+/', '', $setting?->nomor_telfon ?? '');
     if ($rawPhone && str_starts_with($rawPhone, '0')) {
         $rawPhone = '62' . substr($rawPhone, 1);
@@ -9,233 +9,140 @@
         $rawPhone = '62' . $rawPhone;
     }
 
-    $storeName = $setting?->nama_website ?? 'Toko';
-    $pesan = "Halo {$storeName}, saya tertarik dengan produk *{$produk->nama_produk}* (SKU: {$produk->kode_sku}). Apakah produk ini masih tersedia dan bisakah saya mendapatkan informasi lebih lanjut?";
-    $linkWA = $rawPhone ? ("https://wa.me/{$rawPhone}?text=" . urlencode($pesan)) : null;
+    $storeName = $setting?->nama_website ?? 'Pusat Kamera Malang';
+    $message = "Halo {$storeName}, saya tertarik dengan {$produk->nama_produk} (SKU: {$produk->kode_sku}). Apakah masih tersedia?";
+    $whatsAppUrl = $rawPhone ? 'https://wa.me/' . $rawPhone . '?text=' . urlencode($message) : null;
 
-    $mainImage = $produk->gambar->firstWhere('is_main', true);
-    $otherImages = $produk->gambar->filter(function ($g) { return !$g->is_main; });
-
-    if (!$mainImage && $produk->gambar->isNotEmpty()) {
-        $mainImage = $produk->gambar->first();
-        $otherImages = $produk->gambar->skip(1);
-    }
-
-    $galleryImages = $mainImage ? collect([$mainImage])->concat($otherImages) : collect();
-    $galleryImages = $galleryImages->values();
-    $galleryImageUrls = $galleryImages->map(fn($g) => $g->url);
-    $mainImageUrl = $galleryImageUrls->first();
+    // Gambar demo sementara untuk presentasi frontend.
+    $galleryImageUrls = collect([asset('mainIMG/produk.png')]);
 @endphp
 
-@section('title', $produk->nama_produk . ' - Detail Produk - ' . ($setting?->nama_website ?? 'Katalog'))
+@section('title', $produk->nama_produk . ' — Pusat Kamera Malang')
 
 @push('styles')
-    <link rel="stylesheet" href="{{ \App\Helpers\CssAssetHelper::css('css/legacy/mainPage.css') }}">
-    <link rel="stylesheet" href="{{ \App\Helpers\CssAssetHelper::css('css/legacy/detail-produk.css') }}">
-<style>
-
-</style>
+    <link rel="stylesheet" href="{{ \App\Helpers\CssAssetHelper::css('css/legacy/product-detail-brutal.css') }}?v=7">
 @endpush
 
 @section('content')
-
-    <section id="product-detail" style="padding-top: 50px; padding-bottom:50px" >
+<main class="detail-brutal">
     <div class="container">
-        <div class="row align-items-center gy-2 mb-3">
-            <div class="col-12">
-                <div class="d-flex align-items-center gap-2 flex-nowrap">
-                    <a href="javascript:history.back()" class="btn btn-light border d-flex align-items-center gap-1 action-btn">
-                        <i class="bi bi-arrow-left"></i> Kembali
-                    </a>
-                    <form method="GET" action="{{ route('product.index') }}" class="flex-grow-1 flex-shrink-1">
-                        <div class="input-group action-search w-100">
-                            <span class="input-group-text"><i class="bi bi-search"></i></span>
-                            <input type="text" class="form-control" name="search" placeholder="Cari produk..." value="{{ request('search') }}">
+        <section class="detail-grid">
+            <div class="detail-gallery">
+                <nav class="detail-breadcrumb" aria-label="Breadcrumb">
+                    <a href="{{ route('product.index') }}"><i class="bi bi-arrow-left"></i> KEMBALI KE KATALOG</a>
+                    <span>/</span>
+                    <span>{{ $produk->kategori?->nama_kategori ?? 'Produk' }}</span>
+                </nav>
+                <div class="detail-main-image" id="galleryPreview">
+                    <img id="mainProductImage" src="{{ $galleryImageUrls->first() }}" alt="{{ $produk->nama_produk }}">
+                    @if($produk->grade === 'Unggulan')<span class="detail-sticker">PRODUK UNGGULAN</span>@endif
+                </div>
+
+                @if($galleryImageUrls->count() > 1)
+                    <div class="detail-thumbnails">
+                        <button type="button" class="detail-gallery-button" id="galleryPrevBtn" aria-label="Foto sebelumnya"><i class="bi bi-arrow-left"></i></button>
+                        <div class="detail-thumbnail-track" id="thumbsRow">
+                            @foreach($galleryImageUrls as $index => $imageUrl)
+                                <button type="button" class="detail-thumbnail {{ $index === 0 ? 'active' : '' }}" data-index="{{ $index }}" aria-label="Tampilkan foto {{ $index + 1 }}">
+                                    <img src="{{ $imageUrl }}" alt="Foto {{ $index + 1 }} {{ $produk->nama_produk }}">
+                                </button>
+                            @endforeach
                         </div>
-                    </form>
-                </div>
+                        <button type="button" class="detail-gallery-button" id="galleryNextBtn" aria-label="Foto berikutnya"><i class="bi bi-arrow-right"></i></button>
+                    </div>
+                @endif
             </div>
-        </div>
 
-
-        <div class="row py-3">
-            <!-- KIRI: Gambar Carousel -->
-            <div class="col-lg-6 mb-3">
-                <div class="product-image-preview text-center mb-3" id="galleryPreview" style="position:relative;">
-                    <img id="mainProductImage"
-                         src="{{ $mainImageUrl ?? asset('images/placeholder.jpg') }}"
-                         alt="{{ $produk->nama_produk }}"
-                         class="main-image fade-image img-fluid"
-                         style="max-width: 400px; max-height: 400px; aspect-ratio: 1/1; object-fit: contain; border-radius: 12px; background: #fff;">
-                </div>
-                <div class="d-flex align-items-center justify-content-center gap-2 mt-2 w-100" style="position:relative;">
-                    <button type="button" class="gallery-nav-btn left me-2" aria-label="Sebelumnya" onclick="switchThumb(-1)" id="galleryPrevBtn"><i class="bi bi-chevron-left"></i></button>
-                    <div class="thumbnails-container mb-0 flex-grow-1">
-                        <div class="d-flex flex-nowrap gap-2 thumbnails-scroll" id="thumbsRow">
-                        @foreach ($galleryImages as $index => $gambar)
-                            <img src="{{ $gambar->url }}"
-                                alt="{{ $produk->nama_produk }}"
-                                class="img-fluid thumbnail{{ $index === 0 ? ' active' : '' }}"
-                                onclick="switchProductImage({{ $index }})"
-                                data-index="{{ $index }}">
-                        @endforeach
+            <article class="detail-info">
+                <div class="detail-tags">
+                    <span>{{ strtoupper($produk->status) }}</span>
+                    <span>{{ strtoupper($produk->kategori?->nama_kategori ?? 'KAMERA') }}</span>
+                    <div class="detail-availability {{ $produk->stok_produk > 0 ? 'available' : 'empty' }}">
+                        <i class="bi {{ $produk->stok_produk > 0 ? 'bi-check-circle-fill' : 'bi-x-circle-fill' }}"></i>
+                        <div>
+                            <strong>{{ $produk->stok_produk > 0 ? 'STOK TERSEDIA' : 'STOK HABIS' }}</strong>
+                            {{-- <span>{{ $produk->stok_produk > 0 ? $produk->stok_produk . ' unit siap ditanyakan' : 'Hubungi kami untuk alternatif produk' }}</span> --}}
                         </div>
                     </div>
-                    <button type="button" class="gallery-nav-btn right ms-2" aria-label="Selanjutnya" onclick="switchThumb(1)" id="galleryNextBtn"><i class="bi bi-chevron-right"></i></button>
                 </div>
-            </div>
+                <h1>{{ $produk->nama_produk }}</h1>
+                <p class="detail-price">Rp {{ number_format($produk->harga_jual, 0, ',', '.') }}</p>
 
-            <!-- KANAN: Detail Produk -->
-            <div class="col-lg-6">
-                <h2>{{ $produk->nama_produk }}</h2>
-                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
-                    <p class="text-danger fw-bold fs-4 mb-2">Rp {{ number_format($produk->harga_jual, 0, ',', '.') }}</p>
-                    {{-- TOMBOL PESAN SEKARANG DI SINI --}}
-                    @if ($produk->stok_produk > 0)
-                        @if ($linkWA)
-                            <a href="{{ $linkWA }}" class="btn btn-lg flex-shrink-0 btn-custom-whatsapp" target="_blank" rel="noopener noreferrer">
-                                 Pesan Sekarang
-                            </a>
-                        @else
-                            <button class="btn btn-secondary btn-lg flex-shrink-0" disabled>
-                                WhatsApp belum disetel
-                            </button>
-                        @endif
-                    @else
-                        <button class="btn btn-secondary btn-lg flex-shrink-0" disabled>
-                            <i class="bi bi-x-circle me-2"></i> Stok Habis
-                        </button>
-                    @endif
 
-                </div>
-                <p class="text-muted mb-2"><strong>Kode SKU:</strong> {{ $produk->kode_sku }}</p>
-                <p class="text-muted mb-2"><strong>Kategori:</strong> {{ $produk->kategori->nama_kategori }}</p>
-                <p class="text-muted mb-2"><strong>Status:</strong> {{ $produk->status }}</p>
-                <p class="text-muted mb-2">
-                    <strong>Stok:</strong>
-                    @if ($produk->stok_produk > 0)
-                        <span class="text-success">{{ $produk->stok_produk }} tersedia</span>
-                    @else
-                        <span class="text-danger">Stok habis</span>
-                    @endif
-                </p>
-                @if (!empty($produk->instagram_link))
-                <div class="mb-2">
-                    <a href="{{ $produk->instagram_link }}"
-                       class="btn btn-outline-dark btn-sm d-inline-flex align-items-center gap-2"
-                       target="_blank" rel="noopener noreferrer">
-                        <i class="bi bi-instagram"></i>
-                        Lihat video kondisi fisik
+                @if($produk->stok_produk > 0 && $whatsAppUrl)
+                    <a href="{{ $whatsAppUrl }}" class="detail-wa-button" target="_blank" rel="noopener">
+                        <i class="bi bi-whatsapp"></i><span>TANYA PRODUK VIA WHATSAPP<small>Respons cepat dari tim kami</small></span><i class="bi bi-arrow-up-right"></i>
                     </a>
-                </div>
+                @elseif(!$whatsAppUrl)
+                    <button class="detail-wa-button disabled" type="button" disabled>WHATSAPP BELUM DIATUR</button>
                 @endif
-                <p class="text-muted mb-2"><strong>Deskripsi Produk:</strong></p>
-                <p id="descriptionText" class="description collapsed">
-                    {!! nl2br(e($produk->deskripsi_produk)) !!}
-                </p>
-                <span id="toggleText" class="toggle-text" style="display: none;">Baca selengkapnya</span>
 
-                {{-- Tambahkan detail lainnya di sini --}}
-            </div>
-        </div>
+                <dl class="detail-meta">
+                    <div><dt>KODE PRODUK</dt><dd>{{ $produk->kode_sku }}</dd></div>
+                    <div><dt>KONDISI</dt><dd>{{ $produk->status }}</dd></div>
+                    <div><dt>GRADE</dt><dd>{{ $produk->grade }}</dd></div>
+                    <div><dt>KATEGORI</dt><dd>{{ $produk->kategori?->nama_kategori ?? '—' }}</dd></div>
+                </dl>
+
+                @if($produk->instagram_link)
+                    <a href="{{ $produk->instagram_link }}" class="detail-video-link" target="_blank" rel="noopener"><i class="bi bi-instagram"></i> LIHAT VIDEO KONDISI FISIK <i class="bi bi-arrow-up-right"></i></a>
+                @endif
+
+                <section class="detail-inline-description">
+                    <h2>DESKRIPSI PRODUK</h2>
+                    <div class="detail-description-box">
+                        <p id="descriptionText">{!! nl2br(e($produk->deskripsi_produk ?: 'Informasi detail produk dapat ditanyakan langsung kepada tim kami.')) !!}</p>
+                        <button type="button" id="toggleText" hidden>BACA SELENGKAPNYA <i class="bi bi-arrow-down"></i></button>
+                    </div>
+                </section>
+            </article>
+        </section>
+
+        {{-- <section class="detail-help">
+            <div><span>BARU PERTAMA BELI KAMERA?</span><h2>KAMI BANTU PILIH YANG PAS.</h2></div>
+            <p>Ceritakan kebutuhan dan budgetmu. Tim kami akan membantu tanpa istilah teknis yang membingungkan.</p>
+            @if($whatsAppUrl)<a href="{{ $whatsAppUrl }}" target="_blank" rel="noopener">KONSULTASI GRATIS <i class="bi bi-arrow-right"></i></a>@endif
+        </section> --}}
     </div>
-</section>
-
-
+</main>
 @endsection
 
 @push('scripts')
-    <script type="module" src="{{ asset('js/loadingScreen.js') }}"></script>
-    <script type="module" src="{{ asset('js/productHover.js') }}"></script>
-    <script type="module" src="{{ asset('js/scrollNavigation.js') }}"></script>
-    <script>
-        window.galleryImages = @json($galleryImageUrls->toArray());
-    </script>
-    <script src="{{ asset('js/productDetailGallery.js') }}"></script>
-    <script>
-document.addEventListener('DOMContentLoaded', function() {
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const images = @json($galleryImageUrls);
+    const mainImage = document.getElementById('mainProductImage');
+    const thumbnails = [...document.querySelectorAll('.detail-thumbnail')];
+    const previous = document.getElementById('galleryPrevBtn');
+    const next = document.getElementById('galleryNextBtn');
+    let activeIndex = 0;
 
-    let currentGalleryIndex = 0;
-    const galleryImages = @json($galleryImageUrls->toArray());
-    const mainImg = document.getElementById('mainProductImage');
-    const thumbs = document.querySelectorAll('.thumbnail');
-    const prevBtn = document.getElementById('galleryPrevBtn');
-    const nextBtn = document.getElementById('galleryNextBtn');
+    const showImage = (index) => {
+        if (!mainImage || images.length === 0) return;
+        activeIndex = (index + images.length) % images.length;
+        mainImage.classList.add('switching');
+        window.setTimeout(() => {
+            mainImage.src = images[activeIndex];
+            mainImage.classList.remove('switching');
+        }, 120);
+        thumbnails.forEach((thumbnail, position) => thumbnail.classList.toggle('active', position === activeIndex));
+        thumbnails[activeIndex]?.scrollIntoView({ behavior: 'smooth', inline: 'nearest', block: 'nearest' });
+    };
 
-    function setMainImage(idx) {
-        if(idx === currentGalleryIndex) return;
-        mainImg.classList.add('fade-out');
-        setTimeout(() => {
-            mainImg.src = galleryImages[idx];
-            mainImg.classList.remove('fade-out');
-        }, 300);
-        thumbs.forEach((t,i) => t.classList.toggle('active', i === idx));
-        currentGalleryIndex = idx;
-        updateNavBtn();
-    }
+    thumbnails.forEach((thumbnail, index) => thumbnail.addEventListener('click', () => showImage(index)));
+    previous?.addEventListener('click', () => showImage(activeIndex - 1));
+    next?.addEventListener('click', () => showImage(activeIndex + 1));
+    if (images.length < 2) [previous, next].forEach((button) => { if (button) button.disabled = true; });
 
-    window.switchProductImage = setMainImage;
-
-    window.switchThumb = function(dir) {
-        let next = currentGalleryIndex + dir;
-        if(next < 0) next = galleryImages.length - 1;
-        if(next >= galleryImages.length) next = 0;
-        setMainImage(next);
-        const activeThumb = document.querySelector(`.thumbnail[data-index="${next}"]`);
-        activeThumb?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-    }
-
-    function updateNavBtn() {
-        if (galleryImages.length <= 1) {
-            prevBtn.setAttribute('disabled', 'disabled');
-            nextBtn.setAttribute('disabled', 'disabled');
-        } else {
-            prevBtn.removeAttribute('disabled');
-            nextBtn.removeAttribute('disabled');
-        }
-    }
-    updateNavBtn();
-
-    const desc = document.getElementById("descriptionText");
-    const toggle = document.getElementById("toggleText");
-
-    if (desc && toggle) {
-        const collapsedHeight = 120; // px
-        const needsToggle = desc.scrollHeight > collapsedHeight + 5;
-
-        if (needsToggle) {
-            toggle.style.display = "inline";
-            toggle.style.color = "#007bff";
-            toggle.style.cursor = "pointer";
-            toggle.style.fontWeight = "500";
-            toggle.style.marginTop = "10px";
-
-            desc.style.maxHeight = collapsedHeight + "px";
-            desc.style.overflow = "hidden";
-            desc.style.transition = "max-height 0.3s ease";
-            desc.style.maskImage = "linear-gradient(to bottom, black 80%, transparent 100%)";
-            desc.style.webkitMaskImage = "linear-gradient(to bottom, black 80%, transparent 100%)";
-
-            toggle.addEventListener("click", function() {
-                const isCollapsed = desc.style.maxHeight === collapsedHeight + "px";
-                if (isCollapsed) {
-                    desc.style.maxHeight = desc.scrollHeight + "px";
-                    desc.style.maskImage = "none";
-                    desc.style.webkitMaskImage = "none";
-                    toggle.textContent = "Tampilkan lebih sedikit";
-                } else {
-                    desc.style.maxHeight = collapsedHeight + "px";
-                    desc.style.maskImage = "linear-gradient(to bottom, black 80%, transparent 100%)";
-                    desc.style.webkitMaskImage = "linear-gradient(to bottom, black 80%, transparent 100%)";
-                    toggle.textContent = "Baca selengkapnya";
-                }
-            });
-        } else {
-            toggle.style.display = "none";
-            desc.style.maxHeight = "none";
-            desc.style.maskImage = "none";
-            desc.style.webkitMaskImage = "none";
-        }
+    const description = document.getElementById('descriptionText');
+    const toggle = document.getElementById('toggleText');
+    if (description && toggle && description.scrollHeight > 220) {
+        description.classList.add('collapsed');
+        toggle.hidden = false;
+        toggle.addEventListener('click', () => {
+            const expanded = description.classList.toggle('expanded');
+            toggle.innerHTML = expanded ? 'TAMPILKAN LEBIH SEDIKIT <i class="bi bi-arrow-up"></i>' : 'BACA SELENGKAPNYA <i class="bi bi-arrow-down"></i>';
+        });
     }
 });
 </script>

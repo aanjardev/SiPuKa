@@ -9,7 +9,7 @@
     }
 
     $storeName = $setting?->nama_website ?? 'Toko';
-    $message = "Halo {$storeName}, saya ingin bertanya tentang produk yang ada di katalog.";
+    $message = "Halo {$storeName}, saya ingin konsultasi kamera yang cocok untuk kebutuhan dan budget saya.";
     $waLink = $rawPhone ? ('https://wa.me/' . $rawPhone . '?text=' . urlencode($message)) : null;
 @endphp
 

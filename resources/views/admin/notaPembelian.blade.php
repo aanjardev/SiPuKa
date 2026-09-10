@@ -78,7 +78,7 @@
     <div class="header">
         <div class="logo-container">
             {{-- Logo: Tinggi diubah menjadi 70px --}}
-            <img src="{{ public_path('mainIMG/logoDinoyo.png') }}" alt="Logo Dinoyo Kamera" style="height: 70px;">
+            <img src="{{ public_path('mainIMG/logopk.png') }}" alt="Logo Pusat Kamera Malang" style="height: 70px; background: #111;">
         </div>
         <div class="text-details">
             <h3 style="margin: 0; color: #333;">DINOYO KAMERA</h3>

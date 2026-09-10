@@ -19,23 +19,13 @@ class PageController extends Controller
             ->where('is_visible', true)
             ->where('is_archived', false)
             ->latest()
-            ->take(5)
-            ->get();
-
-        $produkUnggulan = Produk::with('gambarUtama')
-            ->where('grade', 'Unggulan')
-            ->where('stok_produk', '>', 0)
-            ->where('is_visible', true)
-            ->where('is_archived', false)
-            ->take(5)
+            ->take(8)
             ->get();
 
         $cat_setting = CatalogSettings::first();
-        $cat_banners = CatalogBanners::all();
-        $cat_partner = CatalogPartnerLogo::all();
-        $kategoris = Kategori::orderBy('id')->get();
+        $kategoris = Kategori::orderBy('id')->take(6)->get();
 
-        return view('mainPage', compact('latestProducts', 'produkUnggulan', 'cat_banners', 'cat_setting', 'cat_partner', 'kategoris'));
+        return view('mainPage', compact('latestProducts', 'cat_setting', 'kategoris'));
 
     }
 
@@ -47,7 +37,7 @@ class PageController extends Controller
 
     public function contact(){
         $cat_setting = CatalogSettings::first();
-        $branches = Branch::with('jamOperasional')
+        $store = Branch::with('jamOperasional')
             ->where('is_active', true)
             ->get()
             ->map(function ($branch) {
@@ -59,9 +49,10 @@ class PageController extends Controller
                     'embed' => $this->buildEmbedMap($branch),
                     'jam' => $this->formatJamOperasional($branch->jamOperasional),
                 ];
-            });
+            })
+            ->first();
 
-        return view("contact", compact('cat_setting', 'branches'));
+        return view("contact", compact('cat_setting', 'store'));
     }
 
     public function katalog(){

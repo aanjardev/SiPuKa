@@ -2,18 +2,13 @@
     $setting = \App\Models\CatalogSettings::first();
 @endphp
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    @php
-        $faviconUrl = $setting?->logo_url
-            ? ($setting->logo_url . '?v=' . ($setting->updated_at?->timestamp ?? time()))
-            : asset('mainIMG/logoDK.png');
-    @endphp
-    <title>@yield('title', $setting?->nama_website ?? 'Dinoyo Kamera')</title>
-    <link rel="icon" href="{{ $faviconUrl }}" type="image/png">
-    <link rel="shortcut icon" href="{{ $faviconUrl }}" type="image/png">
+    <title>@yield('title', $setting?->nama_website ?? 'Pusat Kamera Malang')</title>
+    <link rel="icon" href="{{ asset('mainIMG/logopk.png') }}" type="image/png">
+    <link rel="shortcut icon" href="{{ asset('mainIMG/logopk.png') }}" type="image/png">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,6 +18,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ \App\Helpers\CssAssetHelper::css('css/legacy/header.css') }}">
+    <link rel="stylesheet" href="{{ \App\Helpers\CssAssetHelper::css('css/legacy/storefront.css') }}?v=2">
 
     @stack('styles')
 </head>
