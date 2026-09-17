@@ -17,7 +17,7 @@
 @section('meta_description', $cat_setting?->seo_description ?? $cat_setting?->description ?? '')
 
 @push('styles')
-    <link rel="stylesheet" href="{{ \App\Helpers\CssAssetHelper::css('css/legacy/home-brutal.css') }}?v=6">
+    <link rel="stylesheet" href="{{ \App\Helpers\CssAssetHelper::css('css/legacy/home-brutal.css') }}?v=7">
 @endpush
 
 @section('content')

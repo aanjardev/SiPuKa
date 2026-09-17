@@ -67,4 +67,4 @@
     </div>
 </footer>
 
-<link rel="stylesheet" href="{{ \App\Helpers\CssAssetHelper::css('css/legacy/footer-brutal.css') }}">
+<link rel="stylesheet" href="{{ \App\Helpers\CssAssetHelper::css('css/legacy/footer-brutal.css') }}?v=2">

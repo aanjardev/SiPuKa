@@ -36,7 +36,9 @@
 }
 
 .hero-copy h1 {
-    font-size: clamp(3.2rem, 7.2vw, 7rem);
+    width: fit-content;
+    max-width: min(100%, 680px);
+    font-size: clamp(2.25rem, 6vw, 5rem);
     font-weight: 950;
     letter-spacing: -0.085em;
     line-height: 0.75;
@@ -581,7 +583,7 @@
 
     .hero-copy h1 {
         max-width: 100%;
-        font-size: clamp(2.75rem, 10vw, 5.5rem);
+        font-size: clamp(2.25rem, 8vw, 4.5rem);
         line-height: 0.86;
         overflow-wrap: anywhere;
     }
@@ -598,7 +600,8 @@
 
     .hero-copy h1 {
         width: 100%;
-        font-size: clamp(2.1rem, 10.5vw, 4rem);
+        max-width: 100%;
+        font-size: clamp(1.9rem, 8.8vw, 3.2rem);
         letter-spacing: -0.075em;
         line-height: 0.9;
         white-space: nowrap;
@@ -720,7 +723,7 @@
 
 @media (max-width: 380px) {
     .hero-copy h1 {
-        font-size: clamp(1.85rem, 9.7vw, 2.35rem);
+        font-size: clamp(1.7rem, 8.5vw, 2.05rem);
     }
 
     .category-card {
