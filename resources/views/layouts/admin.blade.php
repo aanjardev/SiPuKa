@@ -17,7 +17,9 @@
         'resources/js/utils/phone-format-display.js',
     ])
 
-    <link rel="shortcut icon" href="{{ $setting?->logo_url ?: asset('mainIMG/logopk.png') }}" type="image/png">
+    <link rel="icon" type="image/png" sizes="512x512" href="{{ asset('mainIMG/logopk.png') }}?v=pusatkamera-2">
+    <link rel="shortcut icon" type="image/png" href="{{ asset('mainIMG/logopk.png') }}?v=pusatkamera-2">
+    <link rel="apple-touch-icon" href="{{ asset('mainIMG/logopk.png') }}?v=pusatkamera-2">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">

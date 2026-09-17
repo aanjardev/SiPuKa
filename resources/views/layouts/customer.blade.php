@@ -14,8 +14,9 @@
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:type" content="website">
     @if($setting?->og_image_url)<meta property="og:image" content="{{ $setting->og_image_url }}">@endif
-    <link rel="icon" href="{{ $setting?->logo_url ?: asset('mainIMG/logopk.png') }}" type="image/png">
-    <link rel="shortcut icon" href="{{ $setting?->logo_url ?: asset('mainIMG/logopk.png') }}" type="image/png">
+    <link rel="icon" type="image/png" sizes="512x512" href="{{ asset('mainIMG/logopk.png') }}?v=pusatkamera-2">
+    <link rel="shortcut icon" type="image/png" href="{{ asset('mainIMG/logopk.png') }}?v=pusatkamera-2">
+    <link rel="apple-touch-icon" href="{{ asset('mainIMG/logopk.png') }}?v=pusatkamera-2">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
