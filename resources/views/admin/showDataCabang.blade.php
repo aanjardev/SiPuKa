@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Detail Cabang')
+@section('title', 'Detail Toko')
 
 @push('page-actions')
 <a href="{{ route('admin.branches.index') }}" class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-2">
@@ -24,7 +24,7 @@
             <div class="card-body">
                 <h6 class="fw-bold text-dark mb-3">
                     <i class="fa-solid fa-store me-2 text-primary"></i>
-                    Informasi Cabang
+                    Informasi Toko
                 </h6>
 
                 <div class="text-center mb-4">
@@ -47,7 +47,7 @@
 
                 <div class="small text-muted">
                     <div class="d-flex justify-content-between">
-                        <span>Status Cabang</span>
+                        <span>Status Toko</span>
                         <span class="fw-semibold">{{ $branch->is_active ? 'Aktif' : 'Non-Aktif' }}</span>
                     </div>
                     <div class="d-flex justify-content-between">
@@ -59,7 +59,7 @@
                 <hr class="my-4">
 
                 <div class="mb-3">
-                    <p class="text-muted small mb-1">Kode Cabang</p>
+                    <p class="text-muted small mb-1">Kode Toko</p>
                     <div class="bg-light rounded p-2 fw-bold fs-5 text-center">BR-{{ str_pad($branch->id, 3, '0', STR_PAD_LEFT) }}</div>
                 </div>
 
@@ -93,10 +93,10 @@
                     Lokasi & Deskripsi
                 </h6>
 
-                @if($branch->link_maps)
+                @if($branch->maps_embed_url)
                     <div class="mb-4">
                         <p class="text-muted small mb-2">Lokasi Google Maps</p>
-                        <a href="{{ $branch->link_maps }}" target="_blank" class="btn btn-outline-primary btn-sm">
+                        <a href="{{ $branch->maps_embed_url }}" target="_blank" class="btn btn-outline-primary btn-sm">
                             <i class="fa-solid fa-external-link-alt me-1"></i>
                             Buka di Google Maps
                         </a>

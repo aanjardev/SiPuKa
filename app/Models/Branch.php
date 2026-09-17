@@ -10,16 +10,18 @@ class Branch extends Model
     use HasFactory;
     protected $table = 'perusahaan_cabang';
     protected $fillable = [
+        'singleton_key',
         'nama',
         'alamat',
         'nomor_telepon',
-        'link_maps',
+        'maps_embed_url',
         'is_active',
         'email',
         'deskripsi',
     ];
 
     protected $casts = [
+        'singleton_key' => 'boolean',
         'is_active' => 'boolean',
     ];
 

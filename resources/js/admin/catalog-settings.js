@@ -44,16 +44,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    const partnerRouteTemplate = form.dataset.routePartnerDestroy;
-    const bannerRouteTemplate = form.dataset.routeBannerDestroy;
-    const galleryRouteTemplate = form.dataset.routeGalleryDestroy;
-
     const pushUnique = (arr, value) => {
         if (!arr.includes(value)) arr.push(value);
     };
 
-    let deletedPartnersArr = [];
-    let deletedBannersArr = [];
     let deletedGalleriesArr = [];
 
     document.addEventListener('click', (e) => {
@@ -66,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const container = btn.closest('[data-id][data-type]');
         const id = container?.getAttribute('data-id');
         const type = container?.getAttribute('data-type');
-        if (!container || !id || !type) return;
+        if (!container || !id || type !== 'gallery') return;
 
         const confirmFn = typeof window.confirmDelete === 'function'
             ? window.confirmDelete
@@ -76,30 +70,10 @@ document.addEventListener('DOMContentLoaded', () => {
             .then((result) => {
                 if (!result?.isConfirmed) return;
 
-        const urlMap = {
-            partner: partnerRouteTemplate,
-            banner: bannerRouteTemplate,
-            gallery: galleryRouteTemplate,
-        };
-                const endpointTemplate = urlMap[type];
-                if (!endpointTemplate) return;
-                const finalUrl = endpointTemplate.replace(':id', id);
-
                 btn.disabled = true;
-
-                if (type === 'partner') {
-                    pushUnique(deletedPartnersArr, id);
-                    const field = document.getElementById('deletedPartners');
-                    if (field) field.value = JSON.stringify(deletedPartnersArr);
-                } else if (type === 'banner') {
-                    pushUnique(deletedBannersArr, id);
-                    const field = document.getElementById('deletedBanners');
-                    if (field) field.value = JSON.stringify(deletedBannersArr);
-                } else if (type === 'gallery') {
-                    pushUnique(deletedGalleriesArr, id);
-                    const field = document.getElementById('deletedGalleries');
-                    if (field) field.value = JSON.stringify(deletedGalleriesArr);
-                }
+                pushUnique(deletedGalleriesArr, id);
+                const field = document.getElementById('deletedGalleries');
+                if (field) field.value = JSON.stringify(deletedGalleriesArr);
 
                 container.style.transition = 'all 0.3s';
                 container.style.opacity = '0';
@@ -109,15 +83,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     form.requestSubmit();
                 }
 
-                if (finalUrl) {
-                    fetch(finalUrl, {
-                        method: 'DELETE',
-                        headers: {
-                            'X-Requested-With': 'XMLHttpRequest',
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content ?? '',
-                        },
-                    }).catch(() => {});
-                }
             });
     });
 

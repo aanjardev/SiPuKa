@@ -2,14 +2,14 @@
 
 @php
     $setting = $cat_setting ?? \App\Models\CatalogSettings::first();
-    $rawPhone = preg_replace('/\D+/', '', $setting?->nomor_telfon ?? '');
+    $rawPhone = preg_replace('/\D+/', '', $setting?->nomor_telepon ?? '');
     if ($rawPhone && str_starts_with($rawPhone, '0')) {
         $rawPhone = '62' . substr($rawPhone, 1);
     } elseif ($rawPhone && str_starts_with($rawPhone, '8')) {
         $rawPhone = '62' . $rawPhone;
     }
 
-    $storeName = $setting?->nama_website ?? 'Pusat Kamera Malang';
+    $storeName = $setting?->nama_website ?? 'PusatKamera.id';
     $message = "Halo {$storeName}, saya tertarik dengan {$produk->nama_produk} (SKU: {$produk->kode_sku}). Apakah masih tersedia?";
     $whatsAppUrl = $rawPhone ? 'https://wa.me/' . $rawPhone . '?text=' . urlencode($message) : null;
 
@@ -17,7 +17,7 @@
     $galleryImageUrls = collect([asset('mainIMG/produk.png')]);
 @endphp
 
-@section('title', $produk->nama_produk . ' — Pusat Kamera Malang')
+@section('title', $produk->nama_produk . ' — PusatKamera.id')
 
 @push('styles')
     <link rel="stylesheet" href="{{ \App\Helpers\CssAssetHelper::css('css/legacy/product-detail-brutal.css') }}?v=7">

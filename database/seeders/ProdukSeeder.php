@@ -2,23 +2,47 @@
 
 namespace Database\Seeders;
 
+use Database\Seeders\Concerns\PreventsProductionSeeding;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
-use Illuminate\Http\File;
 use App\Models\Produk;
 use App\Models\GambarProduk;
-use App\Helpers\ImageUpload;
 
 class ProdukSeeder extends Seeder
 {
+    use PreventsProductionSeeding;
+
+    private array $imageOffsets = [];
+
+    private const IMAGE_PATHS = [
+        1 => ['public/product/1/54fde50442ea4f6d92d77fc57c19f8910b3a1486.webp', 'public/product/1/df1e6a44877cca6e3b39bd0aee57afd6d1170f6a.webp', 'public/product/1/3f6e333927d4300b5934069eb7c709088f6a7911.webp', 'public/product/1/032f29598729550833c97ff77bd91753c770d208.webp'],
+        2 => ['public/product/2/ac99be8f7032c73c007e1ad32197be1189b833d6.webp', 'public/product/2/5a46b6a34bb4908bb80f9e37b81ab4e376b73ed8.webp', 'public/product/2/483af934a66c1a6e33955b2d9628c5582cb736b7.webp', 'public/product/2/2d3cacaa679cc0e3637c9f2151b5a28233cfc8f0.webp', 'public/product/2/01e3549cd8e92f0a3e2479bea8e8b3e571783a6a.webp', 'public/product/2/a7024c3a20cd0814325901113ab70ecd28143f46.webp'],
+        3 => ['public/product/3/373e7b3fc55f4c1d12bda8e3802720756331ea71.webp', 'public/product/3/6d2b44bf6233c0a3708323639753f1e65f065d57.webp', 'public/product/3/5295ba0596ba3b2467eb48b3b797f7dc5f02b1ed.webp', 'public/product/3/599b172fbb4ab7dc96ef30120b5dff00b316a2d7.webp', 'public/product/3/3559b6a546e2e8b53888e93334ec423bd1378713.webp', 'public/product/3/7f605f76a110a053f7323d1c345f6b14844230a7.webp'],
+        4 => ['public/product/4/ac4461e315a1089c9d2ad1c9c7a9be82090c9e17.webp', 'public/product/4/f9861ea21fffcf3c96bba81aef184667daf30206.webp', 'public/product/4/ba6c035a21cf4a41fe96a9f983198d67027fa911.webp'],
+        5 => ['public/product/5/36bec06b404dfdfd3537f9fc1482c312add3389b.webp', 'public/product/5/40ba7ddbb5a0cd5be6613fa6e73997cb827476f2.webp', 'public/product/5/799b0f83cc5dce292c8f0055e184a52d1c0939d1.webp', 'public/product/5/e072e3a23a22d796605f48cfd8d08f589d6da7f6.webp', 'public/product/5/8cdd1e52e79142d15a169c8784ff8d75a791068f.webp', 'public/product/5/eb370e925e85f18a5be7352a899b1db177be6f46.webp'],
+        6 => ['public/product/6/8c71b02b29227127a9269cf9d92e0941988a7a5a.webp', 'public/product/6/4d569eaa81db4745e2726db62b78db0e4cc8fd1a.webp', 'public/product/6/911857cbc7e44768f7acc7065053b3dffec71ef0.webp', 'public/product/6/9f0ab7385e68100fa5d472f244b441db0caa6885.webp', 'public/product/6/c978d0bac6d33dd474b6acab2d06cd1b874dd093.webp'],
+        7 => ['public/product/7/3b4ffb1af75361bbee27b0feb9fd1c5e6fcfd0e1.webp'],
+        8 => ['public/product/8/50fa2f6f0a5291fa7c685ed48fa8baec000b1569.webp'],
+        9 => ['public/product/9/a3f04d03ac6aed2079800dbca970c854d8343731.webp'],
+        10 => ['public/product/10/24598d7287f515cdd3e86d019ff09eeccfe623df.webp'],
+        11 => ['public/product/11/fc6a9845e6795c28f56c2fd8e7d9a2443e574d50.webp'],
+        12 => ['public/product/12/cff7aac194df09fc73164ada55f85feea7526669.webp'],
+        13 => ['public/product/13/51f8cdcbc2feb7636c8eb6a2393d1d419e68e1b8.webp'],
+        14 => ['public/product/14/6b6576ae8022e766b7972ead26e602ff40fa8df4.webp'],
+        15 => ['public/product/15/fe07649f4f9c1c9434c39c17e66400d54e7efe2c.webp'],
+        16 => ['public/product/16/1055318a4aab67f26bf33351f74ba345a084ad9f.webp', 'public/product/16/7e8ecf6d09b7e33f4eb66c1040ba0c0bc09a6f2b.webp', 'public/product/16/1334182914a1e4737987b85b818fa55a30d3243c.webp', 'public/product/16/941d2edb45084993a5ef7f9e25ba4b1cdd76622a.webp'],
+        17 => ['public/product/17/034f41187a15e691964794f22df1cf4167229dbe.webp', 'public/product/17/504e39d3e5619a8964c22a973923f71d5da77335.webp', 'public/product/17/ffd52ceacdf967422d8e29fe069d9db8a2333ab7.webp', 'public/product/17/12c85b2898feb527fd8827281b9ef7e3ff164600.webp', 'public/product/17/f0d13c4c336999968c58c4f5674f1f0eb268cffa.webp', 'public/product/17/6f1a0fffd92e41c27e0bcffc8e9585e227693e36.webp'],
+        18 => ['public/product/18/a4a61a4f9e99ee943bde56a1f432314cc918d632.webp', 'public/product/18/c020656e20b050e52722bef8d2f8904abb05db1a.webp', 'public/product/18/f9823ea1eba23d0505496675348dd18f8eddab43.webp', 'public/product/18/89e69c5fe8b088d224964840cd7bfd7b72341ea4.webp', 'public/product/18/31d9dd32c4e411e697041c90225080787517c0a5.webp'],
+    ];
+
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
+        $this->guardAgainstProduction();
+
 
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
@@ -28,10 +52,7 @@ class ProdukSeeder extends Seeder
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
 
-        $localDir = base_path('public/productIMG');
-        if (!is_dir($localDir)) {
-            throw new \RuntimeException("Seeder image directory not found: {$localDir}");
-        }
+        $localDir = '';
 
         $produk = Produk::create([
             'kode_sku' => '1274OBOOPL',
@@ -812,27 +833,15 @@ Kode Barang : #1298_DK'
 
     private function uploadSeederImage(int $productId, string $relativePath, string $localDir): string
     {
-        $relative = ltrim($relativePath, DIRECTORY_SEPARATOR);
-        $source = $localDir . DIRECTORY_SEPARATOR . $relative;
+        $offset = $this->imageOffsets[$productId] ?? 0;
+        $path = self::IMAGE_PATHS[$productId][$offset] ?? null;
 
-        if (!is_file($source)) {
-            $basename = basename($relative);
-            $iterator = new \RecursiveIteratorIterator(
-                new \RecursiveDirectoryIterator($localDir, \FilesystemIterator::SKIP_DOTS)
-            );
-            foreach ($iterator as $file) {
-                if (strcasecmp($file->getFilename(), $basename) === 0) {
-                    $source = $file->getPathname();
-                    break;
-                }
-            }
+        if (!$path) {
+            throw new \RuntimeException("Snapshot gambar produk {$productId} tidak lengkap ({$relativePath}).");
         }
 
-        if (!is_file($source)) {
-            throw new \RuntimeException("Seeder image not found: {$source}");
-        }
+        $this->imageOffsets[$productId] = $offset + 1;
 
-        $paths = ImageUpload::upload($source, "product/{$productId}");
-        return $paths['path'];
+        return $path;
     }
 }

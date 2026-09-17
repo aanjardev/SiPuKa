@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Database\Seeders\Concerns\PreventsProductionSeeding;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -9,8 +10,17 @@ use Illuminate\Support\Facades\Hash;
 
 class KaryawanSeeder extends Seeder
 {
+    use PreventsProductionSeeding;
+
     public function run(): void
     {
+        $this->guardAgainstProduction();
+
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        DB::table('users')->truncate();
+        DB::table('karyawan')->truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
         DB::table('karyawan')->insert([
             [
                 'nama_lengkap' => 'Ahmad Fauzi',
@@ -82,9 +92,10 @@ class KaryawanSeeder extends Seeder
         DB::table('users')->insert([
             'id' => 1,
             'name' => 'Ahmad Fauzi',
-            'password' => Hash::make('password'),
+            'password' => Hash::make(config('seeders.legacy_admin_password')),
             'email' => 'admin@gmail.com',
             'role' => 'manager',
+            'status' => 'pending',
         ]);
     }
 }

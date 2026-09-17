@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Branch;
 use App\Models\JamOperasionalCabang;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 
 class BranchController extends Controller
@@ -45,6 +44,11 @@ class BranchController extends Controller
 
     public function create()
     {
+        if ($store = Branch::query()->first()) {
+            return redirect()->route('admin.branches.edit', $store)
+                ->with('info', 'PK hanya menggunakan satu toko. Silakan ubah data toko yang sudah ada.');
+        }
+
         $hariList = JamOperasionalCabang::getAllHari();
         return view('admin.inputDataCabang', [
             'hariList' => $hariList
@@ -53,6 +57,11 @@ class BranchController extends Controller
 
     public function store(Request $request)
     {
+        if (Branch::query()->exists()) {
+            return redirect()->route('admin.branches.index')
+                ->with('error', 'Data toko sudah ada. PK hanya dapat memiliki satu toko.');
+        }
+
         $validated = $request->validate([
             'nama' => [
                 'required',
@@ -70,11 +79,11 @@ class BranchController extends Controller
                 'required',
                 'regex:/^(?:\+62|62|0)[0-9]{8,15}$/'
             ],
-            'link_maps' => [
+            'maps_embed_url' => [
                 'nullable',
                 'url',
-                'max:255',
-                Rule::unique('perusahaan_cabang', 'link_maps'),
+                'max:2048',
+                'regex:#^https://(?:www\.)?(?:google\.[^/]+|maps\.google\.[^/]+)/maps/embed(?:[/?]|$)#i',
             ],
             'email' => [
                 'nullable',
@@ -99,11 +108,11 @@ class BranchController extends Controller
             'jam_operasional.*.catatan' => ['nullable', 'string', 'max:200'],
         ],
         [
-            'nama.regex' => 'Nama cabang hanya boleh mengandung huruf, angka, spasi, titik, koma, dan tanda hubung',
+            'nama.regex' => 'Nama toko hanya boleh mengandung huruf, angka, spasi, titik, koma, dan tanda hubung',
             'alamat.regex' => 'Alamat hanya boleh huruf, angka, spasi, titik, koma, garis miring, dan tanda hubung.',
             'nomor_telepon.regex' => 'Nomor telepon harus berupa angka dan diawali dengan 0, 62, atau +62.',
-            'link_maps.url' => 'Link Maps harus berupa URL yang valid.',
-            'link_maps.unique' => 'Link Google Maps sudah terdaftar.',
+            'maps_embed_url.url' => 'URL embed Google Maps harus berupa URL yang valid.',
+            'maps_embed_url.regex' => 'Gunakan URL embed Google Maps, contohnya https://www.google.com/maps/embed?pb=...',
             'jam_operasional.required' => 'Jam operasional harus diisi untuk semua hari.',
             'jam_operasional.size' => 'Jam operasional harus diisi untuk 7 hari.',
         ]);
@@ -111,7 +120,7 @@ class BranchController extends Controller
         DB::beginTransaction();
         try {
 
-            $branch = Branch::create($validated);
+            $branch = Branch::create(array_merge($validated, ['singleton_key' => true]));
 
             foreach ($validated['jam_operasional'] as $hari => $jamData) {
                 JamOperasionalCabang::create([
@@ -129,11 +138,11 @@ class BranchController extends Controller
             DB::rollback();
             return redirect()->back()
                 ->withInput()
-                ->with('error', 'Gagal menyimpan data cabang: ' . $e->getMessage());
+                ->with('error', 'Gagal menyimpan data toko: ' . $e->getMessage());
         }
 
         return redirect()->route('admin.branches.index')
-        ->with('success', 'Cabang berhasil ditambahkan.');
+        ->with('success', 'Data toko berhasil ditambahkan.');
     }
 
     public function show(Branch $branch)
@@ -163,13 +172,13 @@ class BranchController extends Controller
 
         if (!$branch->is_active) {
             return redirect()->route('admin.branches.index')
-                ->with('info', 'Cabang sudah dalam kondisi non-aktif.');
+                ->with('info', 'Toko sudah dalam kondisi non-aktif.');
         }
 
         $branch->update(['is_active' => false]);
 
         return redirect()->route('admin.branches.index')
-            ->with('success', 'Cabang berhasil dinonaktifkan. Cabang non-aktif tidak dapat digunakan untuk transaksi baru.');
+            ->with('success', 'Toko berhasil dinonaktifkan. Toko non-aktif tidak dapat digunakan untuk transaksi baru.');
     }
 
     public function updateStatus(Request $request, Branch $branch)
@@ -181,8 +190,8 @@ class BranchController extends Controller
         $branch->update(['is_active' => $validated['is_active']]);
 
         $message = $validated['is_active']
-            ? 'Cabang berhasil diaktifkan.'
-            : 'Cabang berhasil dinonaktifkan. Cabang non-aktif tidak dapat digunakan untuk transaksi baru.';
+            ? 'Toko berhasil diaktifkan.'
+            : 'Toko berhasil dinonaktifkan. Toko non-aktif tidak dapat digunakan untuk transaksi baru.';
 
         return redirect()->route('admin.branches.index')->with('success', $message);
     }
@@ -206,11 +215,11 @@ class BranchController extends Controller
                 'required',
                 'regex:/^(?:\+62|62|0)[0-9]{8,15}$/'
             ],
-            'link_maps' => [
+            'maps_embed_url' => [
                 'nullable',
                 'url',
-                'max:255',
-                Rule::unique('perusahaan_cabang', 'link_maps')->ignore($branch->id),
+                'max:2048',
+                'regex:#^https://(?:www\.)?(?:google\.[^/]+|maps\.google\.[^/]+)/maps/embed(?:[/?]|$)#i',
             ],
             'email' => [
                 'nullable',
@@ -234,11 +243,11 @@ class BranchController extends Controller
             'jam_operasional.*.jam_tutup' => ['nullable', 'regex:/^([01]\d|2[0-3]):([0-5]\d)(:[0-5]\d)?$/'],
             'jam_operasional.*.catatan' => ['nullable', 'string', 'max:200'],
         ], [
-            'nama.regex' => 'Nama cabang hanya boleh mengandung huruf, spasi, titik, koma, dan tanda hubung.',
+            'nama.regex' => 'Nama toko hanya boleh mengandung huruf, angka, spasi, titik, koma, dan tanda hubung.',
             'alamat.regex' => 'Alamat hanya boleh huruf, angka, spasi, titik, koma, garis miring, dan tanda hubung.',
             'nomor_telepon.regex' => 'Nomor telepon harus berupa angka dan diawali dengan 0, 62, atau +62.',
-            'link_maps.url' => 'Link Maps harus berupa URL yang valid.',
-            'link_maps.unique' => 'Link Google Maps sudah terdaftar.',
+            'maps_embed_url.url' => 'URL embed Google Maps harus berupa URL yang valid.',
+            'maps_embed_url.regex' => 'Gunakan URL embed Google Maps, contohnya https://www.google.com/maps/embed?pb=...',
             'jam_operasional.required' => 'Jam operasional harus diisi untuk semua hari.',
             'jam_operasional.size' => 'Jam operasional harus diisi untuk 7 hari.',
         ]);
@@ -266,10 +275,10 @@ class BranchController extends Controller
             DB::rollback();
             return redirect()->back()
                 ->withInput()
-                ->with('error', 'Gagal memperbarui data cabang: ' . $e->getMessage());
+                ->with('error', 'Gagal memperbarui data toko: ' . $e->getMessage());
         }
 
         return redirect()->route('admin.branches.index')
-            ->with('success', 'Cabang berhasil diperbarui.');
+            ->with('success', 'Data toko berhasil diperbarui.');
     }
 }

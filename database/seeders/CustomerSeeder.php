@@ -2,13 +2,22 @@
 
 namespace Database\Seeders;
 
+use Database\Seeders\Concerns\PreventsProductionSeeding;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
 class CustomerSeeder extends Seeder
 {
+    use PreventsProductionSeeding;
+
     public function run()
     {
+        $this->guardAgainstProduction();
+
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        DB::table('customer')->truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
         DB::table('customer')->insert([
             [
                 'kode_customer' => 'CS0001',

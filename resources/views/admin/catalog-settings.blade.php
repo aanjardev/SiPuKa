@@ -191,15 +191,12 @@
 <form action="{{ route('admin.catalog-settings.update') }}"
       method="POST"
       enctype="multipart/form-data"
-      id="settingsForm"
-      data-route-partner-destroy="{{ route('admin.catalog-settings.partner.destroy', ':id') }}"
-      data-route-banner-destroy="{{ route('admin.catalog-settings.banner.destroy', ':id') }}"
-      data-route-gallery-destroy="{{ route('admin.catalog-settings.gallery.destroy', ':id') }}">
+      id="settingsForm">
     @csrf
 
     <div class="row">
         {{-- KOLOM KIRI: Logo, Informasi Umum, Kontak, & Sosmed --}}
-        <div class="col-lg-7 mb-4">
+        <div class="col-12 mb-4">
 
             <div class="row g-3 mb-4">
                 <div class="col-lg-4">
@@ -210,11 +207,7 @@
                         </div>
                         <div class="card-body text-center">
                             <div class="bg-light rounded-3 p-3 mb-3 border border-dashed d-flex align-items-center justify-content-center" style="min-height: 150px;">
-                                @php
-                                    $path = $cat_setting->logo_path;
-                                    $url = Str::startsWith($path, 'photos/') ? asset('storage/' . $path) : asset($path);
-                        @endphp
-                        <img src="{{ asset('mainIMG/logopk.png') }}" class="img-fluid" alt="Logo Pusat Kamera Malang" style="background: #111;">
+                        <img src="{{ $cat_setting->logo_url ?: asset('mainIMG/logopk.png') }}" class="img-fluid" alt="Logo {{ $cat_setting->nama_website }}" style="background: #111;">
                     </div>
                     <input type="file" class="form-control form-control-sm" name="photo_logo" accept="image/png,image/jpeg,image/jpg,image/webp" data-max-bytes="2097152" data-max-label="2MB">
                     <div class="invalid-feedback">Ukuran file terlalu besar. Maksimal 2MB.</div>
@@ -258,12 +251,12 @@
                                          id="contact_phone_display"
                                          data-format="phone"
                                          data-target="#contact_phone"
-                                         value="{{ old('contact_phone', $cat_setting->nomor_telfon) }}"
+                                         value="{{ old('contact_phone', $cat_setting->nomor_telepon) }}"
                                          placeholder="08xx-xxxx-xxxx">
                                     <input type="hidden"
                                            name="contact_phone"
                                            id="contact_phone"
-                                           value="{{ old('contact_phone', $cat_setting->nomor_telfon) }}">
+                                           value="{{ old('contact_phone', $cat_setting->nomor_telepon) }}">
                                 </div>
                                 <div class="invalid-feedback">Nomor telepon wajib diawali 0/62 dan hanya berisi angka.</div>
                                 @error('contact_phone') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
@@ -326,23 +319,21 @@
                             </div>
                         </div>
 
-                        <div class="col-md-6">
-                            <label class="form-label fw-medium small text-muted">Tokopedia</label>
-                            <div class="input-group">
-                                <span class="input-group-text bg-light"><i class="fa-solid fa-store text-success"></i></span>
-                                <input type="text" class="form-control @error('social_tokopedia') is-invalid @enderror" name="social_tokopedia" value="{{ old('social_tokopedia', $cat_setting->tokopedia_link) }}" placeholder="Link Tokopedia">
-                                @error('social_tokopedia') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
-                            </div>
-                        </div>
+                    </div>
+                </div>
+            </div>
 
-                        <div class="col-md-6">
-                            <label class="form-label fw-medium small text-muted">Shopee</label>
-                            <div class="input-group">
-                                <span class="input-group-text bg-light"><i class="fa-solid fa-bag-shopping" style="color: #ff4000ff"></i></span>
-                                <input type="text" class="form-control @error('social_shopee') is-invalid @enderror" name="social_shopee" value="{{ old('social_shopee', $cat_setting->shopee_link) }}" placeholder="Link Shopee">
-                                @error('social_shopee') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
-                            </div>
-                        </div>
+            <div class="card card-uniform position-relative shadow-sm border-0 mt-4">
+                <button type="submit" class="btn btn-primary btn-sm card-save-btn"><span class="save-icon"><i class="fas fa-save"></i></span><span class="save-label">Simpan Perubahan</span></button>
+                <div class="card-header bg-white py-3"><h6 class="mb-0 fw-bold text-dark"><i class="fa-solid fa-heading me-2 text-primary"></i>Hero Homepage & SEO</h6></div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6"><label class="form-label small text-muted">Label Hero</label><input class="form-control" name="hero_eyebrow" maxlength="100" value="{{ old('hero_eyebrow', $cat_setting->hero_eyebrow) }}"></div>
+                        <div class="col-md-6"><label class="form-label small text-muted">Judul Hero</label><input class="form-control" name="hero_title" maxlength="120" value="{{ old('hero_title', $cat_setting->hero_title) }}"></div>
+                        <div class="col-12"><label class="form-label small text-muted">Deskripsi Hero</label><textarea class="form-control" name="hero_description" rows="2" maxlength="500">{{ old('hero_description', $cat_setting->hero_description) }}</textarea></div>
+                        <div class="col-md-6"><label class="form-label small text-muted">SEO Title</label><input class="form-control" name="seo_title" maxlength="70" value="{{ old('seo_title', $cat_setting->seo_title) }}"><div class="form-text">Maksimal 70 karakter.</div></div>
+                        <div class="col-md-6"><label class="form-label small text-muted">Open Graph Image</label><input type="file" class="form-control" name="og_image" accept="image/png,image/jpeg,image/jpg,image/webp" data-max-bytes="4194304" data-max-label="4MB"></div>
+                        <div class="col-12"><label class="form-label small text-muted">SEO Description</label><textarea class="form-control" name="seo_description" rows="2" maxlength="320">{{ old('seo_description', $cat_setting->seo_description) }}</textarea></div>
                     </div>
                 </div>
             </div>
@@ -371,13 +362,15 @@
                             @foreach ($cat_gallery as $gallery)
                             <div class="upload-box has-image" data-id="{{ $gallery->id }}" data-type="gallery">
                                 <div class="preview">
-                                    <img src="{{ $gallery->url }}" alt="Galeri customer">
+                                    <img src="{{ $gallery->url }}" onerror="this.onerror=null;this.src='{{ asset('mainIMG/produk.png') }}'" alt="{{ $gallery->caption ?: 'Galeri customer' }}">
                                 </div>
                                 <div class="controls">
                                     <button type="button" class="btn-action btn-remove text-danger" title="Hapus Foto">
                                         <i class="fa-solid fa-trash"></i>
                                     </button>
                                 </div>
+                                <input class="form-control form-control-sm mt-2" name="gallery_captions[{{ $gallery->id }}]" value="{{ old('gallery_captions.' . $gallery->id, $gallery->caption) }}" maxlength="150" placeholder="Caption foto">
+                                <input class="form-control form-control-sm mt-1" type="number" min="0" max="9999" name="gallery_order[{{ $gallery->id }}]" value="{{ old('gallery_order.' . $gallery->id, $gallery->sort_order) }}" aria-label="Urutan tampil">
                             </div>
                             @endforeach
                         </div>
@@ -388,106 +381,6 @@
 
         </div>
 
-        {{-- KOLOM KANAN: Aset Visual (Logo, Banner, Partner) --}}
-        <div class="col-lg-5 mb-4">
-
-            {{-- Card: Banner Homepage --}}
-            <div class="card card-uniform position-relative shadow-sm border-0 mb-4">
-                <button type="submit" class="btn btn-primary btn-sm card-save-btn">
-                    <span class="save-icon"><i class="fas fa-save"></i></span>
-                    <span class="save-label">Simpan Perubahan</span>
-                </button>
-                <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
-                    <h6 class="mb-0 fw-bold text-dark"><i class="fa-solid fa-panorama me-2 text-primary"></i>Banner Slider</h6>
-                </div>
-                <div class="card-body">
-                    <div class="mb-3">
-                        <label class="form-label fw-medium small text-muted">Upload Banner Baru</label>
-                        <input type="file" class="form-control form-control-sm" name="banner" accept="image/png,image/jpeg,image/jpg,image/webp" data-max-bytes="4194304" data-max-label="4MB">
-                        <div class="invalid-feedback">Ukuran file terlalu besar. Maksimal 4MB.</div>
-                        <div class="form-text text-muted" style="font-size: 0.75rem;">Format: JPG/PNG. Max: 4MB. Resolusi optimal: 700x300px (rasio 7:3).</div>
-                        @error('banner') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
-                    </div>
-
-                    <div class="table-responsive border rounded-3">
-                        <table class="table table-modern table-sm mb-0 table-scroll-fixed">
-                            <thead class="bg-light">
-                                <tr>
-                                    <th style="width: 60%">Gambar</th>
-                                    <th class="text-center">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($cat_banners as $index => $banner)
-                                <tr data-id="{{ $banner->id }}" data-type="banner">
-                                    <td class="p-2">
-                                        <img src="{{ $banner->banner_url }}" class="rounded shadow-sm w-100" style="height:60px;object-fit:cover;">
-                                    </td>
-                                    <td class="text-center align-middle">
-                                        <button type="button" class="btn-action btn-remove text-danger mx-auto" title="Hapus Banner">
-                                            <i class="fa-solid fa-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                    <input type="hidden" name="deleted_banners" id="deletedBanners">
-                </div>
-            </div>
-
-            {{-- Card: Logo Partner --}}
-            <div class="card card-uniform position-relative shadow-sm border-0">
-                <button type="submit" class="btn btn-primary btn-sm card-save-btn">
-                    <span class="save-icon"><i class="fas fa-save"></i></span>
-                    <span class="save-label">Simpan Perubahan</span>
-                </button>
-                <div class="card-header bg-white py-3">
-                    <h6 class="mb-0 fw-bold text-dark"><i class="fa-solid fa-handshake me-2 text-primary"></i>Logo Brand/Partner</h6>
-                </div>
-                <div class="card-body">
-                    <div class="mb-3">
-                        <label class="form-label fw-medium small text-muted">Upload Logo Baru</label>
-                        <input type="file" class="form-control form-control-sm" name="brand_logos" accept="image/png,image/jpeg,image/jpg,image/webp" data-max-bytes="2097152" data-max-label="2MB">
-                        <div class="invalid-feedback">Ukuran file terlalu besar. Maksimal 2MB.</div>
-                        <div class="form-text text-muted" style="font-size: 0.75rem;">Format: PNG/JPG. Max: 2MB. Resolusi optimal: 300x100px (rasio 3:1).</div>
-                        @error('brand_logos') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
-                    </div>
-
-                    <div class="table-responsive border rounded-3">
-                        <table class="table table-modern table-sm mb-0 table-scroll-fixed">
-                            <thead class="bg-light sticky-top" style="z-index: 1;">
-                                <tr>
-                                    <th style="width: 60%">Logo</th>
-                                    <th class="text-center">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($cat_partner as $index => $partner)
-                                <tr data-id="{{ $partner->id }}" data-type="partner">
-                                    <td class="p-2 align-middle">
-                                        <div class="bg-light rounded p-1 text-center border border-dashed">
-                                            <img src="{{ Str::startsWith($partner->url, 'http') ? $partner->url : asset('storage/' . $partner->logo_path) }}"
-                                                 class="img-fluid"
-                                                 style="max-height: 40px;">
-                                        </div>
-                                    </td>
-                                    <td class="text-center align-middle">
-                                        <button type="button" class="btn-action btn-remove text-danger mx-auto" title="Hapus Logo">
-                                            <i class="fa-solid fa-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                    <input type="hidden" name="deleted_partners" id="deletedPartners">
-                </div>
-            </div>
-
-        </div>
     </div>
 
     {{-- Tombol Simpan Mobile / Bottom --}}

@@ -5,8 +5,8 @@
 <nav id="main-header" class="navbar navbar-expand-lg">
     <div class="container">
         <a class="navbar-brand d-flex align-items-center" href="{{ route('index') }}">
-            <img src="{{ asset('mainIMG/logopk.png') }}" alt="Logo Pusat Kamera Malang" class="img-fluid" style="background: #111;">
-            <span class="brand-text ms-3">{{ $setting->nama_website}}</span>
+            <img src="{{ $setting?->logo_url ?: asset('mainIMG/logopk.png') }}" alt="Logo {{ $setting?->nama_website ?? 'Pusat Kamera Malang' }}" class="img-fluid" style="background: #111;">
+            <span class="brand-text ms-3">{{ $setting?->nama_website ?? 'Pusat Kamera Malang' }}</span>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>

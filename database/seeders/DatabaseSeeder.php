@@ -15,6 +15,17 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        if (app()->environment('production') && !config('seeders.allow_destructive_in_production')) {
+            throw new \RuntimeException(
+                'Seeder diblokir di production. Set ALLOW_PRODUCTION_SEEDING=true hanya untuk eksekusi yang disengaja.'
+            );
+        }
+
+        if (!config('seeders.admin_password') || !config('seeders.legacy_admin_password')) {
+            throw new \RuntimeException(
+                'SEED_ADMIN_PASSWORD dan SEED_LEGACY_ADMIN_PASSWORD wajib diatur sebelum menjalankan seeder.'
+            );
+        }
 
         $this->call([
             KaryawanSeeder::class,    // Run first to create manager employee

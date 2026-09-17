@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\CatalogSettings;
-use App\Models\CatalogBanners;
-use App\Models\CatalogPartnerLogo;
 use App\Models\CatalogCustomerGallery;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -16,57 +14,60 @@ class CatalogSettingsController extends Controller
     public function edit()
     {
         return view('admin.catalog-settings', [
-            'cat_setting' => CatalogSettings::first(),
-            'cat_banners' => CatalogBanners::all(),
-            'cat_partner' => CatalogPartnerLogo::all(),
-            'cat_gallery' => CatalogCustomerGallery::all(),
+            'cat_setting' => $this->settings(),
+            'cat_gallery' => CatalogCustomerGallery::orderBy('sort_order')->orderBy('id')->get(),
         ]);
     }
 
     public function update(Request $request)
     {
-        $cat_setting = CatalogSettings::first();
+        $cat_setting = $this->settings();
 
         $request->validate([
             'site_name'         => 'required|string|max:255',
             'photo_logo'        => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
-            'brand_logos'       => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
-            'banner'            => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
+            'og_image'          => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
             'customer_gallery'  => 'nullable',
             'customer_gallery.*' => 'image|mimes:jpg,jpeg,png,webp|max:4096',
-            'social_facebook'   => 'nullable|url',
-            'social_instagram'  => 'nullable|url',
-            'social_tiktok'     => 'nullable|url',
-            'social_youtube'    => 'nullable|url',
-            'social_tokopedia'  => 'nullable|url',
-            'social_shopee'     => 'nullable|url',
+            'social_facebook'   => ['nullable', 'url:http,https', $this->allowedHosts(['facebook.com', 'fb.com'])],
+            'social_instagram'  => ['nullable', 'url:http,https', $this->allowedHosts(['instagram.com'])],
+            'social_tiktok'     => ['nullable', 'url:http,https', $this->allowedHosts(['tiktok.com'])],
+            'social_youtube'    => ['nullable', 'url:http,https', $this->allowedHosts(['youtube.com', 'youtu.be'])],
             'contact_phone'     => 'nullable|string|max:20',
             'description_text'  => 'nullable|string',
+            'hero_eyebrow'      => 'nullable|string|max:100',
+            'hero_title'        => 'nullable|string|max:120',
+            'hero_description'  => 'nullable|string|max:500',
+            'seo_title'         => 'nullable|string|max:70',
+            'seo_description'   => 'nullable|string|max:320',
+            'gallery_captions'  => 'nullable|array',
+            'gallery_captions.*' => 'nullable|string|max:150',
+            'gallery_order'     => 'nullable|array',
+            'gallery_order.*'   => 'nullable|integer|min:0|max:9999',
         ]);
 
         $cat_setting->update([
             'nama_website'   => $request->site_name,
-            'nomor_telfon'   => $request->contact_phone,
+            'nomor_telepon'  => $request->contact_phone,
             'description'     => $request->description_text,
+            'hero_eyebrow'    => $request->hero_eyebrow,
+            'hero_title'      => $request->hero_title,
+            'hero_description' => $request->hero_description,
+            'seo_title'       => $request->seo_title,
+            'seo_description' => $request->seo_description,
             'facebook_link'   => $request->social_facebook,
             'instagram_link'  => $request->social_instagram,
             'tiktok_link'     => $request->social_tiktok,
             'youtube_link'    => $request->social_youtube,
-            'tokopedia_link'  => $request->social_tokopedia,
-            'shopee_link'     => $request->social_shopee,
         ]);
 
-        if ($request->filled('deleted_partners')) {
-            $ids = json_decode($request->deleted_partners, true);
-
-            $partners = CatalogPartnerLogo::whereIn('id', $ids)->get();
-
-            foreach ($partners as $partner) {
-
-                $this->deleteImageVariants($partner->logo_path);
-            }
-
-            CatalogPartnerLogo::whereIn('id', $ids)->delete();
+        foreach ($request->input('gallery_captions', []) as $id => $caption) {
+            CatalogCustomerGallery::where('catalog_setting_id', $cat_setting->id)
+                ->whereKey($id)
+                ->update([
+                    'caption' => $caption,
+                    'sort_order' => (int) data_get($request->input('gallery_order', []), $id, 0),
+                ]);
         }
 
         if ($request->filled('deleted_galleries')) {
@@ -81,45 +82,12 @@ class CatalogSettingsController extends Controller
             CatalogCustomerGallery::whereIn('id', $ids)->delete();
         }
 
-        if ($request->filled('deleted_banners')) {
-            $ids = json_decode($request->deleted_banners, true);
-
-            $banners = CatalogBanners::whereIn('id', $ids)->get();
-
-            foreach ($banners as $banner) {
-
-                $this->deleteImageVariants($banner->banner_path);
-            }
-
-            CatalogBanners::whereIn('id', $ids)->delete();
-        }
-
-        if ($request->hasFile('banner')) {
-
-            $paths = ImageUpload::upload($request->file('banner'), 'catalog/banners');
-
-            CatalogBanners::create([
-                'banner_path' => $paths['path'],
-                'catalog_setting_id' => 1,
-            ]);
-        }
-
-        if ($request->hasFile('brand_logos')) {
-
-            $paths = ImageUpload::upload($request->file('brand_logos'), 'catalog/partners');
-
-            CatalogPartnerLogo::create([
-                'logo_path' => $paths['path'],
-                'catalog_setting_id' => 1,
-            ]);
-        }
-
         if ($request->hasFile('customer_gallery')) {
             foreach ($request->file('customer_gallery') as $file) {
                 $paths = ImageUpload::upload($file, 'catalog/gallery');
                 CatalogCustomerGallery::create([
                     'image_path' => $paths['path'],
-                    'catalog_setting_id' => 1,
+                    'catalog_setting_id' => $cat_setting->id,
                 ]);
             }
         }
@@ -131,6 +99,12 @@ class CatalogSettingsController extends Controller
             $paths = ImageUpload::upload($request->file('photo_logo'), 'catalog/logo');
 
             $cat_setting->update(['logo_path' => $paths['path']]);
+        }
+
+        if ($request->hasFile('og_image')) {
+            $this->deleteImageVariants($cat_setting->og_image_path);
+            $paths = ImageUpload::upload($request->file('og_image'), 'catalog/seo');
+            $cat_setting->update(['og_image_path' => $paths['path']]);
         }
 
 
@@ -167,36 +141,6 @@ class CatalogSettingsController extends Controller
         }
     }
 
-    public function destroyBanner($id)
-    {
-        $banner = CatalogBanners::find($id);
-        if (!$banner) {
-            return response()->json(['success' => false, 'message' => 'Banner tidak ditemukan'], 404);
-        }
-
-        $this->deleteImageVariants($banner->banner_path);
-        $banner->delete();
-
-        return redirect()
-            ->route('admin.catalog-settings.index')
-            ->with('success', 'Pengaturan katalog berhasil diperbarui.');
-    }
-
-    public function destroyPartner($id)
-    {
-        $partner = CatalogPartnerLogo::find($id);
-        if (!$partner) {
-            return response()->json(['success' => false, 'message' => 'Partner tidak ditemukan'], 404);
-        }
-
-        $this->deleteImageVariants($partner->logo_path);
-        $partner->delete();
-
-        return redirect()
-            ->route('admin.catalog-settings.index')
-            ->with('success', 'Pengaturan katalog berhasil diperbarui.');
-    }
-
     public function destroyGallery($id)
     {
         $gallery = CatalogCustomerGallery::find($id);
@@ -210,5 +154,31 @@ class CatalogSettingsController extends Controller
         return redirect()
             ->route('admin.catalog-settings.index')
             ->with('success', 'Pengaturan katalog berhasil diperbarui.');
+    }
+
+    private function settings(): CatalogSettings
+    {
+        return CatalogSettings::firstOrCreate(
+            ['singleton_key' => true],
+            ['nama_website' => config('app.name', 'PusatKamera.id')]
+        );
+    }
+
+    private function allowedHosts(array $allowedHosts): \Closure
+    {
+        return function (string $attribute, mixed $value, \Closure $fail) use ($allowedHosts): void {
+            if (!$value) {
+                return;
+            }
+
+            $host = strtolower((string) parse_url($value, PHP_URL_HOST));
+            $valid = collect($allowedHosts)->contains(
+                fn (string $allowed) => $host === $allowed || str_ends_with($host, '.' . $allowed)
+            );
+
+            if (!$valid) {
+                $fail("Domain pada {$attribute} tidak sesuai dengan platform yang dipilih.");
+            }
+        };
     }
 }

@@ -5,11 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Produk;
 use App\Models\CatalogSettings;
-use App\Models\CatalogBanners;
-use App\Models\CatalogPartnerLogo;
 use App\Models\CatalogCustomerGallery;
 use App\Models\Kategori;
 use App\Models\Branch;
+use App\Models\KategoriHarga;
 
 class PageController extends Controller
 {
@@ -24,35 +23,43 @@ class PageController extends Controller
 
         $cat_setting = CatalogSettings::first();
         $kategoris = Kategori::orderBy('id')->take(6)->get();
+        $managedBudgetCategories = KategoriHarga::active()->get();
 
-        return view('mainPage', compact('latestProducts', 'cat_setting', 'kategoris'));
+        return view('mainPage', compact('latestProducts', 'cat_setting', 'kategoris', 'managedBudgetCategories'));
 
     }
 
     public function about(){
         $cat_setting = CatalogSettings::first();
-        $gallery = CatalogCustomerGallery::all();
+        $gallery = CatalogCustomerGallery::orderBy('sort_order')->orderBy('id')->get();
         return view("AboutStore", compact('cat_setting', 'gallery'));
     }
 
     public function contact(){
         $cat_setting = CatalogSettings::first();
-        $store = Branch::with('jamOperasional')
+        $stores = Branch::with('jamOperasional')
             ->where('is_active', true)
             ->get()
             ->map(function ($branch) {
+                $phone = preg_replace('/\D+/', '', $branch->nomor_telepon ?? '');
+                if (str_starts_with($phone, '0')) {
+                    $phone = '62' . substr($phone, 1);
+                } elseif (str_starts_with($phone, '8')) {
+                    $phone = '62' . $phone;
+                }
+
                 return [
+                    'id' => $branch->id,
                     'nama' => $branch->nama,
                     'alamat' => $branch->alamat,
                     'telepon' => $branch->nomor_telepon,
-                    'link_maps' => $branch->link_maps,
-                    'embed' => $this->buildEmbedMap($branch),
+                    'maps_embed_url' => $branch->maps_embed_url,
+                    'wa_phone' => $phone,
                     'jam' => $this->formatJamOperasional($branch->jamOperasional),
                 ];
-            })
-            ->first();
+            });
 
-        return view("contact", compact('cat_setting', 'store'));
+        return view("contact", compact('cat_setting', 'stores'));
     }
 
     public function katalog(){
@@ -68,27 +75,19 @@ class PageController extends Controller
         return view("admin.edit");
     }
 
-    /**
-     * Bangun link embed Google Maps dari link umum.
-     */
-    private function buildEmbedMap($branch)
+    public function sitemap()
     {
-        $link = $branch->link_maps;
-        $query = urlencode($branch->nama . ' ' . $branch->alamat);
+        $products = Produk::where('is_visible', true)->where('is_archived', false)->get(['id', 'updated_at']);
 
-        if (!$link) {
-            return "https://www.google.com/maps?q={$query}&output=embed";
-        }
+        return response()
+            ->view('sitemap', compact('products'))
+            ->header('Content-Type', 'application/xml');
+    }
 
-        if (str_contains($link, '/maps/embed')) {
-            return $link;
-        }
-
-        if (str_contains($link, 'google.com/maps')) {
-            return str_replace('/maps/', '/maps/embed/', $link);
-        }
-
-        return "https://www.google.com/maps?q={$query}&output=embed";
+    public function robots()
+    {
+        return response("User-agent: *\nAllow: /\nDisallow: /admin\nSitemap: " . url('/sitemap.xml') . "\n", 200)
+            ->header('Content-Type', 'text/plain');
     }
 
     /**

@@ -37,7 +37,7 @@ return new class extends Migration
             }
 
             if (!Schema::hasColumn('perusahaan_cabang', 'email')) {
-                $table->string('email', 100)->nullable()->after('link_maps');
+                $table->string('email', 100)->nullable()->after('maps_embed_url');
             }
 
             if (!Schema::hasColumn('perusahaan_cabang', 'deskripsi')) {

@@ -43,7 +43,7 @@ class Categories extends Model
             return null;
         }
 
-        $base = rtrim(env('CDN_BASE_URL', 'https://sidika.qurrotul-ainii0266.workers.dev'), '/');
+        $base = rtrim(config('filesystems.disks.r2.url', ''), '/');
 
         if ($base) {
             return $base . '/' . ltrim($this->path_gambar, '/');

@@ -1,64 +1,50 @@
-.floating-wa {
-    position: fixed;
-    right: 2rem;
-    bottom: 2rem;
-    z-index: 1900;
-    display: flex;
-    align-items: center;
-    gap: .7rem;
-    padding: .75rem 1rem;
-    border: 3px solid #111;
-    border-radius: 0;
-    background: #ffd600;
-    box-shadow: 6px 6px 0 #111;
-    color: #111;
-    font-weight: 900;
-    text-decoration: none;
-    transition: transform .15s ease, box-shadow .15s ease;
+
+:root {
+    --wa-color: #25D366;
+    --wa-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --wa-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+    --wa-transition: all 0.3s ease;
 }
 
-.floating-wa i {
-    display: grid;
-    place-items: center;
-    width: 34px;
-    height: 34px;
-    background: #111;
-    color: #ffd600;
-    font-size: 1.35rem;
+.floating-wa {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background-color: var(--wa-color);
+    color: white;
+    padding: 0.5rem 1.5rem;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: var(--wa-shadow-md);
+    transition: var(--wa-transition);
+    z-index: 1000;
 }
 
 .floating-wa:hover {
-    transform: translate(-3px, -3px);
-    box-shadow: 9px 9px 0 #111;
-    color: #111;
+    transform: translateY(-3px);
+    box-shadow: var(--wa-shadow-lg);
+    color: white;
+    text-decoration: none;
 }
 
-.floating-wa:active {
-    transform: translate(6px, 6px);
-    box-shadow: none;
+.floating-wa i {
+    font-size: 1.25rem;
 }
+
 
 @media (max-width: 576px) {
     .floating-wa {
-        right: 1rem;
         bottom: 1rem;
-        width: 56px;
-        height: 56px;
-        padding: 0;
-        justify-content: center;
+        right: 1rem;
+        padding: 0.75rem 1.25rem;
+        font-size: 0.9rem;
     }
-
+    
     .floating-wa i {
-        width: auto;
-        height: auto;
-        background: transparent;
-        color: #111;
-        font-size: 1.65rem;
+        font-size: 1.1rem;
     }
-
-    .floating-wa span { display: none; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .floating-wa { transition: none; }
-}
+} 

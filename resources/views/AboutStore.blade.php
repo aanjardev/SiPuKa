@@ -317,8 +317,9 @@
                             <div class="customer-gallery-item {{ $index === 0 ? 'is-active' : '' }}">
                                 <div class="customer-gallery-frame">
                                     <div class="customer-gallery-media">
-                                        <img src="{{ $item->url }}" alt="Galeri customer {{ $index + 1 }}">
+                                        <img src="{{ $item->url }}" onerror="this.onerror=null;this.src='{{ asset('mainIMG/produk.png') }}'" alt="{{ $item->caption ?: 'Galeri customer ' . ($index + 1) }}">
                                     </div>
+                                    @if($item->caption)<p class="text-center mt-2 mb-0 fw-semibold">{{ $item->caption }}</p>@endif
                                 </div>
                             </div>
                         @endforeach

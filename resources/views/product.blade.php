@@ -1,6 +1,6 @@
 @extends('layouts.customer')
 
-@section('title', 'Katalog Kamera — Pusat Kamera Malang')
+@section('title', 'Katalog Kamera — PusatKamera.id')
 
 @push('styles')
     <link rel="stylesheet" href="{{ \App\Helpers\CssAssetHelper::css('css/legacy/catalog-brutal.css') }}?v=5">
@@ -10,7 +10,7 @@
 <main class="catalog-brutal">
     {{-- <header class="catalog-hero">
         <div class="container">
-            <span class="catalog-kicker">PUSAT KAMERA MALANG</span>
+            <span class="catalog-kicker">PusatKamera.id</span>
             <div class="catalog-title-row">
                 <h1>CARI KAMERA<br><span>SESUAI BUDGET.</span></h1>
                 <p>Dari kamera pertama sampai paket lembaga, temukan pilihan yang pas tanpa bikin kantong kaget.</p>

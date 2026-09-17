@@ -15,9 +15,14 @@ class CatalogCustomerGallery extends Model
         'catalog_setting_id',
         'image_path',
         'caption',
+        'sort_order',
     ];
 
     protected $appends = ['url'];
+
+    protected $casts = [
+        'sort_order' => 'integer',
+    ];
 
     public function getUrlAttribute()
     {
@@ -25,7 +30,7 @@ class CatalogCustomerGallery extends Model
             return null;
         }
 
-        $base = rtrim(env('CDN_BASE_URL', 'https://sidika.qurrotul-ainii0266.workers.dev'), '/');
+        $base = rtrim(config('filesystems.disks.r2.url', ''), '/');
 
         if ($base) {
             return $base . '/' . ltrim($this->image_path, '/');

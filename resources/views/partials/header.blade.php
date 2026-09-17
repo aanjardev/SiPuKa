@@ -1,12 +1,18 @@
 <!-- Navigation -->
 @php
     $setting = \App\Models\CatalogSettings::first();
+    $store = \App\Models\Branch::where('is_active', true)->first();
 @endphp
 <nav id="main-header" class="navbar navbar-expand-lg">
     <div class="container">
         <a class="navbar-brand d-flex align-items-center" href="/">
-            <span class="brand-logo"><img src="{{ asset('mainIMG/logopk.png') }}" alt="Logo Pusat Kamera Malang"></span>
-            <span class="brand-text">PUSAT KAMERA MALANG</span>
+            <span class="brand-logo"><img src="{{ $setting?->logo_url ?: asset('mainIMG/logopk.png') }}" onerror="this.onerror=null;this.src='{{ asset('mainIMG/logopk.png') }}'" alt="Logo {{ $setting?->nama_website ?? 'PusatKamera.id' }}"></span>
+            <span class="brand-identity">
+                <span class="brand-text">{{ strtoupper($setting?->nama_website ?? 'PusatKamera.id') }}</span>
+                @if($store?->alamat)
+                    <span class="brand-address">{{ $store->alamat }}</span>
+                @endif
+            </span>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>

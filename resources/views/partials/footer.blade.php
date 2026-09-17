@@ -1,7 +1,7 @@
 @php
     $setting = $cat_setting ?? \App\Models\CatalogSettings::first();
     $store = \App\Models\Branch::with('jamOperasional')->where('is_active', true)->first();
-    $phone = $store?->nomor_telepon ?: $setting?->nomor_telfon;
+    $phone = $store?->nomor_telepon ?: $setting?->nomor_telepon;
     $rawPhone = preg_replace('/\D+/', '', $phone ?? '');
     if ($rawPhone && str_starts_with($rawPhone, '0')) {
         $rawPhone = '62' . substr($rawPhone, 1);
@@ -9,7 +9,7 @@
         $rawPhone = '62' . $rawPhone;
     }
     $waLink = $rawPhone ? "https://wa.me/{$rawPhone}" : null;
-    $mapLink = $store?->link_maps ?: ($store ? 'https://www.google.com/maps?q=' . urlencode($store->alamat) : null);
+    $mapLink = $store?->maps_embed_url;
     $openHours = $store?->jamOperasional?->where('is_buka', true);
     $firstHours = $openHours?->first();
     $hoursText = $firstHours && $firstHours->jam_buka && $firstHours->jam_tutup
@@ -27,14 +27,14 @@
     <div class="container">
         <div class="footer-main pt-5">
             <div class="footer-intro">
-                <span class="footer-logo"><img src="{{ asset('mainIMG/logopk.png') }}" alt="Logo Pusat Kamera Malang"></span>
-                <h2>PUSAT KAMERA<br>MALANG.</h2>
-                <p>Spesialis kamera pemula untuk pelajar, mahasiswa, ekstrakurikuler fotografi, dan lembaga pendidikan.</p>
+                <span class="footer-logo"><img src="{{ $setting?->logo_url ?: asset('mainIMG/logopk.png') }}" onerror="this.onerror=null;this.src='{{ asset('mainIMG/logopk.png') }}'" alt="Logo {{ $setting?->nama_website ?? 'PusatKamera.id' }}"></span>
+                <h2>{{ $setting?->nama_website ?? 'PusatKamera.id' }}</h2>
+                <p>{{ $setting?->description ?? 'Spesialis kamera pemula untuk pelajar, mahasiswa, ekstrakurikuler fotografi, dan lembaga pendidikan.' }}</p>
             </div>
 
             <div class="footer-panel">
                 <p class="footer-label">KUNJUNGI TOKO</p>
-                <h3>{{ $store?->nama ?: 'Pusat Kamera Malang' }}</h3>
+                <h3>{{ $store?->nama ?: 'PusatKamera.id' }}</h3>
                 <ul>
                     @if($store?->alamat)
                         <li><i class="bi bi-geo-alt-fill"></i><span>{{ $store->alamat }}</span></li>
@@ -52,7 +52,7 @@
         </div>
 
         <div class="footer-bottom">
-            <p>© {{ date('Y') }} PUSAT KAMERA MALANG</p>
+            <p>© {{ date('Y') }} PusatKamera.id</p>
             <nav aria-label="Navigasi footer">
                 <a href="/">BERANDA</a><a href="{{ route('product.index') }}">KATALOG</a><a href="/contact">KONTAK</a>
             </nav>

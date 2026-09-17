@@ -61,10 +61,14 @@ class Handler extends ExceptionHandler
         });
 
         $this->renderable(function (AuthenticationException $e, Request $request) {
+            if (!$request->expectsJson()) {
+                return redirect()->guest(route('login'));
+            }
+
             try {
-                return response()->view('errors.403', [], 403);
+                return response()->json(['message' => 'Unauthenticated.'], 401);
             } catch (\Exception $viewException) {
-                return response()->make('Access denied - Please login', 403);
+                return response()->make('Unauthenticated.', 401);
             }
         });
 

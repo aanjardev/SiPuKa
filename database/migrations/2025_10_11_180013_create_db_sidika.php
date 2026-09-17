@@ -31,6 +31,7 @@ return new class extends Migration
 
         Schema::create('perusahaan_cabang', function (Blueprint $table) {
             $table->id();
+            $table->boolean('singleton_key')->default(true)->unique('perusahaan_cabang_singleton_unique');
             $table->string('nama', 50);
             $table->string('alamat', 200);
             $table->time('jam_buka')->nullable();

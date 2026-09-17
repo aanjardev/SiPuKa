@@ -6,9 +6,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', $setting?->nama_website ?? 'Pusat Kamera Malang')</title>
-    <link rel="icon" href="{{ asset('mainIMG/logopk.png') }}" type="image/png">
-    <link rel="shortcut icon" href="{{ asset('mainIMG/logopk.png') }}" type="image/png">
+    <title>@yield('title', $setting?->nama_website ?? 'PusatKamera.id')</title>
+    <meta name="description" content="@yield('meta_description', $setting?->seo_description ?? $setting?->description ?? '')">
+    <link rel="canonical" href="{{ url()->current() }}">
+    <meta property="og:title" content="@yield('title', $setting?->seo_title ?? $setting?->nama_website ?? 'PusatKamera.id')">
+    <meta property="og:description" content="@yield('meta_description', $setting?->seo_description ?? $setting?->description ?? '')">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:type" content="website">
+    @if($setting?->og_image_url)<meta property="og:image" content="{{ $setting->og_image_url }}">@endif
+    <link rel="icon" href="{{ $setting?->logo_url ?: asset('mainIMG/logopk.png') }}" type="image/png">
+    <link rel="shortcut icon" href="{{ $setting?->logo_url ?: asset('mainIMG/logopk.png') }}" type="image/png">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,7 +25,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{ \App\Helpers\CssAssetHelper::css('css/legacy/header.css') }}">
+    <link rel="stylesheet" href="{{ \App\Helpers\CssAssetHelper::css('css/legacy/header.css') }}?v=pk-navbar-3">
     <link rel="stylesheet" href="{{ \App\Helpers\CssAssetHelper::css('css/legacy/storefront.css') }}?v=2">
 
     @stack('styles')

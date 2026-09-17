@@ -37,6 +37,28 @@
     letter-spacing: 0.5px;
     margin-left: 1rem;
     transition: var(--header-transition);
+    text-transform: uppercase;
+    line-height: 1.05;
+}
+
+#main-header .brand-identity {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+}
+
+#main-header .brand-address {
+    max-width: 430px;
+    margin: 0.3rem 0 0 1rem;
+    overflow: hidden;
+    color: #858585;
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.025em;
+    line-height: 1.25;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 #main-header .navbar-toggler {
@@ -112,4 +134,9 @@
     #main-header .navbar-brand img {
         max-width: 70px;
     }
-} 
+
+    #main-header .brand-address {
+        max-width: min(58vw, 260px);
+        font-size: 0.58rem;
+    }
+}

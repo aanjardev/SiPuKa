@@ -13,10 +13,11 @@
     ];
 @endphp
 
-@section('title', 'Pusat Kamera Malang — Jagonya Kamera Pemula & Lembaga')
+@section('title', $cat_setting?->seo_title ?? (($cat_setting?->nama_website ?? 'PusatKamera.id') . ' — Katalog Kamera'))
+@section('meta_description', $cat_setting?->seo_description ?? $cat_setting?->description ?? '')
 
 @push('styles')
-    <link rel="stylesheet" href="{{ \App\Helpers\CssAssetHelper::css('css/legacy/home-brutal.css') }}?v=2">
+    <link rel="stylesheet" href="{{ \App\Helpers\CssAssetHelper::css('css/legacy/home-brutal.css') }}?v=6">
 @endpush
 
 @section('content')
@@ -25,9 +26,9 @@
         <div class="container">
             <div class="hero-grid">
                 <div class="hero-copy">
-                    <span class="brutal-sticker">JAGONYA KAMERA PEMULA & LEMBAGA</span>
-                    <h1>PUSAT<br><span>KAMERA</span><br>MALANG</h1>
-                    <p>Pilihan kamera terjangkau untuk pelajar, mahasiswa, ekstrakurikuler fotografi, dan lembaga pendidikan.</p>
+                    <span class="brutal-sticker">{{ $cat_setting?->hero_eyebrow ?? 'JAGONYA KAMERA PEMULA & LEMBAGA' }}</span>
+                    <h1>{{ $cat_setting?->hero_title ?? $cat_setting?->nama_website ?? 'PusatKamera.id' }}</h1>
+                    <p>{{ $cat_setting?->hero_description ?? 'Pilihan kamera terjangkau untuk pelajar, mahasiswa, ekstrakurikuler fotografi, dan lembaga pendidikan.' }}</p>
                     <div class="hero-actions">
                         <a href="{{ route('product.index') }}" class="brutal-btn brutal-btn-light">LIHAT KATALOG <i class="bi bi-arrow-up-right"></i></a>
                         <a href="/contact" class="brutal-btn brutal-btn-light">KONSULTASI GRATIS</a>
@@ -35,7 +36,7 @@
                 </div>
                 <div class="hero-art" aria-label="Ilustrasi kamera">
                     <span class="hero-burst">CEK<br>STOK!</span>
-                    <img class="hero-image" src="{{ asset('mainIMG/produk.png') }}" alt="Kamera di Pusat Kamera Malang">
+                    <img class="hero-image" src="{{ asset('mainIMG/produk.png') }}" alt="Kamera di PusatKamera.id">
                     <p>SIAP UNTUK<br>MULAI BERKARYA</p>
                 </div>
             </div>
@@ -49,13 +50,13 @@
                 <a href="{{ route('product.index') }}">LIHAT SEMUA <i class="bi bi-arrow-right"></i></a>
             </div>
             <div class="category-grid budget-category-grid">
-                @foreach ($budgetCategories as $category)
-                    <a href="{{ $category['url'] }}" class="category-card budget-category-card">
+                @foreach ($managedBudgetCategories as $category)
+                    <a href="{{ route('product.index', ['budget' => $category->slug]) }}" class="category-card budget-category-card">
                         <div class="category-media">
-                            <small>{{ $category['eyebrow'] }}</small>
-                            <strong>{{ $category['price'] }}</strong>
+                            <small>BUDGET KAMERA</small>
+                            <strong>{{ strtoupper($category->nama) }}</strong>
                         </div>
-                        <div class="category-name"><span>{{ $category['label'] }}</span><i class="bi bi-arrow-up-right"></i></div>
+                        <div class="category-name"><span>LIHAT PRODUK</span><i class="bi bi-arrow-up-right"></i></div>
                     </a>
                 @endforeach
             </div>
@@ -104,7 +105,7 @@
                     <h3>HARGA SESUAI BUDGET</h3>
                     <p>Pilih kamera dari berbagai rentang harga sesuai anggaranmu.</p>
                 </article>
-                <article><span>03</span><i class="bi bi-people-fill"></i><h3>PAKET UNTUK LEMBAGA</h3><p>Solusi perlengkapan fotografi untuk sekolah, kampus, dan ekstrakurikuler.</p></article>
+                <article><span>03</span><i class="bi bi-people-fill"></i><h3>PAKET SESUAI KEBUTUHAN</h3><p>Paket untuk fotografer pemula, kegiatan ekstrakurikuler, mahasiswa jurusan DKV, dan anggota komunitas fotografi.</p></article>
             </div>
         </div>
     </section>

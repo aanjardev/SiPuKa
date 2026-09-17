@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth; // Pastikan untuk meng-import Auth
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class CheckRole
@@ -19,23 +19,20 @@ class CheckRole
     {
 
         if (!Auth::check()) {
-
-            return redirect('/login'); // Sesuaikan dengan route login Anda
+            return redirect()->route('login');
         }
 
 
         $userRole = Auth::user()->role;
 
-        if ($userRole == 'manager') {
+        if ($userRole === 'manager') {
             return $next($request);
         }
 
-        if (in_array($userRole, $roles)) {
+        if (in_array($userRole, $roles, true)) {
             return $next($request);
         }
 
-
-
-        return back()->with('error', 'Anda tidak memiliki hak akses untuk halaman ini.');
+        abort(403, 'Anda tidak memiliki hak akses untuk halaman ini.');
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Produk;
 use App\Models\Kategori;
 use App\Models\CatalogSettings;
+use App\Models\KategoriHarga;
 
 use Illuminate\Http\Request;
 
@@ -87,6 +88,13 @@ class ProductController extends Controller
             '6-10jt' => ['label' => '6–10 Juta', 'min' => 6000000, 'max' => 10999999],
             'diatas-10jt' => ['label' => 'Di Atas 10 Juta', 'min' => 11000000, 'max' => null],
         ];
+        $budgetRanges = KategoriHarga::active()->get()->mapWithKeys(fn ($range) => [
+            $range->slug => [
+                'label' => $range->nama,
+                'min' => $range->harga_minimum,
+                'max' => $range->harga_maksimum,
+            ],
+        ])->all();
 
         $query = Produk::with(['gambarUtama', 'kategori'])
             ->where('is_visible', true)

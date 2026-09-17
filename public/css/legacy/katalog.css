@@ -506,6 +506,19 @@ body {
     }
 }
 
+/* Custom Container Width untuk Desktop */
+@media (min-width: 1200px) {
+    .container {
+        max-width: 1320px;
+    }
+}
+
+@media (min-width: 1400px) {
+    .container {
+        max-width: 1420px;
+    }
+}
+
 @media (min-width: 768px) {
 
         --bs-grid-columns: 3;

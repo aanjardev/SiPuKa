@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('perusahaan_cabang', function (Blueprint $table) {
-            $table->string('link_maps')->after('alamat')->nullable();
+            $table->text('maps_embed_url')->after('alamat')->nullable();
         });
     }
 
@@ -22,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('perusahaan_cabang', function (Blueprint $table) {
-            $table->dropColumn('link_maps');
+            $table->dropColumn('maps_embed_url');
         });
     }
 };

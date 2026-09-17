@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', isset($branch) ? (isset($isShow) && $isShow ? 'Detail Data Cabang' : 'Edit Data Cabang') : 'Tambah Data Cabang')
+@section('title', isset($branch) ? (isset($isShow) && $isShow ? 'Detail Data Toko' : 'Edit Data Toko') : 'Isi Data Toko')
 
 @push('page-actions')
     <a href="{{ route('admin.branches.index') }}" class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-2">
@@ -10,7 +10,7 @@
     @if(!isset($isShow) || !$isShow)
     <button type="submit" form="branchForm" class="btn btn-primary btn-sm d-flex align-items-center gap-2">
         <i class="fa-solid fa-save"></i>
-        <span>{{ isset($branch) ? 'Simpan Perubahan' : 'Simpan Cabang' }}</span>
+        <span>{{ isset($branch) ? 'Simpan Perubahan' : 'Simpan Toko' }}</span>
     </button>
     @endif
 @endpush
@@ -35,17 +35,17 @@
                 <div class="card-header bg-white border-0 pt-4 ps-4 pe-4 pb-0">
                     <h6 class="fw-bold text-dark mb-0">
                         <i class="fa-solid fa-store me-2 text-primary"></i>
-                        {{ isset($isShow) && $isShow ? 'Detail Cabang' : (isset($branch) ? 'Informasi Cabang' : 'Identitas Cabang Baru') }}
+                        {{ isset($isShow) && $isShow ? 'Detail Toko' : (isset($branch) ? 'Informasi Toko' : 'Identitas Toko') }}
                     </h6>
                     <p class="text-muted small mt-1">
-                        {{ isset($isShow) && $isShow ? 'Informasi detail cabang (mode tampil)' : 'Masukkan detail nama dan alamat fisik cabang.' }}
+                        {{ isset($isShow) && $isShow ? 'Informasi detail toko (mode tampil)' : 'Masukkan detail nama dan alamat fisik toko.' }}
                     </p>
                 </div>
 
                 <div class="card-body p-4">
-                    {{-- Nama Cabang --}}
+                    {{-- Nama Toko --}}
                     <div class="mb-4">
-                        <label for="namaCabang" class="form-label fw-medium text-secondary small">Nama Cabang <span class="text-danger">*</span></label>
+                        <label for="namaCabang" class="form-label fw-medium text-secondary small">Nama Toko <span class="text-danger">*</span></label>
                         <div class="input-group">
                             <span class="input-group-text bg-light border-end-0 text-muted ps-3">
                                 <i class="fa-solid fa-shop"></i>
@@ -56,17 +56,17 @@
                                 name="nama"
                                 style="height: 45px;"
                                 value="{{ old('nama', $branch->nama ?? '') }}"
-                                placeholder="Contoh: Dinoyo Kamera Pusat"
+                                placeholder="Contoh: PusatKamera.id"
                                 {{ isset($isShow) && $isShow ? 'readonly' : 'required' }}
                                 @if(!isset($isShow) || !$isShow)
-                                data-error-message="Nama cabang wajib diisi"
+                                data-error-message="Nama toko wajib diisi"
                                 @endif
                                 autofocus>
                         </div>
                         @error('nama')
                         <div class="invalid-feedback d-block">{{ $message }}</div>
                         @else
-                        <div class="invalid-feedback">Nama cabang wajib diisi</div>
+                        <div class="invalid-feedback">Nama toko wajib diisi</div>
                         @enderror
                     </div>
 
@@ -82,7 +82,7 @@
                                 id="Alamat"
                                 name="alamat"
                                 rows="2" maxlength="150"
-                                placeholder="Masukkan alamat lengkap cabang (Jalan, No, RT/RW, Kota)..."
+                                placeholder="Masukkan alamat lengkap toko (Jalan, No, RT/RW, Kota)..."
                                 {{ isset($isShow) && $isShow ? 'readonly' : 'required' }}
                                 @if(!isset($isShow) || !$isShow)
                                 data-error-message="Alamat lengkap wajib diisi"
@@ -97,7 +97,7 @@
 
                     {{-- Email --}}
                     <div class="mb-3">
-                        <label for="email" class="form-label fw-medium text-secondary small">Email Cabang</label>
+                        <label for="email" class="form-label fw-medium text-secondary small">Email Toko</label>
                         <div class="input-group">
                             <span class="input-group-text bg-light border-end-0 text-muted ps-3">
                                 <i class="fa-solid fa-envelope"></i>
@@ -108,7 +108,7 @@
                                 name="email"
                                 style="height: 45px;"
                                 value="{{ old('email', $branch->email ?? '') }}"
-                                placeholder="email@cabang.com"
+                                placeholder="email@toko.com"
                                 {{ isset($isShow) && $isShow ? 'readonly' : '' }}>
                         </div>
                         @error('email')
@@ -118,7 +118,7 @@
 
                     {{-- Deskripsi --}}
                     <div class="mb-3">
-                        <label for="deskripsi" class="form-label fw-medium text-secondary small">Deskripsi Cabang</label>
+                        <label for="deskripsi" class="form-label fw-medium text-secondary small">Deskripsi Toko</label>
                         <div class="input-group">
                             <span class="input-group-text bg-light border-end-0 text-muted ps-3">
                                 <i class="fa-solid fa-info-circle"></i>
@@ -128,7 +128,7 @@
                                 id="deskripsi"
                                 name="deskripsi"
                                 rows="3"
-                                placeholder="Deskripsi singkat tentang cabang..."
+                                placeholder="Deskripsi singkat tentang toko..."
                                 {{ isset($isShow) && $isShow ? 'readonly' : '' }}>{{ old('deskripsi', $branch->deskripsi ?? '') }}</textarea>
                         </div>
                         @error('deskripsi')
@@ -147,14 +147,14 @@
                                 <div class="col-md-6">
                                     {{-- Status Aktif --}}
                                     <div class="mb-4">
-                                        <label for="is_active" class="form-label fw-medium text-secondary small">Status Cabang</label>
+                                        <label for="is_active" class="form-label fw-medium text-secondary small">Status Toko</label>
                                         <div class="form-check form-switch">
                                             <input class="form-check-input" type="checkbox" id="is_active" name="is_active" value="1" {{ old('is_active', $branch->is_active ?? 1) ? 'checked' : '' }} {{ isset($isShow) && $isShow ? 'disabled' : '' }}>
                                             <label class="form-check-label fw-medium" for="is_active">
-                                                Cabang Aktif
+                                                Toko Aktif
                                             </label>
                                         </div>
-                                        <div class="form-text small text-muted">Non-aktifkan jika cabang tidak beroperasi.</div>
+                                        <div class="form-text small text-muted">Nonaktifkan jika toko tidak beroperasi.</div>
                                     </div>
                                 </div>
                             </div>
@@ -191,34 +191,39 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    {{-- Link Maps --}}
+                                    {{-- URL embed Maps --}}
                                     <div class="mb-4">
-                                        <label for="LinkMaps" class="form-label fw-medium text-secondary small">Link Google Maps</label>
+                                        <label for="maps_embed_url" class="form-label fw-medium text-secondary small">URL Embed Google Maps</label>
                                         <div class="input-group">
                                             <span class="input-group-text bg-light border-end-0 text-muted ps-3">
                                                 <i class="fa-solid fa-link"></i>
                                             </span>
                                             <input type="text"
-                                                class="form-control border-start-0 ps-2 @error('link_maps') is-invalid @enderror"
-                                                id="LinkMaps"
-                                                name="link_maps"
+                                                class="form-control border-start-0 ps-2 @error('maps_embed_url') is-invalid @enderror"
+                                                id="maps_embed_url"
+                                                name="maps_embed_url"
                                                 style="height: 45px;"
-                                                value="{{ old('link_maps', $branch->link_maps ?? '') }}"
-                                                placeholder="https://maps.google.com/..."
+                                                value="{{ old('maps_embed_url', $branch->maps_embed_url ?? '') }}"
+                                                placeholder="https://www.google.com/maps/embed?pb=..."
                                                 {{ isset($isShow) && $isShow ? 'readonly' : '' }}>
                                         </div>
                                         @if(isset($isShow) && $isShow)
                                             <div class="form-text small">
-                                                <a href="{{ $branch->link_maps ?? '#' }}" target="_blank" class="text-primary">
+                                                <a href="{{ $branch->maps_embed_url ?? '#' }}" target="_blank" class="text-primary">
                                                     <i class="fa-solid fa-external-link-alt me-1"></i>Buka di Google Maps
                                                 </a>
                                             </div>
                                         @else
-                                            <div class="form-text small text-muted">Salin link lokasi dari Google Maps.</div>
+                                            <div class="form-text small text-muted">Google Maps → Bagikan → Sematkan peta, lalu salin URL dari atribut src.</div>
                                         @endif
-                                        @error('link_maps')
+                                        @error('maps_embed_url')
                                             <div class="text-danger small mt-1">{{ $message }}</div>
                                         @enderror
+                                        @if(old('maps_embed_url', $branch->maps_embed_url ?? null))
+                                            <div class="ratio ratio-16x9 mt-3 border rounded overflow-hidden">
+                                                <iframe src="{{ old('maps_embed_url', $branch->maps_embed_url ?? '') }}" title="Preview lokasi toko" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                                            </div>
+                                        @endif
                                     </div>
                                 </div>
                             </div>

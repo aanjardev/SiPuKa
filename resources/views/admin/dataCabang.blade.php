@@ -1,12 +1,19 @@
 @extends('layouts.admin')
 
-@section('title', 'Data Cabang')
+@section('title', 'Data Toko')
 
 @push('page-actions')
+@if($data_cabang->isNotEmpty())
+<a href="{{ route('admin.branches.edit', $data_cabang->first()) }}" class="btn btn-primary btn-sm d-flex align-items-center gap-2">
+    <i class="fas fa-pen-to-square fa-fw"></i>
+    <span>Edit Toko</span>
+</a>
+@else
 <a href="{{ route('admin.branches.create') }}" class="btn btn-primary btn-sm d-flex align-items-center gap-2">
     <i class="fas fa-plus fa-fw"></i>
-    <span>Tambah Cabang</span>
+    <span>Isi Data Toko</span>
 </a>
+@endif
 @endpush
 
 @section('content')
@@ -23,7 +30,7 @@
                 <input type="text"
                        class="form-control border-0 shadow-none bg-transparent"
                        name="search"
-                       placeholder="Cari cabang berdasarkan nama atau alamat..."
+                       placeholder="Cari toko berdasarkan nama atau alamat..."
                        value="{{ $search_term ?? '' }}"
                        style="font-size: 0.95rem;">
             </div>
@@ -52,7 +59,7 @@
                 <thead>
                     <tr>
                         <th class="text-center" style="width: 5%;">No</th>
-                        <th style="width: 20%;">Nama Cabang</th>
+                        <th style="width: 20%;">Nama Toko</th>
                         <th style="width: 25%; min-width: 300px;">Alamat</th>
                         <th style="width: 15%;">Kontak</th>
                         <th style="width: 15%;">Jam Operasional</th>
@@ -76,8 +83,8 @@
                         </td>
 
                         <td>
-                            @if ($cabang->link_maps)
-                                <a href="{{ $cabang->link_maps }}"
+                            @if ($cabang->maps_embed_url)
+                                <a href="{{ $cabang->maps_embed_url }}"
                                    target="_blank"
                                    rel="noopener noreferrer"
                                    class="text-decoration-none text-muted small d-flex align-items-start gap-2"
@@ -165,8 +172,8 @@
                                     <input type="hidden" name="is_active" value="0">
                                     <button type="button"
                                         class="btn-action btn-action-delete"
-                                        title="Nonaktifkan Cabang"
-                                        data-message="Nonaktifkan cabang ini? Cabang yang non-aktif tidak bisa dipakai untuk transaksi baru.">
+                                        title="Nonaktifkan Toko"
+                                        data-message="Nonaktifkan toko ini? Toko yang non-aktif tidak bisa dipakai untuk transaksi baru.">
                                         <i class="fa-solid fa-power-off"></i>
                                     </button>
                                 </form>
@@ -177,7 +184,7 @@
                                     <input type="hidden" name="is_active" value="1">
                                     <button type="submit"
                                         class="btn-action btn-action-edit"
-                                        title="Aktifkan Cabang">
+                                        title="Aktifkan Toko">
                                         <i class="fa-solid fa-rotate-left"></i>
                                     </button>
                                 </form>
@@ -190,7 +197,7 @@
                         <td colspan="7" class="text-center py-5">
                             <div class="d-flex flex-column align-items-center opacity-50">
                                 <i class="fa-solid fa-shop fa-3x mb-3 text-muted"></i>
-                                <h6 class="text-muted">Belum ada data cabang</h6>
+                                <h6 class="text-muted">Belum ada data toko</h6>
                             </div>
                         </td>
                     </tr>

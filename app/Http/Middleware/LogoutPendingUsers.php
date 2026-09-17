@@ -13,13 +13,13 @@ class LogoutPendingUsers
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::check() && Auth::user()->status === 'pending') {
+        if (Auth::check() && Auth::user()->status !== 'active') {
             Auth::logout();
             $request->session()->invalidate();
             $request->session()->regenerateToken();
 
             return redirect()->route('login')
-                ->with('warning', 'Email Anda telah diganti. Mohon cek email baru untuk aktivasi ulang, lalu login kembali.');
+                ->with('warning', 'Akun Anda belum aktif atau sudah dinonaktifkan. Silakan hubungi manager.');
         }
 
         return $next($request);

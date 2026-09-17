@@ -1,6 +1,5 @@
-
 :root {
-    --primary-color: #2F353F;
+    --primary-color: #2f353f;
     --secondary-color: #333333;
     --text-color: #333333;
     --gray-100: #f8f9fa;
@@ -18,16 +17,19 @@
     --transition-base: all 0.3s ease;
 }
 
-
 body {
-    font-family: 'Montserrat', sans-serif;
+    font-family: "Montserrat", sans-serif;
     color: var(--text-color);
     line-height: 1.6;
     background-color: var(--gray-100);
 }
 
-
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     color: var(--primary-color);
     font-weight: 700;
 }
@@ -41,7 +43,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .section-title::after {
-    content: '';
+    content: "";
     position: absolute;
     bottom: 0;
     left: 50%;
@@ -57,7 +59,6 @@ h1, h2, h3, h4, h5, h6 {
     max-width: 700px;
     margin: 0 auto 3rem;
 }
-
 
 .platform-card {
     background: white;
@@ -114,7 +115,6 @@ h1, h2, h3, h4, h5, h6 {
     transform: translateY(-2px);
 }
 
-
 .location-card {
     background: white;
     border-radius: 15px;
@@ -165,7 +165,6 @@ h1, h2, h3, h4, h5, h6 {
     margin-top: 0.25rem;
 }
 
-
 .contact-form-card {
     background: white;
     border-radius: 15px;
@@ -180,7 +179,8 @@ h1, h2, h3, h4, h5, h6 {
     margin-bottom: 0.5rem;
 }
 
-.input-group .input-group-text .form-control, .form-select {
+.input-group .input-group-text .form-control,
+.form-select {
     border: 1px solid var(--gray-300);
     border-radius: 8px;
     padding: 0.75rem;
@@ -188,7 +188,8 @@ h1, h2, h3, h4, h5, h6 {
     transition: var(--transition-base);
 }
 
-.form-control:focus, .form-select:focus {
+.form-control:focus,
+.form-select:focus {
     border-color: var(--secondary-color);
     box-shadow: 0 0 0 0.2rem rgba(78, 205, 196, 0.25);
 }
@@ -207,7 +208,6 @@ h1, h2, h3, h4, h5, h6 {
     background-color: var(--secondary-color);
     transform: translateY(-2px);
 }
-
 
 .store-hours {
     display: inline-block;
@@ -248,7 +248,7 @@ h1, h2, h3, h4, h5, h6 {
     position: absolute;
     bottom: 70px;
     right: 0;
-    background-color: #25D366;
+    background-color: #25d366;
     color: white;
     padding: 5px 15px;
     border-radius: 5px;
@@ -258,7 +258,6 @@ h1, h2, h3, h4, h5, h6 {
     display: block;
     transition-duration: 500ms;
 }
-
 
 @media (max-width: 768px) {
     .section-title {
@@ -272,13 +271,32 @@ h1, h2, h3, h4, h5, h6 {
     .platform-title {
         font-size: 1.5rem;
     }
-    
+
     .location-card .map-container {
         height: 200px;
     }
-    
+
     .contact-form-card {
         padding: 1.5rem;
+    }
+}
+
+@media (max-width: 992px) {
+    .location-card .map-container {
+        height: 220px;
+    }
+}
+
+/* Custom Container Width untuk Desktop */
+@media (min-width: 1200px) {
+    .container {
+        max-width: 1320px;
+    }
+}
+
+@media (min-width: 1400px) {
+    .container {
+        max-width: 1420px;
     }
 }
 
@@ -286,11 +304,11 @@ h1, h2, h3, h4, h5, h6 {
     .section-title {
         font-size: 1.75rem;
     }
-    
+
     .section-subtitle {
         font-size: 1rem;
     }
-    
+
     .location-card {
         margin-bottom: 1.5rem;
     }

@@ -31,7 +31,7 @@ class AdminSeeder extends Seeder
                     'id' => $manager->id,
                     'name' => $manager->nama_lengkap,
                     'email' => 'admin@dinoyokamera.com',
-                    'password' => Hash::make('admin123'), // Password default
+                    'password' => Hash::make(config('seeders.admin_password')),
                     'role' => 'manager', // Role manager (highest level)
                     'status' => 'active', // Langsung aktif, tidak pending
                     'email_verified_at' => now(), // Langsung verified
@@ -40,7 +40,7 @@ class AdminSeeder extends Seeder
 
                 $this->command->info('✅ Admin account created successfully!');
                 $this->command->info('   Email: admin@dinoyokamera.com');
-                $this->command->info('   Password: admin123');
+                $this->command->info('   Password: menggunakan SEED_ADMIN_PASSWORD');
                 $this->command->info('   Role: Manager');
                 $this->command->info('   Status: Active (Auto-login ready)');
             } else {

@@ -1,18 +1,19 @@
 @extends('layouts.auth')
 
-@section('title', 'Login Admin | Dinoyo Kamera')
+@section('title', 'Masuk Admin | PusatKamera.id')
 
 @section('content')
-    <div class="text-center mb-4">
-        <h2 class="fw-bold text-dark mb-2">Welcome Back!</h2>
-        <p class="text-muted small">Silakan masuk ke Sistem Informasi Dinoyo Kamera.</p>
+    <div class="auth-heading mb-4">
+        <span class="auth-eyebrow">AREA ADMIN</span>
+        <h2>Selamat datang<span>.</span></h2>
+        <p>Masuk untuk mengelola operasional PusatKamera.id.</p>
     </div>
 
     <form method="POST" action="{{ route('login') }}" id="loginForm">
         @csrf
 
         <div class="mb-3">
-            <label for="email" class="form-label">Email Address <span class="text-danger">*</span></label>
+            <label for="email" class="form-label">Alamat email <span class="text-danger">*</span></label>
             <div class="input-group">
                 <span class="input-group-text">
                     <i class="fa-solid fa-envelope"></i>
@@ -38,7 +39,7 @@
         </div>
 
         <div class="mb-3">
-            <label for="password" class="form-label">Password <span class="text-danger">*</span></label>
+            <label for="password" class="form-label">Kata sandi <span class="text-danger">*</span></label>
             <div class="input-group">
                 <span class="input-group-text">
                     <i class="fa-solid fa-lock"></i>
@@ -65,15 +66,15 @@
 
         <div class="d-flex justify-content-end align-items-center mb-4">
             @if (Route::has('password.request'))
-            <a href="{{ route('password.request') }}" class="small text-primary">Lupa Password?</a>
+            <a href="{{ route('password.request') }}" class="small text-primary">Lupa kata sandi?</a>
             @else
-            <a href="{{ route('password.request') }}" class="small text-primary">Lupa Password?</a>
+            <a href="{{ route('password.request') }}" class="small text-primary">Lupa kata sandi?</a>
             @endif
         </div>
 
         <div class="d-grid">
             <button type="submit" class="btn btn-primary">
-                <i class="fa-solid fa-right-to-bracket me-2"></i> Sign In
+                MASUK KE DASHBOARD <i class="fa-solid fa-arrow-right ms-2"></i>
             </button>
         </div>
 
@@ -82,7 +83,7 @@
     <div class="mt-4 text-center">
         <div class="border-top pt-3">
             <p class="text-muted small mb-0">
-                Baru mendaftar?
+                Belum mengaktifkan akun?
                 <a href="{{ route('activation.form') }}" class="text-primary">
                     Aktivasi Akun
                 </a>

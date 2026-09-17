@@ -17,7 +17,7 @@
         'resources/js/utils/phone-format-display.js',
     ])
 
-    <link rel="shortcut icon" href="{{ asset('mainIMG/logopk.png') }}" type="image/png">
+    <link rel="shortcut icon" href="{{ $setting?->logo_url ?: asset('mainIMG/logopk.png') }}" type="image/png">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -59,11 +59,11 @@
     <aside class="sidebar" id="sidebar">
         <!-- Sidebar Header -->
         <div class="sidebar-header">
-            <img src="{{ asset('mainIMG/logopk.png') }}"
-                alt="Logo Pusat Kamera Malang"
+            <img src="{{ $setting?->logo_url ?: asset('mainIMG/logopk.png') }}"
+                alt="Logo {{ $setting?->nama_website ?? 'Pusat Kamera Malang' }}"
                 class="sidebar-logo" style="background: #111;">
             <div class="sidebar-brand">
-                <h4 class="sidebar-brand-text">{{ $setting->nama_website}}</h4>
+                <h4 class="sidebar-brand-text">{{ $setting?->nama_website ?? 'Pusat Kamera Malang' }}</h4>
                 <span class="sidebar-brand-subtitle">Admin Panel</span>
             </div>
             <button class="sidebar-close" type="button" aria-label="Close Sidebar">
@@ -116,14 +116,21 @@
                     <div class="submenu-item">
                         <a href="{{ route('admin.categories.index') }}" class="submenu-link">
                             <i class="fas fa-list submenu-icon"></i>
-                            <span>Daftar Kategori</span>
+                            <span>Kategori Kamera</span>
+                        </a>
+                    </div>
+
+                    <div class="submenu-item">
+                        <a href="{{ route('admin.price-categories.index') }}" class="submenu-link">
+                            <i class="fas fa-tags submenu-icon"></i>
+                            <span>Kategori Harga</span>
                         </a>
                     </div>
 
                     <div class="submenu-item">
                         <a href="{{ route('admin.branches.index') }}" class="submenu-link">
                             <i class="fas fa-store submenu-icon"></i>
-                            <span>Data Cabang</span>
+                            <span>Data Toko</span>
                         </a>
                     </div>
                 </div>
@@ -193,7 +200,7 @@
 
                     @if (Auth::user()->role == 'manager')
                     <div class="submenu-item">
-                        <a href="{{ route('admin.permissions') }}" class="submenu-link">
+                        <a href="{{ route('admin.permissions.index') }}" class="submenu-link">
                             <i class="fas fa-user-shield submenu-icon"></i>
                             <span>Manajemen Akses</span>
                         </a>
