@@ -8,8 +8,12 @@
     background-color: #f8f9fc;
     color: #000;
     font-weight: 600;
+    background-color: #18191d;
+    color: #ffd600;
+    font-weight: 800;
     text-transform: uppercase;
     font-size: 0.85rem;
+    font-size: 0.82rem;
     letter-spacing: 0.5px;
     padding: 1rem;
     border: none;
@@ -25,6 +29,9 @@
     bottom: -1px;
     height: 6px;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+    height: 4px;
+    background: #ffd600;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
 .table-modern thead th:first-child {
@@ -40,6 +47,7 @@
     vertical-align: middle;
     border-bottom: 1px solid #f0f0f0;
     color: #555;
+    color: #333;
     font-size: 0.9rem;
     background-color: #fff;
 }
@@ -47,11 +55,15 @@
 .table-modern tbody tr:nth-child(even) td {
     background-color: #f8f9fc !important;
     box-shadow: inset 0 0 0 9999px #f8f9fc !important;
+    background-color: #fafafa !important;
+    box-shadow: inset 0 0 0 9999px #fafafa !important;
 }
 
 .table-modern tbody tr:hover td {
     background-color: #f1f4ff !important;
     box-shadow: inset 0 0 0 9999px #f1f4ff !important;
+    background-color: #fffde7 !important;
+    box-shadow: inset 0 0 0 9999px #fffde7 !important;
     transition: background-color 0.2s ease;
 }
 
@@ -70,11 +82,15 @@
 .btn-action-edit {
     background-color: rgba(13, 110, 253, 0.1);
     color: #0d6efd;
+    background-color: rgba(255, 214, 0, 0.2);
+    color: #854d0e;
 }
 
 .btn-action-edit:hover {
     background-color: #0d6efd;
     color: white;
+    background-color: #ffd600;
+    color: #111111;
 }
 
 .btn-action-delete {
@@ -90,11 +106,15 @@
 .btn-action-warning {
     background-color: rgba(255, 193, 7, 0.1);
     color: #ffc107;
+    background-color: rgba(255, 214, 0, 0.25);
+    color: #854d0e;
 }
 
 .btn-action-warning:hover {
     background-color: #ffc107;
     color: white;
+    background-color: #ffd600;
+    color: #111111;
 }
 
 nav,
@@ -128,6 +148,7 @@ div.hidden.sm\:flex-1 p {
 
     font-family:
         "Inter",
+        "Montserrat",
         system-ui,
         -apple-system,
         sans-serif;
@@ -141,6 +162,7 @@ div.hidden.sm\:flex-1 p {
 nav p.small.text-muted span {
     font-weight: 700 !important;
     color: #1e293b;
+    color: #111111;
 }
 
 ul.pagination {
@@ -164,6 +186,7 @@ ul.pagination {
     font-weight: 600;
     font-size: 0.9rem;
     color: #475467;
+    color: #111111;
 
     text-decoration: none;
 
@@ -171,6 +194,7 @@ ul.pagination {
     border: 1px solid #eaecf0;
 
     border-radius: 12px !important;
+    border-radius: 10px !important;
 
     box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
 
@@ -183,11 +207,15 @@ ul.pagination {
     color: #4e6cff;
 
     border-color: #d0d5dd;
+    background-color: #fef9c3;
+    color: #111111;
+    border-color: #ffd600;
     transform: translateY(-2px);
 
     box-shadow:
         0 4px 6px -1px rgba(0, 0, 0, 0.1),
         0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
 }
 
 .page-item.active .page-link {
@@ -197,6 +225,11 @@ ul.pagination {
     color: #ffffff !important;
 
     box-shadow: 0 4px 12px rgba(78, 108, 255, 0.35);
+    background: #ffd600 !important;
+    border-color: #ffd600 !important;
+    color: #111111 !important;
+    font-weight: 800;
+    box-shadow: 0 4px 14px rgba(255, 214, 0, 0.4);
     transform: scale(1.05);
 }
 
@@ -212,6 +245,7 @@ ul.pagination {
 .page-item .page-link:focus {
     outline: none;
     box-shadow: 0 0 0 4px rgba(78, 108, 255, 0.15);
+    box-shadow: 0 0 0 4px rgba(255, 214, 0, 0.3);
 }
 
 .header-tight {

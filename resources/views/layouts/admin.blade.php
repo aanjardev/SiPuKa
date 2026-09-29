@@ -9,13 +9,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>@yield('title', 'Admin Panel') | SiDiKa</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    @vite([
-        'resources/css/app.css',
-        'resources/js/app.js',
-        'resources/css/admin/admin-layout.css',
-        'resources/js/admin/admin-layout.js',
-        'resources/js/utils/phone-format-display.js',
-    ])
 
     <link rel="icon" type="image/png" sizes="512x512" href="{{ asset('mainIMG/logopk.png') }}?v=pusatkamera-2">
     <link rel="shortcut icon" type="image/png" href="{{ asset('mainIMG/logopk.png') }}?v=pusatkamera-2">
@@ -37,6 +30,14 @@
     <link href="{{ \App\Helpers\CssAssetHelper::css('css/legacy/adminsidebar.css') }}" rel="stylesheet">
     <link href="{{ \App\Helpers\CssAssetHelper::css('css/legacy/adminpage.css') }}" rel="stylesheet">
     <link href="{{ \App\Helpers\CssAssetHelper::css('css/legacy/form-validation.css') }}" rel="stylesheet">
+
+    @vite([
+        'resources/css/app.css',
+        'resources/js/app.js',
+        'resources/css/admin/admin-layout.css',
+        'resources/js/admin/admin-layout.js',
+        'resources/js/utils/phone-format-display.js',
+    ])
 
     @stack('styles')
 

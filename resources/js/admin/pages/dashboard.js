@@ -26,6 +26,7 @@ document.addEventListener("DOMContentLoaded", function() {
             },
             series: data.seriesPendapatan,
             colors: ["#4E6BFF", "#0dcaf0"],
+            colors: ["#ffd600", "#18191d"],
             stroke: {
                 curve: "smooth",
                 width: 3,
@@ -38,6 +39,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     type: "vertical",
                     shadeIntensity: 0.5,
                     gradientToColors: ["#4E6BFF", "#0dcaf0"],
+                    gradientToColors: ["#ffd600", "#18191d"],
                     opacityFrom: 0.6,
                     opacityTo: 0.1,
                     stops: [0, 90, 100],
@@ -132,6 +134,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 size: 4,
                 colors: ["#fff"],
                 strokeColors: ["#4E6BFF", "#0dcaf0"],
+                strokeColors: ["#ffd600", "#18191d"],
                 strokeWidth: 2,
                 hover: {
                     size: 6,
@@ -159,6 +162,7 @@ document.addEventListener("DOMContentLoaded", function() {
             series: data.seriesTransaksi,
             labels: ["Penjualan", "Pembelian"],
             colors: ["#4E6BFF", "#198754"],
+            colors: ["#ffd600", "#18191d"],
             plotOptions: {
                 pie: {
                     donut: {

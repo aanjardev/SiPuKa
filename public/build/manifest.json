@@ -75,7 +75,7 @@
     ]
   },
   "resources/css/admin/admin-layout.css": {
-    "file": "assets/admin-layout-DEc5b112.css",
+    "file": "assets/admin-layout-CilCl6nU.css",
     "src": "resources/css/admin/admin-layout.css",
     "isEntry": true,
     "name": "admin-layout",
@@ -84,7 +84,7 @@
     ]
   },
   "resources/css/admin/pages/dashboard.css": {
-    "file": "assets/dashboard-Br5MsU8H.css",
+    "file": "assets/dashboard-CxOKUWDe.css",
     "src": "resources/css/admin/pages/dashboard.css",
     "isEntry": true,
     "name": "dashboard",
@@ -141,7 +141,7 @@
     "isEntry": true
   },
   "resources/js/admin/pages/dashboard.js": {
-    "file": "assets/dashboard-BjnyoZAP.js",
+    "file": "assets/dashboard-Dg6zwQxc.js",
     "name": "dashboard",
     "src": "resources/js/admin/pages/dashboard.js",
     "isEntry": true
