@@ -98,7 +98,7 @@
                                         <i class="fas fa-star"></i>
                                     </button>
                                     <button class="btn btn-outline-danger remove-image" data-image-id="{{ $photo->id }}" title="Hapus">
-                                        <i class="fas fa-trash"></i>
+                                        <i class="fa-solid fa-trash"></i>
                                     </button>
                                 </div>
                             </div>

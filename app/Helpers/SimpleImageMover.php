@@ -25,10 +25,12 @@ class SimpleImageMover
 
         // Try R2 first
         try {
-            Storage::disk('r2')->putFileAs($dir, new File($tempPath), $name, [
+            $stored = Storage::disk('r2')->putFileAs($dir, new File($tempPath), $name, [
                 'visibility' => 'public',
                 'ContentType' => mime_content_type($tempPath) ?: 'application/octet-stream',
             ]);
+
+            if (!$stored) { throw new \RuntimeException('Gagal menyimpan gambar ke R2.'); }
 
             return ['path' => $path, 'original_hash' => null];
         } catch (\Throwable $e) {
@@ -39,9 +41,11 @@ class SimpleImageMover
                     $public->makeDirectory($dir, 0755, true);
                 }
 
-                $public->putFileAs($dir, new File($tempPath), $name, [
+                $stored = $public->putFileAs($dir, new File($tempPath), $name, [
                     'visibility' => 'public',
                 ]);
+
+                if (!$stored) { throw new \RuntimeException('Gagal menyimpan gambar lokal.'); }
 
                 return ['path' => "public/{$path}", 'original_hash' => null];
             } catch (\Throwable $e2) {

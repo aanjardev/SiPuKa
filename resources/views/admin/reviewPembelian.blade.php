@@ -11,7 +11,7 @@
 
     {{-- Tombol Edit Transaksi Ini (Diubah ke Dark Gold Outline) --}}
     <a href="{{ route('admin.purchases.edit', $pembelian->id) }}" class="btn btn-outline-dark-gold btn-sm d-flex align-items-center gap-2">
-        <i class="fas fa-pen-to-square fa-fw"></i>
+        <i class="fa-solid fa-pen-to-square fa-fw"></i>
         <span>Edit Transaksi</span>
     </a>
 

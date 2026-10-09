@@ -57,7 +57,7 @@
                        minlength="6"
                        autocomplete="new-password" autofocus>
                 <button class="btn btn-toggle-password" type="button" id="toggleNewPassword">
-                    <i class="fas fa-eye"></i>
+                    <i class="fa-solid fa-eye"></i>
                 </button>
             </div>
             <div class="form-text text-muted">
@@ -83,7 +83,7 @@
                        minlength="6"
                        autocomplete="new-password">
                 <button class="btn btn-toggle-password" type="button" id="toggleConfirmPassword">
-                    <i class="fas fa-eye"></i>
+                    <i class="fa-solid fa-eye"></i>
                 </button>
             </div>
             <div class="invalid-feedback">

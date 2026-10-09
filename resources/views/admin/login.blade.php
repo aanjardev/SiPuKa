@@ -52,7 +52,7 @@
                     required
                     data-error-message="Password wajib diisi">
                 <button class="btn btn-toggle-password" type="button" id="togglePassword">
-                    <i class="fas fa-eye"></i>
+                    <i class="fa-solid fa-eye"></i>
                 </button>
             </div>
             <div class="invalid-feedback">

@@ -35,8 +35,8 @@
                         <td>Rp {{ number_format($category->harga_minimum, 0, ',', '.') }} — {{ $category->harga_maksimum === null ? 'tanpa batas' : 'Rp ' . number_format($category->harga_maksimum, 0, ',', '.') }}</td>
                         <td><span class="badge {{ $category->is_active ? 'bg-success' : 'bg-secondary' }}">{{ $category->is_active ? 'Aktif' : 'Nonaktif' }}</span></td>
                         <td class="text-center">
-                            <a href="{{ route('admin.price-categories.edit', $category) }}" class="btn btn-sm btn-outline-primary"><i class="fas fa-pen"></i></a>
-                            <form action="{{ route('admin.price-categories.destroy', $category) }}" method="POST" class="d-inline">@csrf @method('DELETE')<button class="btn btn-sm btn-outline-danger" onclick="return confirm('Hapus kategori harga ini?')"><i class="fas fa-trash"></i></button></form>
+                            <a href="{{ route('admin.price-categories.edit', $category) }}" class="btn-action btn-action-edit" title="Edit" aria-label="Edit kategori harga"><i class="fa-solid fa-pen-to-square"></i></a>
+                            <form action="{{ route('admin.price-categories.destroy', $category) }}" method="POST" class="d-inline">@csrf @method('DELETE')<button type="submit" class="btn-action btn-action-delete" title="Hapus" aria-label="Hapus kategori harga" onclick="return confirm('Hapus kategori harga ini?')"><i class="fa-solid fa-trash"></i></button></form>
                         </td>
                     </tr>
                 @empty

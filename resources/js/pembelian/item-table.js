@@ -50,11 +50,11 @@ export default class ItemTable {
 
                 <td class="text-center py-3">
                     <div class="d-flex justify-content-center gap-2">
-                        <button type="button" class="btn-action-icon" data-edit="${item.id}">
+                        <button type="button" class="btn-action btn-action-edit" title="Edit" aria-label="Edit item" data-edit="${item.id}">
                             <i class="fa-solid fa-pen-to-square"></i>
                         </button>
-                        <button type="button" class="btn-action-icon" data-delete="${item.id}">
-                            <i class="fa-solid fa-trash-can"></i>
+                        <button type="button" class="btn-action btn-action-delete" title="Hapus" aria-label="Hapus item" data-delete="${item.id}">
+                            <i class="fa-solid fa-trash"></i>
                         </button>
                     </div>
                 </td>

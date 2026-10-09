@@ -32,6 +32,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get("/", [PageController::class,"index"]);
+Route::get('/media/image', [\App\Http\Controllers\StoredImageController::class, 'show'])->middleware('signed:relative')->name('stored-image');
+Route::get('/catalog-logo', [CatalogSettingsController::class, 'logo'])->name('catalog.logo');
 Route::get("/about", [PageController::class,"about"]);
 Route::get("/contact", [PageController::class,"contact"]);
 Route::get('/sitemap.xml', [PageController::class, 'sitemap'])->name('sitemap');

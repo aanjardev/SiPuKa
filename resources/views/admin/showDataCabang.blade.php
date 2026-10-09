@@ -8,7 +8,7 @@
     <span>Kembali</span>
 </a>
 <a href="{{ route('admin.branches.edit', $branch->id) }}" class="btn btn-primary btn-sm d-flex align-items-center gap-2">
-    <i class="fas fa-pen"></i>
+    <i class="fa-solid fa-pen-to-square"></i>
     <span>Edit</span>
 </a>
 @endpush

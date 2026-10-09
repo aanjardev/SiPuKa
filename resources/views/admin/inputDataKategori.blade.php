@@ -33,7 +33,7 @@
             </div>
 
             <div class="card-body p-4">
-                <form id="categoryForm" action="{{ isset($category) ? route('admin.categories.update', $category->id) : route('admin.categories.store') }}" method="POST" data-validate-form enctype="multipart/form-data">
+                <form id="categoryForm" action="{{ isset($category) ? route('admin.categories.update', $category->id) : route('admin.categories.store') }}" method="POST" data-validate-form>
                     @csrf
                     @if(isset($category))
                         @method('PUT')
@@ -70,30 +70,6 @@
                                 </div>
                             </div>
 
-                            <div class="mb-4">
-                                <label for="gambar" class="form-label fw-medium text-secondary small">Gambar Kategori</label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-light border-end-0 text-muted ps-3">
-                                        <i class="fa-solid fa-image"></i>
-                                    </span>
-                                    <input type="file"
-                                           name="gambar"
-                                           id="gambar"
-                                           accept="image/*"
-                                           class="form-control border-start-0 ps-2 @error('gambar') is-invalid @enderror">
-                                </div>
-                                @if(isset($category) && $category->image_url)
-                                    <div class="mt-3">
-                                        <span class="text-muted small d-block mb-1">Pratinjau saat ini:</span>
-                                        <img src="{{ $category->image_url }}" alt="Gambar {{ $category->nama_kategori }}" class="rounded border" style="height: 90px; width: auto;">
-                                    </div>
-                                @endif
-                                <div class="invalid-feedback d-block">
-                                    @error('gambar')
-                                        {{ $message }}
-                                    @enderror
-                                </div>
-                            </div>
                         </div>
                     </div>
 

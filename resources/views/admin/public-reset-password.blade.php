@@ -31,7 +31,7 @@
                     data-error-message="Password wajib diisi"
                     data-validate="password-strength" autofocus>
                 <button class="btn btn-toggle-password" type="button" id="togglePassword">
-                    <i class="fas fa-eye"></i>
+                    <i class="fa-solid fa-eye"></i>
                 </button>
             </div>
             <div class="password-strength" id="passwordStrength"></div>
@@ -59,7 +59,7 @@
                     required
                     data-error-message="Konfirmasi password wajib diisi">
                 <button class="btn btn-toggle-password" type="button" id="togglePasswordConfirm">
-                    <i class="fas fa-eye"></i>
+                    <i class="fa-solid fa-eye"></i>
                 </button>
             </div>
             <div class="invalid-feedback">

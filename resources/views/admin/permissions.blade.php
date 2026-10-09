@@ -198,7 +198,7 @@
 <div class="card shadow-sm border-0" style="border-radius: 10px; overflow: hidden; min-height: 700px;">
     <div class="card-body p-0">
         <div class="table-responsive permission-table-responsive">
-            <table class="table table-modern mb-0 permission-table-fixed">
+            <table class="admin-table-dense table table-modern mb-0 permission-table-fixed">
                 <thead>
                     <tr>
                         <th class="text-center" style="width: 5%;">No</th>

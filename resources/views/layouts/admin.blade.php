@@ -10,9 +10,9 @@
     <title>@yield('title', 'Admin Panel') | {{ $setting?->nama_website ?? 'PusatKamera.id' }}</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <link rel="icon" type="image/png" sizes="512x512" href="{{ asset('mainIMG/logopk.png') }}?v=pusatkamera-2">
-    <link rel="shortcut icon" type="image/png" href="{{ asset('mainIMG/logopk.png') }}?v=pusatkamera-2">
-    <link rel="apple-touch-icon" href="{{ asset('mainIMG/logopk.png') }}?v=pusatkamera-2">
+    <link rel="icon" href="{{ $setting?->logo_url ?: asset('mainIMG/logopk.png') }}">
+    <link rel="shortcut icon" href="{{ $setting?->logo_url ?: asset('mainIMG/logopk.png') }}">
+    <link rel="apple-touch-icon" href="{{ $setting?->logo_url ?: asset('mainIMG/logopk.png') }}">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -40,6 +40,7 @@
     ])
 
     @stack('styles')
+    <link href="{{ \App\Helpers\CssAssetHelper::css('css/admin/admin-tables.css') }}" rel="stylesheet">
 
 </head>
 
@@ -50,11 +51,6 @@
     @unless ($__env->hasSection('disable_alerts'))
         @include('partials.alerts')
     @endunless
-    <!-- loader Start -->
-    <div id="loading">
-        <div class="loader"></div>
-    </div>
-
     <!-- Sidebar Overlay -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
@@ -130,12 +126,6 @@
                         </a>
                     </div>
 
-                    <div class="submenu-item">
-                        <a href="{{ route('admin.branches.index') }}" class="submenu-link">
-                            <i class="fas fa-store submenu-icon"></i>
-                            <span>Data Toko</span>
-                        </a>
-                    </div>
                 </div>
             </div>
 
@@ -187,6 +177,13 @@
                 </button>
 
                 <div class="collapse submenu" id="manajemenMenu">
+                    <div class="submenu-item">
+                        <a href="{{ route('admin.branches.index') }}" class="submenu-link">
+                            <i class="fas fa-store submenu-icon"></i>
+                            <span>Data Toko</span>
+                        </a>
+                    </div>
+
                     <div class="submenu-item">
                         <a href="{{ route('admin.catalog-settings.index') }}" class="submenu-link">
                             <i class="fas fa-cog submenu-icon"></i>

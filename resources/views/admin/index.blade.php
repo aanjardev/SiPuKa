@@ -331,7 +331,7 @@
             <div class="card-body p-0">
                 @if(isset($recentPurchases) && $recentPurchases->count() > 0)
                     <div class="table-modern-container">
-                        <table class="table table-modern mb-0">
+                        <table class="admin-table-dense table table-modern mb-0">
                             <thead>
                                 <tr>
                                     <th class="text-center ps-4" style="width: 5%;">No</th>

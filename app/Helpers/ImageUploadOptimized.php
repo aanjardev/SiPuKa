@@ -140,7 +140,8 @@ class ImageUploadOptimized
      */
     private static function uploadImage($buffer, string $path): array
     {
-        // Check if already exists
+        // Try R2 first, including the existence check.
+        try {
         if (Storage::disk('r2')->exists($path)) {
             \Log::info("Image already exists in R2", ['path' => $path]);
             return [
@@ -149,8 +150,6 @@ class ImageUploadOptimized
             ];
         }
 
-        // Try R2 first
-        try {
             self::uploadToR2($buffer, $path);
             \Log::info("Image uploaded to R2 successfully", ['path' => $path]);
             return [
@@ -178,7 +177,7 @@ class ImageUploadOptimized
         try {
             $buffer->save($temp);
 
-            Storage::disk("r2")->putFileAs(
+            $stored = Storage::disk("r2")->putFileAs(
                 dirname($path),
                 new File($temp),
                 basename($path),
@@ -188,6 +187,7 @@ class ImageUploadOptimized
                     'CacheControl' => 'public, max-age=31536000, immutable'
                 ]
             );
+            if (!$stored) { throw new \RuntimeException('Gagal menyimpan gambar ke R2.'); }
         } finally {
             @unlink($temp);
         }
@@ -212,7 +212,7 @@ class ImageUploadOptimized
             }
 
             // Upload to public storage
-            $localDisk->putFileAs(
+            $stored = $localDisk->putFileAs(
                 $dir,
                 new File($temp),
                 basename($path),
@@ -220,6 +220,8 @@ class ImageUploadOptimized
                     'visibility' => 'public',
                 ]
             );
+
+            if (!$stored) { throw new \RuntimeException('Gagal menyimpan gambar lokal.'); }
 
             \Log::info("Image uploaded to local storage", [
                 'path' => "public/$path"

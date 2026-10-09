@@ -268,9 +268,92 @@ class PusatKameraAdminTest extends TestCase
         $product->gambar()->create(['path_gambar'=>'public/test/main.webp','is_main'=>true]);
         $product->gambar()->create(['path_gambar'=>'public/test/extra.webp','is_main'=>false]);
         foreach (['/','/katalog','/katalog/'.$product->id] as $url) {
-            $this->get($url)->assertOk()->assertSee('/storage/test/main.webp');
+            $this->get($url)->assertOk()->assertSee(\App\Helpers\StoredImage::url('public/test/main.webp'));
         }
-        $this->get('/katalog/'.$product->id)->assertSee('/storage/test/extra.webp');
+        $this->get('/katalog/'.$product->id)->assertSee(\App\Helpers\StoredImage::url('public/test/extra.webp'));
+    }
+
+    public function test_logo_upload_falls_back_when_r2_returns_false_and_updates_all_branding(): void
+    {
+        $local = Storage::fake('public');
+        $remote = \Mockery::mock(\Illuminate\Contracts\Filesystem\Filesystem::class);
+        $remote->shouldReceive('exists')->andReturn(false);
+        $remote->shouldReceive('putFileAs')->once()->andReturn(false);
+        Storage::shouldReceive('disk')->with('r2')->andReturn($remote);
+        Storage::shouldReceive('disk')->with('public')->andReturn($local);
+        $this->actingAs($this->owner());
+        $this->post('/admin/catalog-settings', [
+            'site_name' => 'Uploaded Brand',
+            'photo_logo' => \Illuminate\Http\UploadedFile::fake()->image('logo.png', 80, 80),
+        ])->assertSessionHasNoErrors()->assertRedirect('/admin/catalog-settings');
+        $setting = CatalogSettings::first();
+        $this->assertStringStartsWith('public/catalog/logo/', $setting->logo_path);
+        Storage::disk('public')->assertExists(substr($setting->logo_path, 7));
+        $url = $setting->logo_url;
+        $this->get($url)->assertOk()->assertHeader('Content-Type', 'image/webp');
+        $this->get('/admin/catalog-settings')->assertOk()->assertSee($url, false)->assertSee('catalogSaveStatus')->assertSee('Menyimpan...');
+        foreach (['/', '/katalog', '/about', '/contact'] as $page) {
+            $this->get($page)->assertOk()->assertSee('rel="icon" href="'.$url.'"', false)->assertSee('src="'.$url.'"', false);
+        }
+        $this->post('/admin/catalog-settings', ['site_name' => 'Uploaded Brand'])->assertSessionHasNoErrors();
+        $this->assertSame($setting->logo_path, $setting->fresh()->logo_path);
+    }
+
+    public function test_logo_endpoint_streams_remote_logo_without_public_bucket_url(): void
+    {
+        Storage::fake('r2');
+        Storage::disk('r2')->put('catalog/logo/remote.webp', 'remote-image');
+        $setting = CatalogSettings::firstOrCreate(['singleton_key' => true], ['nama_website' => 'Brand']);
+        $setting->update(['logo_path' => 'catalog/logo/remote.webp']);
+        $firstUrl = $setting->logo_url;
+        $this->get($firstUrl)->assertOk()->assertStreamedContent('remote-image');
+        $setting->update(['logo_path' => 'catalog/logo/missing.webp']);
+        $this->assertNotSame($firstUrl, $setting->logo_url);
+        $this->get($setting->logo_url)->assertNotFound();
+    }
+
+    public function test_hero_and_seo_uploads_are_accessible_from_local_fallback(): void
+    {
+        $local = Storage::fake('public');
+        $remote = \Mockery::mock(\Illuminate\Contracts\Filesystem\Filesystem::class);
+        $remote->shouldReceive('exists')->andThrow(new \RuntimeException('R2 unavailable'));
+        Storage::shouldReceive('disk')->with('r2')->andReturn($remote);
+        Storage::shouldReceive('disk')->with('public')->andReturn($local);
+        $this->actingAs($this->owner());
+        $this->post('/admin/catalog-settings', [
+            'site_name' => 'Image Test',
+            'hero_image' => \Illuminate\Http\UploadedFile::fake()->image('hero.png', 120, 80),
+            'og_image' => \Illuminate\Http\UploadedFile::fake()->image('seo.png', 100, 60),
+        ])->assertSessionHasNoErrors();
+        $setting = CatalogSettings::first();
+        foreach (['hero_image_path', 'og_image_path'] as $field) {
+            $this->assertStringStartsWith('public/catalog/', $setting->{$field});
+            $local->assertExists(substr($setting->{$field}, 7));
+            $this->get(\App\Helpers\StoredImage::url($setting->{$field}))->assertOk()->assertHeader('Content-Type', 'image/webp');
+        }
+        $this->get('/')->assertOk()->assertSee($setting->hero_image_url)->assertSee($setting->og_image_url);
+        $this->post('/admin/catalog-settings', ['site_name' => 'Image Test'])->assertSessionHasNoErrors();
+        $this->assertSame($setting->hero_image_path, $setting->fresh()->hero_image_path);
+        $this->assertSame($setting->og_image_path, $setting->fresh()->og_image_path);
+    }
+
+    public function test_stored_image_urls_support_local_and_private_r2_and_reject_tampering(): void
+    {
+        Storage::fake('public');
+        Storage::fake('r2');
+        config(['filesystems.disks.r2.url' => null]);
+        Storage::disk('public')->put('category/test.webp', 'local-image');
+        Storage::disk('r2')->put('product/test.webp', 'remote-image');
+        $this->get(\App\Helpers\StoredImage::url('public/category/test.webp'))->assertOk()->assertStreamedContent('local-image');
+        $url = \App\Helpers\StoredImage::url('product/test.webp');
+        $this->get($url)->assertOk()->assertStreamedContent('remote-image');
+        $this->get(str_replace('product', 'private', $url))->assertForbidden();
+        $this->get('/media/image?path=public/category/test.webp')->assertForbidden();
+        $this->get(\App\Helpers\StoredImage::url('public/../secret.webp'))->assertNotFound();
+        $this->get(\App\Helpers\StoredImage::url('public/private.txt'))->assertNotFound();
+        $this->get(\App\Helpers\StoredImage::url('public/missing.webp'))->assertNotFound();
+        config(['filesystems.disks.r2.url' => 'https://images.example.com']);
+        $this->assertSame('https://images.example.com/product/test.webp', \App\Helpers\StoredImage::url('product/test.webp'));
     }
 
     public function test_hero_image_is_shown_and_preserved_when_no_replacement_is_uploaded(): void
@@ -278,10 +361,10 @@ class PusatKameraAdminTest extends TestCase
         $this->actingAs($this->owner());
         $setting = CatalogSettings::firstOrCreate(['singleton_key'=>true], ['nama_website'=>'Pusat Kamera']);
         $setting->update(['hero_image_path'=>'public/test/hero.webp']);
-        $this->get('/admin/catalog-settings')->assertOk()->assertSee('Gambar Hero')->assertSee('/storage/test/hero.webp')->assertDontSee('Galeri Pelanggan');
+        $this->get('/admin/catalog-settings')->assertOk()->assertSee('Gambar Hero')->assertSee(\App\Helpers\StoredImage::url('public/test/hero.webp'))->assertDontSee('Galeri Pelanggan');
         $this->post('/admin/catalog-settings', ['site_name'=>'Pusat Kamera'])->assertSessionHasNoErrors();
         $this->assertEquals('public/test/hero.webp', $setting->fresh()->hero_image_path);
-        $this->get('/')->assertOk()->assertSee('/storage/test/hero.webp');
+        $this->get('/')->assertOk()->assertSee(\App\Helpers\StoredImage::url('public/test/hero.webp'));
     }
 
     public function test_invalid_hero_image_cannot_partially_change_settings(): void

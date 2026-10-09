@@ -37,7 +37,7 @@ class CatalogSettings extends Model
     ];
     public function getLogoUrlAttribute()
     {
-        return \App\Helpers\StoredImage::url($this->logo_path);
+        return $this->logo_path ? route('catalog.logo', ['v' => sha1($this->logo_path)]) : null;
     }
     protected $appends = ['logo_url'];
 

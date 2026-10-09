@@ -9,11 +9,12 @@ class StoredImage
     public static function url(?string $path): ?string
     {
         if (!$path) { return null; }
-        if (str_starts_with($path, 'public/')) {
-            return Storage::disk('public')->url(substr($path, 7));
+        $base = rtrim((string) config('filesystems.disks.r2.url', ''), '/');
+        if (!str_starts_with($path, 'public/') && $base) {
+            return $base . '/' . ltrim($path, '/');
         }
-        $base = rtrim(config('filesystems.disks.r2.url', ''), '/');
-        return $base ? $base . '/' . ltrim($path, '/') : Storage::disk('r2')->url($path);
+        // Local files and private R2 buckets are served without a storage symlink.
+        return url(\Illuminate\Support\Facades\URL::signedRoute('stored-image', ['path' => $path], null, false));
     }
 
     public static function delete(?string $path): void

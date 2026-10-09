@@ -139,7 +139,6 @@
                 <thead>
                     <tr>
                         <th class="text-center" style="width: 5%;">No</th>
-                        <th style="width: 15%;">Gambar</th>
                         <th>Nama Kategori</th>
                         <th class="text-center" style="width: 100px;">Aksi</th>
                     </tr>
@@ -149,9 +148,6 @@
                     <tr class="clickable-row" data-detail-url="{{ route('admin.categories.edit', $category->id) }}">
                         <td class="text-center text-muted fw-bold">{{ ($categories->firstItem() ?? 0) + $index }}</td>
 
-                        <td>
-                            <img src="{{ $category->image_url ?? asset('images/placeholder.jpg') }}" alt="{{ $category->nama_kategori }}" class="img-fluid rounded border" style="max-height: 64px;">
-                        </td>
 
                         <td>
                             <div class="d-flex align-items-center gap-3">
@@ -194,7 +190,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="4" class="text-center py-5">
+                        <td colspan="3" class="text-center py-5">
                             <div class="d-flex flex-column align-items-center opacity-50">
                                 <i class="fa-solid fa-folder-open fa-3x mb-3 text-muted"></i>
                                 <h6 class="text-muted">Belum ada kategori</h6>

@@ -123,7 +123,7 @@
                             <span class="input-group-text bg-light border-end-0 text-muted"><i class="fa-solid fa-lock"></i></span>
                             <input type="password" class="form-control border-start-0" id="current_password" name="current_password" required>
                             <button class="btn btn-outline-secondary border-start-0" type="button" id="toggleCurrentPassword">
-                                <i class="fas fa-eye"></i>
+                                <i class="fa-solid fa-eye"></i>
                             </button>
                         </div>
                         @error('current_password')
@@ -142,7 +142,7 @@
                             <span class="input-group-text bg-light border-end-0 text-muted"><i class="fa-solid fa-key"></i></span>
                             <input type="password" class="form-control border-start-0" id="new_password" name="new_password" required minlength="6">
                             <button class="btn btn-outline-secondary border-start-0" type="button" id="toggleNewPassword">
-                                <i class="fas fa-eye"></i>
+                                <i class="fa-solid fa-eye"></i>
                             </button>
                         </div>
                         @error('new_password')
@@ -157,7 +157,7 @@
                             <span class="input-group-text bg-light border-end-0 text-muted"><i class="fa-solid fa-lock"></i></span>
                             <input type="password" class="form-control border-start-0" id="new_password_confirmation" name="new_password_confirmation" required>
                             <button class="btn btn-outline-secondary border-start-0" type="button" id="toggleConfirmPassword">
-                                <i class="fas fa-eye"></i>
+                                <i class="fa-solid fa-eye"></i>
                             </button>
                         </div>
                         @error('new_password_confirmation')

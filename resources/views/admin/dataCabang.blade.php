@@ -5,7 +5,7 @@
 @push('page-actions')
 @if($data_cabang->isNotEmpty())
 <a href="{{ route('admin.branches.edit', $data_cabang->first()) }}" class="btn btn-primary btn-sm d-flex align-items-center gap-2">
-    <i class="fas fa-pen-to-square fa-fw"></i>
+    <i class="fa-solid fa-pen-to-square fa-fw"></i>
     <span>Edit Toko</span>
 </a>
 @else
@@ -55,7 +55,7 @@
 <div class="card shadow-sm border-0 branch-table-card" style="border-radius: 15px; overflow: hidden; min-height: 700px;">
     <div class="card-body p-0">
         <div class="table-responsive branch-table-responsive">
-            <table class="table table-modern mb-0 branch-table">
+            <table class="admin-table-dense table table-modern mb-0 branch-table">
                 <thead>
                     <tr>
                         <th class="text-center" style="width: 5%;">No</th>

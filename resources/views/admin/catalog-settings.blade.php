@@ -16,7 +16,7 @@
         <h2 class="h5">Identitas Website</h2>
         <label for="site_name" class="form-label">Nama Website</label>
         <input id="site_name" name="site_name" class="form-control mb-3" value="{{ old('site_name', $cat_setting->nama_website) }}" maxlength="255" required>
-        @if($cat_setting->logo_url)<img src="{{ $cat_setting->logo_url }}" alt="Logo saat ini" class="img-fluid mb-2" style="max-height:100px">@endif
+        <img id="logoPreview" src="{{ $cat_setting->logo_url ?: asset('mainIMG/logopk.png') }}" alt="Preview logo" class="img-fluid mb-2" style="max-height:100px">
         <label for="photo_logo" class="form-label d-block">Logo</label>
         <input id="photo_logo" name="photo_logo" type="file" class="form-control" accept="image/jpeg,image/png,image/webp">
         <p class="form-text">JPG, PNG, atau WebP. Maksimal 2 MB. Kosongkan untuk mempertahankan logo.</p>
@@ -78,6 +78,7 @@
         <label for="seo_description" class="form-label">Deskripsi SEO</label>
         <textarea id="seo_description" name="seo_description" maxlength="320" rows="3" class="form-control mb-3">{{ old('seo_description', $cat_setting->seo_description) }}</textarea>
         <label for="og_image" class="form-label">Gambar Berbagi Tautan</label>
+        <img src="{{ $cat_setting->og_image_url ?: asset('mainIMG/logopk.png') }}" alt="Preview gambar berbagi tautan" class="img-fluid d-block mb-2" style="max-height:160px">
         <input id="og_image" name="og_image" type="file" class="form-control" accept="image/jpeg,image/png,image/webp">
         <p class="form-text">Maksimal 4 MB. Kosongkan untuk mempertahankan gambar saat ini.</p>
     </div></section>
@@ -85,4 +86,45 @@
 <div class="col-12"><button class="btn btn-primary" type="submit">Simpan Pengaturan</button></div>
 </div>
 </form>
+<div id="catalogSaveStatus" class="alert alert-info mt-3" role="status" aria-live="polite" hidden><span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>Sedang mengunggah gambar dan menyimpan pengaturan. Mohon tunggu.</div>
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('catalogSettingsForm');
+    const buttons = Array.from(document.querySelectorAll('button[type="submit"][form="catalogSettingsForm"], #catalogSettingsForm button[type="submit"]'));
+    const originalLabels = buttons.map(button => button.innerHTML);
+    const status = document.getElementById('catalogSaveStatus');
+    let saving = false;
+    form.addEventListener('submit', event => {
+        if (saving) { event.preventDefault(); return; }
+        if (event.defaultPrevented) return;
+        saving = true;
+        form.setAttribute('aria-busy', 'true');
+        status.hidden = false;
+        buttons.forEach(button => {
+            button.disabled = true;
+            button.innerHTML = '<span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>Menyimpan...';
+        });
+    });
+    window.addEventListener('pageshow', () => {
+        saving = false;
+        form.removeAttribute('aria-busy');
+        status.hidden = true;
+        buttons.forEach((button, index) => { button.disabled = false; button.innerHTML = originalLabels[index]; });
+    });
+    let previewUrl;
+    document.getElementById('photo_logo').addEventListener('change', event => {
+        if (previewUrl) URL.revokeObjectURL(previewUrl);
+        const file = event.target.files[0];
+        if (file && ['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
+            previewUrl = URL.createObjectURL(file);
+            document.getElementById('logoPreview').src = previewUrl;
+        } else {
+            document.getElementById('logoPreview').src = @json($cat_setting->logo_url ?: asset('mainIMG/logopk.png'));
+        }
+    });
+});
+</script>
+@endpush

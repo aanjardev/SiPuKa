@@ -142,7 +142,7 @@
 <div class="card shadow-sm border-0" style="border-radius: 15px; overflow: hidden; min-height: 700px;">
     <div class="card-body p-0">
         <div class="table-responsive qc-history-table-responsive">
-            <table class="table table-modern mb-0 qc-history-table">
+            <table class="admin-table-dense table table-modern mb-0 qc-history-table">
                 <thead>
                     <tr>
                         <th class="text-center" style="width: 5%;">No</th>
@@ -191,10 +191,10 @@
 
                         <td class="text-center no-row-navigation">
                             <a href="{{ route('admin.quality-control.edit', $item->id) }}?readonly=1"
-                               class="btn btn-sm btn-outline-primary shadow-sm px-3 rounded-3 fw-medium"
-                               style="font-size: 0.85rem;"
+                               class="btn-action btn-action-view"
+                               aria-label="Lihat Detail QC"
                                title="Lihat Detail QC">
-                                <i class="fa-solid fa-eye me-1"></i> Detail
+                                <i class="fa-solid fa-eye" aria-hidden="true"></i>
                             </a>
                         </td>
                     </tr>

@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <div class="card shadow-sm border-0 customer-table-card" style="border-radius: 15px; overflow: hidden; min-height: 700px;">
     <div class="card-body p-0">
         <div class="table-responsive customer-table-responsive">
-            <table class="table table-modern mb-0">
+            <table class="admin-table-dense table table-modern mb-0">
                 <thead>
                     <tr>
                         <th class="text-center" style="width: 5%;">No</th>

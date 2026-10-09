@@ -190,7 +190,7 @@
     <div class="card shadow-sm border-0 purchase-table-card" style="border-radius: 15px; overflow: hidden; min-height: 700px;">
         <div class="card-body p-0">
             <div class="table-responsive purchase-table-responsive">
-                <table class="table table-modern mb-0 purchase-table-fixed purchase-table">
+                <table class="admin-table-dense table table-modern mb-0 purchase-table-fixed purchase-table">
                     <thead>
                         <tr>
                             <th class="text-center" style="width: 5%;">No</th>

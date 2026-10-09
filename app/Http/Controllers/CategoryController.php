@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Categories;
-use App\Helpers\ImageUpload;
 
 class CategoryController extends Controller
 {
@@ -48,7 +47,6 @@ class CategoryController extends Controller
     {
         $validated = $request->validate([
             'nama_kategori' => 'required|string|max:50|regex:/^[A-Za-z0-9_\\s\\.,\\-]+$/',
-            'gambar' => 'nullable|image|max:5120',
         ], [
             'nama_kategori.regex' => 'Nama kategori hanya boleh mengandung huruf, angka, spasi, titik, koma, dan tanda hubung.',
         ]);
@@ -57,14 +55,7 @@ class CategoryController extends Controller
             'nama_kategori' => $validated['nama_kategori'],
         ]);
 
-        if ($request->hasFile('gambar')) {
-            $uploaded = ImageUpload::upload(
-                $request->file('gambar')->getPathname(),
-                "category/{$category->id}"
-            );
 
-            $category->update(['path_gambar' => $uploaded['path']]);
-        }
 
         return redirect()->route('admin.categories.index')
             ->with('success', 'Kategori berhasil ditambahkan.');
@@ -95,7 +86,6 @@ class CategoryController extends Controller
     {
         $validated = $request->validate([
             'nama_kategori' => 'required|string|max:50|regex:/^[A-Za-z0-9_\\s\\.,\\-]+$/',
-            'gambar' => 'nullable|image|max:5120',
         ], [
             'nama_kategori.regex' => 'Nama kategori hanya boleh mengandung huruf, angka, spasi, titik, koma, dan tanda hubung.',
         ]);
@@ -104,14 +94,7 @@ class CategoryController extends Controller
 
         $data = ['nama_kategori' => $validated['nama_kategori']];
 
-        if ($request->hasFile('gambar')) {
-            $uploaded = ImageUpload::upload(
-                $request->file('gambar')->getPathname(),
-                "category/{$category->id}"
-            );
 
-            $data['path_gambar'] = $uploaded['path'];
-        }
 
         $category->update($data);
 

@@ -67,12 +67,14 @@
     font-size: 0.8rem;
 }
 
-.btn-action-edit {
+.btn-action-edit,
+.btn-action-view {
     background-color: rgba(13, 110, 253, 0.1);
     color: #0d6efd;
 }
 
-.btn-action-edit:hover {
+.btn-action-edit:hover,
+.btn-action-view:hover {
     background-color: #0d6efd;
     color: white;
 }
@@ -217,4 +219,9 @@ ul.pagination {
 .header-tight {
     padding-top: 1rem;
     padding-bottom: 0.4rem;
+}
+
+.btn-action:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
 }

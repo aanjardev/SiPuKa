@@ -176,7 +176,7 @@
 
                         {{-- Table --}}
                         <div class="table-responsive rounded border">
-                            <table class="table table-hover align-middle mb-0 customer-history-table" style="font-size: 0.9rem;">
+                            <table class="admin-table-dense table table-hover align-middle mb-0 customer-history-table" style="font-size: 0.9rem;">
                                 <thead class="bg-light text-secondary">
                                     <tr>
                                         <th class="ps-3 py-3">No</th>
