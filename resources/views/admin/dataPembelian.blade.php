@@ -178,17 +178,8 @@
                     <option value="terlama" {{ ($sort_filter ?? '') == 'terlama' ? 'selected' : '' }}>Terlama</option>
                 </select>
 
-                {{-- Filter Cabang --}}
-                <select name="cabang" id="filter-cabang"
-                        class="form-select border-0 shadow-none bg-transparent text-secondary w-auto fw-medium"
-                        style="cursor: pointer;">
-                    <option value="">Semua Cabang</option>
-                    @foreach($semua_cabang ?? [] as $cab)
-                        <option value="{{ $cab->id }}" {{ ($filter_cabang ?? '') == $cab->id ? 'selected' : '' }}>
-                            {{ $cab->nama }}
-                        </option>
-                    @endforeach
-                </select>
+                {{-- Filter Toko --}}
+
             </div>
         </div>
     </div>
@@ -206,7 +197,7 @@
                             <th>Kode</th>
                             <th>Customer</th>
                             <th>Tanggal</th>
-                            <th>Cabang</th>
+                            <th>Toko</th>
                             <th style="width: 25%; max-width:300px;">Item Dibeli</th>
                             <th class="text-center">Status</th>
                             <th>Harga Deal</th>
@@ -242,7 +233,7 @@
                                 <span class="opacity-75">{{ $pembelian->created_at->format('H:i') }} WIB</span>
                             </td>
 
-                            {{-- Cabang --}}
+                            {{-- Toko --}}
                             <td class="text-dark small">
                                 {{ $pembelian->perusahaan_cabang->nama ?? '-' }}
                             </td>
@@ -359,13 +350,8 @@
                         <input type="hidden" name="month" id="export-purchases-period" value="{{ now()->format('Y-m') }}">
                     </div>
                     <div class="mb-3">
-                        <label for="export-purchases-cabang" class="form-label">Cabang</label>
-                        <select id="export-purchases-cabang" name="cabang" class="form-select">
-                            <option value="">Semua Cabang</option>
-                            @foreach ($semua_cabang ?? [] as $cab)
-                                <option value="{{ $cab->id }}">{{ $cab->nama }}</option>
-                            @endforeach
-                        </select>
+
+
                     </div>
                     <input type="hidden" name="status" id="export-purchases-status" value="">
                 </div>

@@ -45,14 +45,14 @@
                 <div class="card-body p-4">
                     {{-- Nama Toko --}}
                     <div class="mb-4">
-                        <label for="namaCabang" class="form-label fw-medium text-secondary small">Nama Toko <span class="text-danger">*</span></label>
+                        <label for="namaToko" class="form-label fw-medium text-secondary small">Nama Toko <span class="text-danger">*</span></label>
                         <div class="input-group">
                             <span class="input-group-text bg-light border-end-0 text-muted ps-3">
                                 <i class="fa-solid fa-shop"></i>
                             </span>
                             <input type="text"
                                 class="form-control border-start-0 ps-2 required-field @error('nama') is-invalid @enderror"
-                                id="namaCabang"
+                                id="namaToko"
                                 name="nama"
                                 style="height: 45px;"
                                 value="{{ old('nama', $branch->nama ?? '') }}"

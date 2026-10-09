@@ -19,33 +19,23 @@ class DashboardController extends Controller
         $selectedMonth = $request->input('month');
         $selectedMonth = $selectedMonth ? (int) $selectedMonth : null;
 
-        $allBranches = Branch::orderBy('nama', 'asc')->get(['id', 'nama']);
-
-        $selectedBranch = $request->input('branch_id');
-        $selectedBranch = $selectedBranch === 'all' ? null : $selectedBranch;
-        if (!empty($selectedBranch)) {
-            $selectedBranch = (int) $selectedBranch;
-            if (!$allBranches->pluck('id')->contains($selectedBranch)) {
-                $selectedBranch = null;
-            }
-        } else {
-            $selectedBranch = null;
-        }
-
-        $selectedBranchName = $selectedBranch
-            ? optional($allBranches->firstWhere('id', $selectedBranch))->nama ?? 'Cabang'
-            : 'Semua Cabang';
+        $selectedBranch = Branch::first()?->id;
+        $selectedBranchName = Branch::first()?->nama ?? 'Toko';
 
         $labelBulan = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
 
         $metrics = $this->dashboardMetrics->getMetrics($selectedYear, $selectedMonth, $selectedBranch);
 
         return view('admin.index', [
+            'stockSummary' => [
+                'available' => \App\Models\Produk::where('is_archived', false)->where('stok_produk', '>', 0)->count(),
+                'empty' => \App\Models\Produk::where('is_archived', false)->where('stok_produk', '<=', 0)->count(),
+                'hidden' => \App\Models\Produk::where('is_archived', false)->where('is_visible', false)->count(),
+            ],
             'selectedYear' => $selectedYear,
             'selectedMonth' => $selectedMonth,
             'labelBulan' => $labelBulan,
             'selectedBranch' => $selectedBranch,
-            'allBranches' => $allBranches,
             'selectedBranchName' => $selectedBranchName,
             'totalPendapatan' => $metrics['totalPendapatan'],
             'totalHPP' => $metrics['totalHPP'],
@@ -62,6 +52,6 @@ class DashboardController extends Controller
             'namaCabangTerbaik' => $metrics['namaCabangTerbaik'],
             'bestBranchGrowthPercent' => $metrics['bestBranchGrowthPercent'],
             'bestBranchGrowthPeriod' => $metrics['bestBranchGrowthPeriod'],
-            'showBestBranch' => $metrics['showBestBranch'],
+            'showBestBranch' => false,
         ]);
     }}

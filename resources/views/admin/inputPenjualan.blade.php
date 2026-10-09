@@ -72,6 +72,7 @@ return [
 <form action="{{ $isEdit ? route('admin.sales.update', $penjualan->id) : route('admin.sales.store') }}"
     method="POST" id="formPenjualan" data-is-edit="{{ $isEdit ? '1' : '0' }}">
     @csrf
+    <input type="hidden" name="submission_token" value="{{ old('submission_token', (string) \Illuminate\Support\Str::uuid()) }}">
     <input type="hidden" name="items" id="itemsInput" value='{{ $raw_items ?? '[]' }}'>
     @if($isEdit)
     @method('PUT')
@@ -127,27 +128,8 @@ return [
                             </div>
                         </div>
 
-                        {{-- Cabang --}}
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label fw-medium text-secondary small">Lokasi Transaksi (Cabang)</label>
-                            <div class="input-group">
-                                <span class="input-group-text bg-light border-end-0 text-muted ps-3"><i class="fa-solid fa-store"></i></span>
-                                <select class="form-select border-start-0 ps-2 @error('perusahaan_cabang_id') is-invalid @enderror" id="perusahaan_cabang_id" name="perusahaan_cabang_id" required style="height: 45px;">
-                                    @foreach ($semua_cabang as $branch)
-                                    <option value="{{ $branch->id }}" {{ (string) old('perusahaan_cabang_id', $penjualan->perusahaan_cabang_id ?? '') === (string) $branch->id ? 'selected' : '' }}>
-                                        {{ $branch->nama }}{{ !$branch->is_active ? ' (Non-Aktif)' : '' }}
-                                    </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="invalid-feedback">
-                                @error('perusahaan_cabang_id')
-                                    {{ $message }}
-                                @else
-                                    Cabang wajib dipilih
-                                @enderror
-                            </div>
-                        </div>
+                        {{-- Toko --}}
+                        <input type="hidden" id="perusahaan_cabang_id" name="perusahaan_cabang_id" value="{{ $semua_cabang->first()?->id }}">
                     </div>
                 </div>
             </div>

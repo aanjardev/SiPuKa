@@ -2,14 +2,13 @@
 
 @php
     $store = $stores->first();
-    $rawPhone = preg_replace('/\D+/', '', $store['telepon'] ?? $cat_setting?->nomor_telepon ?? '');
+    $rawPhone = preg_replace('/\D+/', '', $cat_setting?->nomor_telepon ?: ($store['telepon'] ?? ''));
     if ($rawPhone && str_starts_with($rawPhone, '0')) {
         $rawPhone = '62' . substr($rawPhone, 1);
     } elseif ($rawPhone && str_starts_with($rawPhone, '8')) {
         $rawPhone = '62' . $rawPhone;
     }
     $whatsAppUrl = $rawPhone ? 'https://wa.me/' . $rawPhone : null;
-    $mapsEmbedUrl = $store['maps_embed_url'] ?? null;
     $socials = [
         ['url' => $cat_setting?->instagram_link, 'icon' => 'fa-instagram', 'label' => 'Instagram'],
         ['url' => $cat_setting?->tiktok_link, 'icon' => 'fa-tiktok', 'label' => 'TikTok'],
@@ -22,7 +21,7 @@
 @section('meta_description', 'Alamat, jam operasional, WhatsApp, dan lokasi toko ' . ($cat_setting?->nama_website ?? 'PusatKamera.id') . '.')
 
 @push('styles')
-    <link rel="stylesheet" href="{{ \App\Helpers\CssAssetHelper::css('css/legacy/contact-brutal.css') }}?v=1">
+    <link rel="stylesheet" href="{{ \App\Helpers\CssAssetHelper::css('css/legacy/contact-brutal.css') }}?v=3">
 @endpush
 
 @section('content')
@@ -95,8 +94,15 @@
                         @forelse($stores as $index => $branch)
                             <div class="branch-map" data-branch="{{ $branch['id'] }}" @if($index !== 0) hidden @endif>
                                 @if($branch['maps_embed_url'])
-                                    <iframe src="{{ $branch['maps_embed_url'] }}" title="Lokasi {{ $branch['nama'] }}" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>
-                                    <a class="maps-button" href="{{ $branch['maps_embed_url'] }}" target="_blank" rel="noopener">BUKA DI GOOGLE MAPS <i class="bi bi-arrow-up-right"></i></a>
+                                    <iframe
+                                        class="contact-map-frame"
+                                        src="{{ $branch['maps_embed_url'] }}"
+                                        title="Lokasi {{ $branch['nama'] }} di Google Maps"
+                                        loading="lazy"
+                                        referrerpolicy="no-referrer-when-downgrade"
+                                        allowfullscreen>
+                                    </iframe>
+                                    <a class="maps-button" href="{{ $branch['maps_url'] }}" target="_blank" rel="noopener">BUKA MAPS <i class="bi bi-arrow-up-right"></i></a>
                                 @else
                                     <div><i class="bi bi-map"></i><strong>PETA SEGERA TERSEDIA</strong></div>
                                 @endif

@@ -1,6 +1,6 @@
 @extends('layouts.customer')
 
-@section('title', 'Tentang Kami - ' . ($cat_setting->nama_website ?? 'Dinoyo Kamera'))
+@section('title', 'Tentang Kami - ' . ($cat_setting->nama_website ?? 'PusatKamera.id'))
 
 @push('styles')
     <link rel="stylesheet" href="{{ \App\Helpers\CssAssetHelper::css('css/legacy/AboutStore.css') }}">
@@ -180,7 +180,7 @@
                         {{ $cat_setting->nama_website}}
                     </h1>
                     <p class="hero-description">
-                        {{ $cat_setting->description ?? 'Kami adalah destinasi terpercaya untuk semua kebutuhan fotografi Anda. Dengan pengalaman lebih dari 10 tahun, kami menyediakan peralatan berkualitas dan layanan profesional untuk membantu mewujudkan visi kreatif Anda.' }}
+                        {{ $cat_setting?->about_description ?? $cat_setting?->description ?? 'Kami adalah destinasi terpercaya untuk semua kebutuhan fotografi Anda. Dengan pengalaman lebih dari 10 tahun, kami menyediakan peralatan berkualitas dan layanan profesional untuk membantu mewujudkan visi kreatif Anda.' }}
                     </p>
                     <div class="d-flex justify-content-center gap-3 py-3">
                         <a href="#about" class="btn btn-primary" style="background-color: var(--secondary-color); border: none;">Pelajari Lebih Lanjut</a>
@@ -278,8 +278,8 @@
                             <div class="feature-icon">
                                 <i class="bi bi-arrow-down-circle"></i>
                             </div>
-                            <h3 class="h5 mb-3">Pembelian Kamera</h3>
-                            <p class="text-muted">Punya kamera bekas yang jarang dipakai? Jual aja ke Dinoyo Kamera! Proses cepat, penilaian jujur & transparan, dan uang langsung cair tanpa ribet.</p>
+                            <h3 class="h5 mb-3">{{ $cat_setting?->service_buy_title ?? 'Pembelian Kamera' }}</h3>
+                            <p class="text-muted">{{ $cat_setting?->service_buy_description ?? 'Punya kamera bekas yang jarang dipakai? Jual aja ke PusatKamera.id! Proses cepat, penilaian jujur & transparan, dan uang langsung cair tanpa ribet.' }}</p>
                         </div>
                     </div>
                     <div class="col-md-4" data-aos="fade-up">
@@ -287,8 +287,8 @@
                             <div class="feature-icon">
                                 <i class="bi bi-cart-check"></i>
                             </div>
-                            <h3 class="h5 mb-3">Penjualan Kamera</h3>
-                            <p class="text-muted">Cari kamera atau aksesoris? Di Dinoyo Kamera ada banyak pilihan kamera baru & bekas berkualitas. Kondisi terjamin, siap nemenin setiap momen terbaikmu.</p>
+                            <h3 class="h5 mb-3">{{ $cat_setting?->service_sell_title ?? 'Penjualan Kamera' }}</h3>
+                            <p class="text-muted">{{ $cat_setting?->service_sell_description ?? 'Cari kamera atau aksesoris? Di PusatKamera.id ada banyak pilihan kamera baru & bekas berkualitas. Kondisi terjamin, siap nemenin setiap momen terbaikmu.' }}</p>
                         </div>
                     </div>
                     <div class="col-md-4" data-aos="fade-up">
@@ -296,8 +296,8 @@
                             <div class="feature-icon">
                                 <i class="bi bi-tools"></i>
                             </div>
-                            <h3 class="h5 mb-3">Servis Kamera</h3>
-                            <p class="text-muted">Kamera bermasalah? Tenang! Bawa ke Dinoyo Kamera dan biarkan teknisi profesional kami yang menangani. Dicek dengan teliti, dijelasin dengan jelas, dan siap dipakai lagi.</p>
+                            <h3 class="h5 mb-3">{{ $cat_setting?->service_repair_title ?? 'Servis Kamera' }}</h3>
+                            <p class="text-muted">{{ $cat_setting?->service_repair_description ?? 'Kamera bermasalah? Tenang! Bawa ke PusatKamera.id dan biarkan teknisi profesional kami yang menangani. Dicek dengan teliti, dijelasin dengan jelas, dan siap dipakai lagi.' }}</p>
                         </div>
                     </div>
                 </div>
@@ -309,7 +309,7 @@
             <div class="container mb-5">
                 <div class="text-center mb-5">
                     <p class="section-subtitle" data-aos="fade-up">Galeri Customer</p>
-                    <h2 class="section-title" data-aos="fade-up" data-aos-delay="100">Momen Bersama Dinoyo Kamera</h2>
+                    <h2 class="section-title" data-aos="fade-up" data-aos-delay="100">Momen Bersama {{ $cat_setting?->nama_website ?? 'PusatKamera.id' }}</h2>
                 </div>
                 <div class="customer-gallery">
                     <div class="customer-gallery-track" id="customerGalleryTrack">

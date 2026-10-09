@@ -1,6 +1,6 @@
 @extends('layouts.auth')
 
-@section('title', 'Verifikasi Kode - SiDiKa')
+@section('title', 'Verifikasi Kode - ' . \App\Helpers\Brand::name() . '')
 
 @section('content')
     <div class="auth-logo">

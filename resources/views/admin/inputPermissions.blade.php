@@ -3,7 +3,7 @@
 @section('title', isset($user) ? 'Edit User' : 'Tambah User')
 
 @push('page-actions')
-    <a href="{{ route('admin.permissions') }}" class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-2">
+    <a href="{{ route('admin.permissions.index') }}" class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-2">
         <i class="fa-solid fa-arrow-left"></i>
         <span>Kembali</span>
     </a>

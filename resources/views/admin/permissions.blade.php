@@ -151,7 +151,7 @@
 </div>
 
 {{-- Filter dan Pencarian --}}
-<form method="GET" action="{{ route('admin.permissions') }}" id="searchForm">
+<form method="GET" action="{{ route('admin.permissions.index') }}" id="searchForm">
     <div class="card shadow-sm border-0 mb-4 permission-filter-card" style="border-radius: 10px;">
         <div class="card-body p-2 d-flex align-items-center flex-wrap permission-filter-body">
             {{-- Bagian Kiri: Input Search --}}
@@ -341,7 +341,7 @@
                                 <i class="fa-solid fa-user-slash fa-3x mb-3 text-muted"></i>
                                 <h6 class="text-muted">Tidak ada user yang ditemukan</h6>
                                 @if($search_term || ($selected_role ?? 'all') != 'all' || ($selected_status ?? 'all') != 'all')
-                                    <a href="{{ route('admin.permissions') }}" class="btn btn-sm btn-outline-secondary mt-2">
+                                    <a href="{{ route('admin.permissions.index') }}" class="btn btn-sm btn-outline-secondary mt-2">
                                         Reset Filter
                                     </a>
                                 @endif

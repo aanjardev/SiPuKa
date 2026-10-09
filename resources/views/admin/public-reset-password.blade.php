@@ -1,6 +1,6 @@
 @extends('layouts.auth')
 
-@section('title', 'Reset Password | Dinoyo Kamera')
+@section('title', 'Reset Password | ' . \App\Helpers\Brand::name() . '')
 
 @section('content')
     <div class="text-center mb-4">

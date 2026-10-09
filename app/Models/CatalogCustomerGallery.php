@@ -26,16 +26,6 @@ class CatalogCustomerGallery extends Model
 
     public function getUrlAttribute()
     {
-        if (!$this->image_path) {
-            return null;
-        }
-
-        $base = rtrim(config('filesystems.disks.r2.url', ''), '/');
-
-        if ($base) {
-            return $base . '/' . ltrim($this->image_path, '/');
-        }
-
-        return Storage::disk('r2')->url($this->image_path);
+        return \App\Helpers\StoredImage::url($this->image_path);
     }
 }

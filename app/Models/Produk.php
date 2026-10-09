@@ -12,7 +12,10 @@ class Produk extends Model
     protected $table = 'produk';
 
     protected $fillable = [
+        'id_kategori_harga',
         'kode_sku',
+        'serial_number',
+        'serial_lens',
         'id_kategori',
         'nama_produk',
         'harga_jual',
@@ -31,6 +34,11 @@ class Produk extends Model
         'is_visible' => 'boolean',
         'is_archived' => 'boolean',
     ];
+
+    public function kategoriHarga()
+    {
+        return $this->belongsTo(KategoriHarga::class, 'id_kategori_harga');
+    }
 
     public function kategori()
     {

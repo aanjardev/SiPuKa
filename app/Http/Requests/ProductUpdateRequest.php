@@ -20,6 +20,7 @@ class ProductUpdateRequest extends FormRequest
             'nama_produk'      => ['required', 'string', 'max:200'],
             'kode_sku'         => ['required', 'string', 'max:20', Rule::unique('produk', 'kode_sku')->ignore($productId)],
             'id_kategori'      => ['required', 'exists:kategori,id'],
+            'id_kategori_harga' => ['nullable', Rule::exists('kategori_harga', 'id')->where(fn ($query) => $query->where('is_active', true)->orWhere('id', $this->route('product')?->id_kategori_harga))],
             'harga_jual'       => ['nullable', 'integer', 'min:0'],
             'harga_beli'       => ['nullable', 'integer', 'min:0'],
             'harga_servis'     => ['nullable', 'integer', 'min:0'],

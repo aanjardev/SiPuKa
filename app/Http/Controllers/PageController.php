@@ -14,7 +14,6 @@ class PageController extends Controller
 {
     public function index(){
         $latestProducts = Produk::with('gambarUtama')
-            ->where('stok_produk', '>', 0)
             ->where('is_visible', true)
             ->where('is_archived', false)
             ->latest()
@@ -53,7 +52,8 @@ class PageController extends Controller
                     'nama' => $branch->nama,
                     'alamat' => $branch->alamat,
                     'telepon' => $branch->nomor_telepon,
-                    'maps_embed_url' => $branch->maps_embed_url,
+                    'maps_embed_url' => $branch->maps_embed_url ?: ('https://www.google.com/maps?q=' . rawurlencode(trim($branch->nama . ' ' . $branch->alamat)) . '&output=embed'),
+                    'maps_url' => 'https://www.google.com/maps/search/?api=1&query=' . urlencode(trim($branch->nama . ' ' . $branch->alamat)),
                     'wa_phone' => $phone,
                     'jam' => $this->formatJamOperasional($branch->jamOperasional),
                 ];

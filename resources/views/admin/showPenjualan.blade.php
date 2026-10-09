@@ -67,7 +67,7 @@
                             <dt class="col-5 text-muted">Kasir</dt>
                             <dd class="col-7">{{ $penjualan->user->name ?? '-' }}</dd>
 
-                            <dt class="col-5 text-muted">Cabang</dt>
+                            <dt class="col-5 text-muted">Toko</dt>
                             <dd class="col-7">{{ $penjualan->perusahaan_cabang->nama ?? '-' }}</dd>
                         </dl>
                     </div>

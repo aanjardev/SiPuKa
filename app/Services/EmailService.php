@@ -97,9 +97,9 @@ class EmailService
     {
         try {
             $testEmail = 'test@example.com'; // Ganti dengan email test Anda
-            Mail::raw('This is a test email from SiDiKa system.', function ($message) use ($testEmail) {
+            Mail::raw('This is a test email from PusatKamera.id system.', function ($message) use ($testEmail) {
                 $message->to($testEmail)
-                    ->subject('SiDiKa Email Test')
+                    ->subject('PusatKamera.id Email Test')
                     ->from(config('mail.from.address'), config('mail.from.name'));
             });
             return true;

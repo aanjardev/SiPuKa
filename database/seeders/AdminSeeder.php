@@ -19,7 +19,7 @@ class AdminSeeder extends Seeder
     public function run(): void
     {
 
-        $existingAdmin = User::where('email', 'admin@dinoyokamera.com')->first();
+        $existingAdmin = User::where('email', 'admin@pusatkamera.id')->first();
         
         if (!$existingAdmin) {
 
@@ -30,7 +30,7 @@ class AdminSeeder extends Seeder
                 User::create([
                     'id' => $manager->id,
                     'name' => $manager->nama_lengkap,
-                    'email' => 'admin@dinoyokamera.com',
+                    'email' => 'admin@pusatkamera.id',
                     'password' => Hash::make(config('seeders.admin_password')),
                     'role' => 'manager', // Role manager (highest level)
                     'status' => 'active', // Langsung aktif, tidak pending
@@ -39,7 +39,7 @@ class AdminSeeder extends Seeder
                 ]);
 
                 $this->command->info('✅ Admin account created successfully!');
-                $this->command->info('   Email: admin@dinoyokamera.com');
+                $this->command->info('   Email: admin@pusatkamera.id');
                 $this->command->info('   Password: menggunakan SEED_ADMIN_PASSWORD');
                 $this->command->info('   Role: Manager');
                 $this->command->info('   Status: Active (Auto-login ready)');

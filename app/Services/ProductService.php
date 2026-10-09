@@ -28,6 +28,7 @@ class ProductService
                 'nama_produk'      => $data['nama_produk'],
                 'kode_sku'         => $data['kode_sku'],
                 'id_kategori'      => $data['id_kategori'],
+                'id_kategori_harga' => $data['id_kategori_harga'] ?? null,
                 'harga_jual'       => $data['harga_jual'] ?? null,
                 'harga_beli'       => $data['harga_beli'] ?? null,
                 'harga_servis'     => $data['harga_servis'] ?? null,
@@ -93,7 +94,7 @@ class ProductService
             }
 
             // Calculate remaining images after deletion
-            $remainingImagesCount = $product->gambar()->count() - count($removeIds);
+            $remainingImagesCount = $product->gambar()->count();
 
             // Calculate visibility:
             // - Jika user upload gambar baru → tetap pakai nilai dari input (is_visible dari form)
@@ -110,6 +111,7 @@ class ProductService
                 'nama_produk'      => $data['nama_produk'],
                 'kode_sku'         => $data['kode_sku'],
                 'id_kategori'      => $data['id_kategori'],
+                'id_kategori_harga' => $data['id_kategori_harga'] ?? null,
                 'harga_jual'       => $data['harga_jual'] ?? null,
                 'harga_beli'       => $data['harga_beli'] ?? null,
                 'harga_servis'     => $data['harga_servis'] ?? null,
@@ -152,7 +154,7 @@ class ProductService
             $product->refresh();
             $productHasMain = $product->gambarUtama()->exists();
             // Determine if we should auto-enable visibility (product had no images before)
-            $shouldAutoEnableVisibility = !$product->gambar()->exists();
+            $shouldAutoEnableVisibility = (bool) ($data['is_visible'] ?? false);
 
             // PERBAIKAN: Process langsung untuk development, queue untuk production
             if (config('app.env') === 'production' && config('queue.default') !== 'sync') {

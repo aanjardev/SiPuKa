@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kode Verifikasi SiDiKa</title>
+    <title>Kode Verifikasi {{ \App\Helpers\Brand::name() }}</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -122,15 +122,15 @@
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <h1>🔐 Kode Verifikasi SiDiKa</h1>
-            <p>Sistem Informasi Dinoyo Kamera</p>
+            <h1>🔐 Kode Verifikasi {{ \App\Helpers\Brand::name() }}</h1>
+            <p>Sistem Informasi {{ \App\Helpers\Brand::name() }}</p>
         </div>
 
         <!-- Content -->
         <div class="content">
             <p style="font-size: 18px; margin-bottom: 25px;">
                 Hai <strong>{{ $user->name }}</strong>,<br>
-                Berikut adalah kode verifikasi untuk aktivasi akun SiDiKa Anda.
+                Berikut adalah kode verifikasi untuk aktivasi akun {{ \App\Helpers\Brand::name() }} Anda.
             </p>
 
             <!-- Verification Code Display -->
@@ -177,12 +177,12 @@
 
         <!-- Footer -->
         <div class="footer">
-            <p><strong>Terima kasih menggunakan SiDiKa!</strong></p>
-            <p>Sistem Informasi Dinoyo Kamera</p>
+            <p><strong>Terima kasih menggunakan {{ \App\Helpers\Brand::name() }}!</strong></p>
+            <p>Sistem Informasi {{ \App\Helpers\Brand::name() }}</p>
             
             <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #dee2e6;">
                 <p>Email ini dikirim otomatis. Jangan balas email ini.</p>
-                <p>&copy; {{ date('Y') }} SiDiKa. All rights reserved.</p>
+                <p>&copy; {{ date('Y') }} {{ \App\Helpers\Brand::name() }}. All rights reserved.</p>
             </div>
         </div>
     </div>

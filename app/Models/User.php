@@ -12,6 +12,9 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    // Account IDs are assigned from the employee record, not an auto-increment sequence.
+    public $incrementing = false;
+
     /**
      * The attributes that are mass assignable.
      *

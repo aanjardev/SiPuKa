@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aktivasi Akun SiDiKa</title>
+    <title>Aktivasi Akun {{ \App\Helpers\Brand::name() }}</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -118,15 +118,15 @@
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <h1>🎉 Selamat Datang di SiDiKa!</h1>
-            <p>Sistem Informasi Dinoyo Kamera</p>
+            <h1>🎉 Selamat Datang di {{ \App\Helpers\Brand::name() }}!</h1>
+            <p>Sistem Informasi {{ \App\Helpers\Brand::name() }}</p>
         </div>
 
         <!-- Content -->
         <div class="content">
             <p class="welcome-text">
                 Hai <strong>{{ $user->name }}</strong>,<br>
-                Akun Anda telah dibuat di SiDiKa. Untuk mulai menggunakan sistem, silakan aktivasi akun Anda terlebih dahulu.
+                Akun Anda telah dibuat di {{ \App\Helpers\Brand::name() }}. Untuk mulai menggunakan sistem, silakan aktivasi akun Anda terlebih dahulu.
             </p>
 
             <!-- Account Info -->
@@ -161,7 +161,7 @@
                     <li>Check email baru untuk mendapatkan kode verifikasi 6 digit</li>
                     <li>Masukkan kode verifikasi di halaman verifikasi</li>
                     <li>Buat password baru untuk akun Anda</li>
-                    <li>Login dan mulai menggunakan SiDiKa!</li>
+                    <li>Login dan mulai menggunakan {{ \App\Helpers\Brand::name() }}!</li>
                 </ol>
             </div>
 
@@ -174,12 +174,12 @@
 
         <!-- Footer -->
         <div class="footer">
-            <p><strong>Terima kasih telah bergabung dengan SiDiKa!</strong></p>
-            <p>Sistem Informasi Dinoyo Kamera</p>
+            <p><strong>Terima kasih telah bergabung dengan {{ \App\Helpers\Brand::name() }}!</strong></p>
+            <p>Sistem Informasi {{ \App\Helpers\Brand::name() }}</p>
             
             <div class="company-info">
                 <p>Email ini dikirim otomatis. Jangan balas email ini.</p>
-                <p>&copy; {{ date('Y') }} SiDiKa. All rights reserved.</p>
+                <p>&copy; {{ date('Y') }} {{ \App\Helpers\Brand::name() }}. All rights reserved.</p>
             </div>
         </div>
     </div>

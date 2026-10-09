@@ -114,7 +114,7 @@
                             <div class="catalog-product-media">
                                 @if($product->grade === 'Unggulan')<span class="catalog-badge">PILIHAN</span>@endif
                                 @if($product->stok_produk <= 0)<span class="catalog-badge sold">STOK HABIS</span>@endif
-                                <img src="{{ asset('mainIMG/produk.png') }}" alt="{{ $product->nama_produk }}" loading="lazy">
+                                <img src="{{ $product->gambarUtama?->url ?? asset('mainIMG/produk.png') }}" alt="{{ $product->nama_produk }}" loading="lazy">
                             </div>
                             <div class="catalog-product-info">
                                 <small>{{ $product->kategori?->nama_kategori ?? 'Kamera' }}</small>

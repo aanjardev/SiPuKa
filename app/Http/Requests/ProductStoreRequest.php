@@ -17,6 +17,7 @@ class ProductStoreRequest extends FormRequest
             'nama_produk'      => ['required', 'string', 'max:200'],
             'kode_sku'         => ['required', 'string', 'max:20', 'unique:produk,kode_sku'],
             'id_kategori'      => ['required', 'exists:kategori,id'],
+            'id_kategori_harga' => ['nullable', \Illuminate\Validation\Rule::exists('kategori_harga', 'id')->where('is_active', true)],
             'harga_jual'       => ['nullable', 'integer', 'min:0'],
             'harga_beli'       => ['nullable', 'integer', 'min:0'],
             'harga_servis'     => ['nullable', 'integer', 'min:0'],

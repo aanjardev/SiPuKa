@@ -35,7 +35,7 @@ class VerificationCodeMail extends Mailable
     {
         return new Envelope(
             from: new Address(config('mail.from.address'), config('mail.from.name')),
-            subject: 'Kode Verifikasi SiDiKa - ' . $this->verificationCode,
+            subject: 'Kode Verifikasi ' . \App\Helpers\Brand::name() . ' - ' . $this->verificationCode,
         );
     }
 

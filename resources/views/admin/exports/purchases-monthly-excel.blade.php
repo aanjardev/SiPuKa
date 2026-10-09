@@ -15,8 +15,9 @@
     </style>
 </head>
 <body>
+<p><strong>{{ \App\Helpers\Brand::name() }}</strong></p>
     <h1>Laporan Pembelian Bulan {{ $period }}</h1>
-    <div class="meta">Cabang: {{ $branchLabel ?? 'Semua Cabang' }}</div>
+    <div class="meta">Toko: {{ $branchLabel ?? 'Toko' }}</div>
     <div class="meta">Total transaksi: {{ $rows->count() }}</div>
 
     <table>
@@ -32,7 +33,7 @@
                 <th>Unit No</th>
                 <th>Harga Customer</th>
                 <th>Harga Toko</th>
-                <th>Cabang</th>
+                <th>Toko</th>
                 <th>Status</th>
                 <th class="text-right">Harga Deal (transaksi)</th>
             </tr>

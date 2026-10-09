@@ -1,6 +1,6 @@
 @extends('layouts.auth')
 
-@section('title', 'Aktivasi Akun | Dinoyo Kamera')
+@section('title', 'Aktivasi Akun | ' . \App\Helpers\Brand::name() . '')
 
 @section('content')
     <div class="auth-logo">

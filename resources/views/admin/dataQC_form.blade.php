@@ -37,6 +37,7 @@
       id="qcForm"
       data-validate-form>
     @csrf
+    <input type="hidden" name="submission_token" value="{{ old('submission_token', (string) \Illuminate\Support\Str::uuid()) }}">
     @if(!$isCreate)
     @method('PUT')
     @endif
@@ -109,6 +110,15 @@
                     @endforeach
                 </select>
             </div>
+<label class="form-label mt-3" for="id_kategori_harga">Kategori Harga <span class="text-muted">(opsional)</span></label>
+<select name="id_kategori_harga" id="id_kategori_harga" class="form-select @error('id_kategori_harga') is-invalid @enderror" {{ ($isReadOnly ?? false) ? 'disabled' : '' }}>
+    <option value="">Tanpa kategori harga</option>
+    @foreach(\App\Models\KategoriHarga::where(fn ($query) => $query->where('is_active', true)->orWhere('id', $item->id_kategori_harga))->orderBy('urutan')->get() as $priceCategory)
+        <option value="{{ $priceCategory->id }}" @selected(old('id_kategori_harga', $item->id_kategori_harga) == $priceCategory->id)>{{ $priceCategory->nama }}{{ !$priceCategory->is_active ? ' (nonaktif)' : '' }}</option>
+    @endforeach
+</select>
+<div class="form-text">Pilihan manual untuk filter katalog; tidak dihitung dari harga jual.</div>
+@error('id_kategori_harga')<div class="invalid-feedback">{{ $message }}</div>@enderror
             <div class="invalid-feedback dynamic-error" data-field="kategori_id" style="display: none;">
                 Kategori wajib dipilih
             </div>

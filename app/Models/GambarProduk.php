@@ -28,39 +28,13 @@ class GambarProduk extends Model
         });
     }
 
-    public function getUrlAttribute(): string
+    public function getUrlAttribute()
     {
-        $base = rtrim(config('filesystems.disks.r2.url', ''), '/');
-
-        if ($base) {
-            return $base . '/' . ltrim($this->path_gambar, '/');
-        }
-
-        return Storage::disk('r2')->url($this->path_gambar);
+        return \App\Helpers\StoredImage::url($this->path_gambar);
     }
 
     private function deleteVariants(?string $path): void
     {
-        if (!$path) {
-            return;
-        }
-
-        $disk = Storage::disk('r2');
-
-        if (preg_match('#^(.*)/(thumb|medium|large)/([^/]+)$#', $path, $m)) {
-            $base = $m[1];
-            $file = $m[3];
-            foreach (['thumb', 'medium', 'large'] as $size) {
-                $candidate = "{$base}/{$size}/{$file}";
-                if ($disk->exists($candidate)) {
-                    $disk->delete($candidate);
-                }
-            }
-            return;
-        }
-
-        if ($disk->exists($path)) {
-            $disk->delete($path);
-        }
+        \App\Helpers\StoredImage::delete($path);
     }
 }

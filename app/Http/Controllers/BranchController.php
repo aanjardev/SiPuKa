@@ -11,35 +11,8 @@ class BranchController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Branch::query();
-
-        if ($request->filled('search')) {
-            $search = $request->input('search');
-            $query->where(function($q) use ($search) {
-                $q->where('nama', 'like', "%{$search}%")
-                  ->orWhere('alamat', 'like', "%{$search}%");
-            });
-        }
-
-        $sortBy = $request->input('sort_by', 'updated_at');
-        $sortOrder = $request->input('sort_order', 'desc');
-
-        if ($sortBy === 'nama') {
-            $query->orderBy('nama', 'asc');
-        } elseif ($sortBy === 'nama_desc') {
-            $query->orderBy('nama', 'desc');
-        } else {
-            $query->orderBy('updated_at', $sortOrder);
-        }
-
-        $data_cabang = $query->with('jamOperasional')->paginate(10)->withQueryString();
-
-        return view('admin.dataCabang', [
-            'data_cabang' => $data_cabang,
-            'search_term' => $request->input('search', ''),
-            'sort_by' => $sortBy,
-            'sort_order' => $sortOrder,
-        ]);
+        $store = Branch::first();
+        return $store ? redirect()->route('admin.branches.edit', $store) : redirect()->route('admin.branches.create');
     }
 
     public function create()

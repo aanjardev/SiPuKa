@@ -1,6 +1,6 @@
 @extends('layouts.auth')
 
-@section('title', 'Lupa Password | Dinoyo Kamera')
+@section('title', 'Lupa Password | ' . \App\Helpers\Brand::name() . '')
 
 @section('content')
     <div class="text-center mb-4">

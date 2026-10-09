@@ -130,7 +130,7 @@ class PurchasesMonthlyExport implements FromCollection, WithHeadings
             'Unit No',
             'Harga Customer',
             'Harga Toko',
-            'Cabang',
+            'Toko',
             'Status',
             'Harga Deal (Transaksi)'
         ];

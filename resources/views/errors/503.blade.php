@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Maintenance - SiDiKa</title>
+    <title>Maintenance - {{ \App\Helpers\Brand::name() }}</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -16,7 +16,7 @@
                 </div>
                 <h1 class="text-2xl font-bold text-gray-800 mb-2">Sistem Dalam Perbaikan</h1>
                 <p class="text-gray-600 mb-6">
-                    SiDiKa sedang dalam maintenance untuk memberikan layanan yang lebih baik. 
+                    {{ \App\Helpers\Brand::name() }} sedang dalam maintenance untuk memberikan layanan yang lebih baik.
                     Proses ini akan selesai dalam beberapa saat.
                 </p>
             </div>
@@ -26,7 +26,7 @@
                     <i class="fas fa-sync-alt"></i>
                     Periksa Kembali
                 </button>
-                
+
                 <button onclick="location.href='/'" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition duration-200 flex items-center justify-center gap-2">
                     <i class="fas fa-home"></i>
                     Kembali ke Beranda
@@ -54,14 +54,14 @@
 
         let refreshCount = 0;
         const maxRefresh = 10; // Max 10 kali refresh (5 menit)
-        
+
         function autoRefresh() {
             if (refreshCount >= maxRefresh) {
 
                 document.getElementById('estimate-time').textContent = '15-20 menit';
                 return;
             }
-            
+
             const countdown = document.createElement('div');
             countdown.className = 'fixed bottom-4 right-4 bg-white rounded-lg shadow-lg p-3 text-sm';
             countdown.innerHTML = '<i class="fas fa-sync-alt animate-spin mr-2"></i>Auto check dalam <span id="countdown">30</span> detik...';

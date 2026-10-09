@@ -164,26 +164,8 @@ $backRoute = route('admin.purchases.show', $pembelian->id);
                             </div>
                         </div>
 
-                        {{-- Lokasi Cabang --}}
-                        <div class="col-md-6">
-                            <label for="perusahaan_cabang_id" class="form-label-modern">Lokasi Transaksi</label>
-                            <div class="input-group input-group-modern">
-                                <span class="input-group-text"><i class="fa-solid fa-store"></i></span>
-                                <select class="form-select @error('perusahaan_cabang_id') is-invalid @enderror" id="perusahaan_cabang_id" name="perusahaan_cabang_id" required>
-                                    @foreach($semua_cabang as $cabang)
-                                    <option value="{{ $cabang->id }}"
-                                        @if(isset($pembelian))
-                                            {{ $pembelian->perusahaan_cabang_id == $cabang->id ? 'selected' : '' }}
-                                        @else
-                                            {{ (Auth::user()->cabang_id_default ?? 1) == $cabang->id ? 'selected' : '' }}
-                                        @endif
-                                    >
-                                        {{ $cabang->nama }}
-                                    </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
+                        {{-- Lokasi Toko --}}
+                        <input type="hidden" id="perusahaan_cabang_id" name="perusahaan_cabang_id" value="{{ $semua_cabang->first()?->id }}">
                     </div>
                 </div>
             </div>

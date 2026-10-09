@@ -94,11 +94,11 @@ class PermissionsController extends Controller
         $emailSent = $this->emailService->sendActivationEmail($user, $activationToken);
 
         if ($emailSent) {
-            return redirect()->route('admin.permissions')
+            return redirect()->route('admin.permissions.index')
                 ->with('success', 'User berhasil dibuat! Email aktivasi telah dikirim ke ' . $user->email);
         } else {
 
-            return redirect()->route('admin.permissions')
+            return redirect()->route('admin.permissions.index')
                 ->with('success', 'User berhasil dibuat! Namun email aktivasi gagal dikirim. Silakan generate ulang token.')
                 ->with('warning', 'Email activation failed. Please check email configuration.');
         }
@@ -159,18 +159,18 @@ class PermissionsController extends Controller
 
             }
 
-            return redirect()->route('admin.permissions')
+            return redirect()->route('admin.permissions.index')
                 ->with('success', 'User berhasil diperbarui!');
         }
 
-        return redirect()->route('admin.permissions')->with('success', 'User berhasil diperbarui!');
+        return redirect()->route('admin.permissions.index')->with('success', 'User berhasil diperbarui!');
     }
 
     public function destroy($id)
     {
 
         if (Auth::id() && (int) $id === (int) Auth::id()) {
-            return redirect()->route('admin.permissions')
+            return redirect()->route('admin.permissions.index')
                 ->with('error', 'Anda tidak dapat menonaktifkan akun Anda sendiri.');
         }
 
@@ -179,7 +179,7 @@ class PermissionsController extends Controller
 
         Karyawan::where('id', $id)->update(['status' => 'non-aktif']);
 
-        return redirect()->route('admin.permissions')->with('success', 'User dinonaktifkan. Anda dapat mengaktifkannya kembali jika diperlukan.');
+        return redirect()->route('admin.permissions.index')->with('success', 'User dinonaktifkan. Anda dapat mengaktifkannya kembali jika diperlukan.');
     }
 
     public function regenerateToken($id)
@@ -187,7 +187,7 @@ class PermissionsController extends Controller
         $user = User::findOrFail($id);
 
         if ($user->status !== 'pending') {
-            return redirect()->route('admin.permissions')
+            return redirect()->route('admin.permissions.index')
                 ->with('error', 'Token hanya bisa di-generate untuk user dengan status pending.');
         }
 
@@ -200,10 +200,10 @@ class PermissionsController extends Controller
         $emailSent = $this->emailService->sendActivationEmail($user, $activationToken);
 
         if ($emailSent) {
-            return redirect()->route('admin.permissions')
+            return redirect()->route('admin.permissions.index')
                 ->with('success', 'Token aktivasi berhasil diperbarui! Email baru telah dikirim ke ' . $user->email);
         } else {
-            return redirect()->route('admin.permissions')
+            return redirect()->route('admin.permissions.index')
                 ->with('success', 'Token aktivasi berhasil diperbarui! Namun email gagal dikirim.')
                 ->with('warning', 'Email activation failed. Please check email configuration.');
         }
@@ -216,7 +216,7 @@ class PermissionsController extends Controller
         ]);
 
         if ($validated['status'] === 'inactive' && Auth::id() && (int) $id === (int) Auth::id()) {
-            return redirect()->route('admin.permissions')
+            return redirect()->route('admin.permissions.index')
                 ->with('error', 'Anda tidak dapat menonaktifkan akun Anda sendiri.');
         }
 
@@ -230,7 +230,7 @@ class PermissionsController extends Controller
             ? 'User berhasil diaktifkan.'
             : 'User berhasil dinonaktifkan. User non-aktif tidak dapat login.';
 
-        return redirect()->route('admin.permissions')->with('success', $message);
+        return redirect()->route('admin.permissions.index')->with('success', $message);
     }
 
 }

@@ -35,7 +35,7 @@ class PasswordResetCodeMail extends Mailable
     {
         return new Envelope(
             from: new Address(config('mail.from.address'), config('mail.from.name')),
-            subject: 'Kode Reset Password SiDiKa',
+            subject: 'Kode Reset Password ' . \App\Helpers\Brand::name(),
         );
     }
 

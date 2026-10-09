@@ -26,7 +26,7 @@
     ]
   },
   "resources/admin_theme/css/customizer.min.css": {
-    "file": "assets/customizer-B3gNTQA_.css",
+    "file": "assets/customizer-B2V4YEfV.css",
     "src": "resources/admin_theme/css/customizer.min.css",
     "isEntry": true,
     "name": "customizer.min",
@@ -75,7 +75,7 @@
     ]
   },
   "resources/css/admin/admin-layout.css": {
-    "file": "assets/admin-layout-CilCl6nU.css",
+    "file": "assets/admin-layout-DS0cKWOB.css",
     "src": "resources/css/admin/admin-layout.css",
     "isEntry": true,
     "name": "admin-layout",
@@ -141,7 +141,7 @@
     "isEntry": true
   },
   "resources/js/admin/pages/dashboard.js": {
-    "file": "assets/dashboard-Dg6zwQxc.js",
+    "file": "assets/dashboard-C6BtPnR2.js",
     "name": "dashboard",
     "src": "resources/js/admin/pages/dashboard.js",
     "isEntry": true

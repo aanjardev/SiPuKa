@@ -1,6 +1,6 @@
 @extends('layouts.auth')
 
-@section('title', 'Reset Password | SiDiKa')
+@section('title', 'Reset Password | ' . \App\Helpers\Brand::name() . '')
 
 @push('styles')
     <style>

@@ -21,6 +21,11 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class PembelianController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(\App\Http\Middleware\UseSingleStore::class);
+    }
+
     public function index(Request $request)
     {
 
@@ -91,7 +96,7 @@ class PembelianController extends Controller
         $data_cabang = Branch::where('is_active', true)->orderBy('nama', 'asc')->get();
         if ($data_cabang->isEmpty()) {
             return redirect()->route('admin.purchases.index')
-                ->with('error', 'Tidak ada cabang aktif. Aktifkan cabang terlebih dahulu sebelum membuat transaksi.');
+                ->with('error', 'Lengkapi dan aktifkan Data Toko terlebih dahulu sebelum membuat transaksi.');
         }
         $data_kategori = Kategori::orderBy('nama_kategori', 'asc')->get();
 
@@ -130,7 +135,7 @@ class PembelianController extends Controller
             'harga_tawaran_toko.max' => 'Harga Tawaran Toko melebihi batas maksimum (Rp ' . number_format($max_int, 0, ',', '.') . ').',
             'harga_deal.max' => 'Harga Deal melebihi batas maksimum (Rp ' . number_format($max_int, 0, ',', '.') . ').',
             'pembelian_id.required' => 'Terjadi kesalahan. Coba muat ulang halaman. (ID Pembelian tidak ditemukan)',
-            'perusahaan_cabang_id.exists' => 'Cabang tidak tersedia atau sedang non-aktif.',
+            'perusahaan_cabang_id.exists' => 'Toko tidak tersedia atau sedang non-aktif.',
         ]);
 
         if ($validator->fails()) {
@@ -289,7 +294,7 @@ class PembelianController extends Controller
             $request->all(),
             array_merge($itemRules, $parentRules),
             [
-                'perusahaan_cabang_id.exists' => 'Cabang tidak tersedia atau sedang non-aktif.',
+                'perusahaan_cabang_id.exists' => 'Toko tidak tersedia atau sedang non-aktif.',
             ]
         );
 
@@ -450,7 +455,7 @@ class PembelianController extends Controller
             'harga_tawaran_customer.max' => 'Harga Tawaran Customer melebihi batas maksimum (Rp ' . number_format($max_int, 0, ',', '.') . ').',
             'harga_tawaran_toko.max' => 'Harga Tawaran Toko melebihi batas maksimum (Rp ' . number_format($max_int, 0, ',', '.') . ').',
             'harga_deal.max' => 'Harga Deal melebihi batas maksimum (Rp ' . number_format($max_int, 0, ',', '.') . ').',
-            'perusahaan_cabang_id.exists' => 'Cabang tidak tersedia atau sedang non-aktif.',
+            'perusahaan_cabang_id.exists' => 'Toko tidak tersedia atau sedang non-aktif.',
         ]);
 
         if ($validator->fails()) {
@@ -565,8 +570,8 @@ class PembelianController extends Controller
             ->whereBetween('created_at', [$start, $end])
             ->whereIn('status_pembelian', ['deal', 'tidak_deal']);
 
-        $branchLabel = 'Semua Cabang';
-        $branchSlug = 'semua-cabang';
+        $branchLabel = 'Toko';
+        $branchSlug = 'toko';
         if (!empty($validated['cabang'])) {
             $query->where('perusahaan_cabang_id', $validated['cabang']);
             $branch = Branch::find($validated['cabang']);
@@ -625,7 +630,7 @@ class PembelianController extends Controller
             ->whereBetween('created_at', [$start, $end])
             ->whereIn('status_pembelian', ['deal', 'tidak_deal']);
 
-        $branchSlug = 'semua-cabang';
+        $branchSlug = 'toko';
         if (!empty($validated['cabang'])) {
             $query->where('perusahaan_cabang_id', $validated['cabang']);
             $branch = Branch::find($validated['cabang']);

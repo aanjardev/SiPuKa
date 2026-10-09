@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kode Reset Password SiDiKa</title>
+    <title>Kode Reset Password {{ \App\Helpers\Brand::name() }}</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -133,15 +133,15 @@
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <h1>🔐 Reset Password SiDiKa</h1>
-            <p>Sistem Informasi Dinoyo Kamera</p>
+            <h1>🔐 Reset Password {{ \App\Helpers\Brand::name() }}</h1>
+            <p>Sistem Informasi {{ \App\Helpers\Brand::name() }}</p>
         </div>
 
         <!-- Content -->
         <div class="content">
             <p style="font-size: 18px; margin-bottom: 25px;">
                 Hai <strong>{{ $user->name }}</strong>,<br>
-                Kami menerima permintaan reset password untuk akun SiDiKa Anda.
+                Kami menerima permintaan reset password untuk akun {{ \App\Helpers\Brand::name() }} Anda.
             </p>
 
             <!-- User Info -->
@@ -195,12 +195,12 @@
 
         <!-- Footer -->
         <div class="footer">
-            <p><strong>Terima kasih menggunakan SiDiKa!</strong></p>
-            <p>Sistem Informasi Dinoyo Kamera</p>
+            <p><strong>Terima kasih menggunakan {{ \App\Helpers\Brand::name() }}!</strong></p>
+            <p>Sistem Informasi {{ \App\Helpers\Brand::name() }}</p>
             
             <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #dee2e6;">
                 <p>Email ini dikirim otomatis. Jangan balas email ini.</p>
-                <p>&copy; {{ date('Y') }} SiDiKa. All rights reserved.</p>
+                <p>&copy; {{ date('Y') }} {{ \App\Helpers\Brand::name() }}. All rights reserved.</p>
             </div>
         </div>
     </div>

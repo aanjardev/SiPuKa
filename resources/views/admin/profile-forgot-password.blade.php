@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Reset Password - SiDiKa')
+@section('title', 'Reset Password - ' . \App\Helpers\Brand::name() . '')
 
 @push('page-actions')
     <a href="{{ route('admin.profile') }}" class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-2">

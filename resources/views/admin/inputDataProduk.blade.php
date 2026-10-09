@@ -239,6 +239,15 @@ $backRoute = route('admin.products.index');
                         </option>
                         @endforeach
                     </select>
+<label class="form-label mt-3" for="id_kategori_harga">Kategori Harga <span class="text-muted">(opsional)</span></label>
+<select name="id_kategori_harga" id="id_kategori_harga" class="form-select @error('id_kategori_harga') is-invalid @enderror" >
+    <option value="">Tanpa kategori harga</option>
+    @foreach(\App\Models\KategoriHarga::where(fn ($query) => $query->where('is_active', true)->orWhere('id', ($product->id_kategori_harga ?? null)))->orderBy('urutan')->get() as $priceCategory)
+        <option value="{{ $priceCategory->id }}" @selected(old('id_kategori_harga', $isEdit ? $product->id_kategori_harga : null) == $priceCategory->id)>{{ $priceCategory->nama }}{{ !$priceCategory->is_active ? ' (nonaktif)' : '' }}</option>
+    @endforeach
+</select>
+<div class="form-text">Pilihan manual untuk filter katalog; tidak dihitung dari harga jual.</div>
+@error('id_kategori_harga')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     @error('id_kategori')
                     <div class="invalid-feedback d-block">{{ $message }}</div>
                     @else

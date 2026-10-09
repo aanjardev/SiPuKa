@@ -3,6 +3,9 @@
 @section('title', 'Detail Produk')
 
 @push('page-actions')
+@if($product->is_visible && !$product->is_archived)
+<a href="{{ route('product.show', $product->id) }}" target="_blank" rel="noopener" class="btn btn-outline-secondary btn-sm">Lihat di Katalog</a>
+@endif
 <a href="{{ route('admin.products.index') }}" class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-2">
     <i class="fas fa-arrow-left"></i>
     <span>Kembali</span>

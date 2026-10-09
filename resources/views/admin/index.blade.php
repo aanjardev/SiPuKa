@@ -25,6 +25,11 @@
 @endpush
 
 @section('content')
+<div class="row g-3 mb-3">
+    @foreach(['available' => 'Produk tersedia', 'empty' => 'Stok habis', 'hidden' => 'Produk disembunyikan'] as $key => $label)
+        <div class="col-md-4"><div class="card"><div class="card-body"><span class="text-muted">{{ $label }}</span><strong class="d-block fs-4">{{ $stockSummary[$key] }}</strong></div></div></div>
+    @endforeach
+</div>
 
 {{-- ======================================================= --}}
 {{-- FILTER SECTION --}}
@@ -51,17 +56,7 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-md-3">
-                        <label for="branch_id" class="form-label mb-1 text-muted small fw-medium">Cabang</label>
-                        <select name="branch_id" id="branch_id" class="form-select form-select-sm ">
-                            <option value="">Semua Cabang</option>
-                            @foreach($allBranches as $branchOption)
-                            <option value="{{ $branchOption->id }}" {{ (int)$selectedBranch === (int)$branchOption->id ? 'selected' : '' }}>
-                                    {{ $branchOption->nama }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
+
                 </form>
             </div>
         </div>
@@ -73,7 +68,7 @@
 {{-- ======================================================= --}}
 <div class="row mb-3">
     @php
-        $cardCount = $showBestBranch ? 4 : 3;
+        $cardCount = 3;
         $colClass = $cardCount == 4 ? 'col-xl-3 col-md-6' : 'col-xl-4 col-md-4';
     @endphp
 
@@ -167,44 +162,8 @@
         </div>
     </div>
 
-    {{-- Card 4: Cabang Terbaik --}}
-    @if($showBestBranch)
-        <div class="{{ $colClass }} mb-1 carddashboard">
-            <div class="card shadow-sm border-0 h-100 rounded-xl" style="border-left: 4px solid #ffc107;">
-                <div class="card-body p-4">
-                    <div class="d-flex justify-content-between align-items-start mb-3">
-                        <div>
-                            <p class="text-muted small mb-1 fw-medium">Cabang Terbaik</p>
-                            <h5 class="mb-1 fw-bold text-truncate" title="{{ $namaCabangTerbaik }}">
-                                {{ $namaCabangTerbaik }}
-                            </h5>
-                            @if($bestBranchGrowthPercent != 0)
-                                <h6 class="mb-0 text-muted">{{ $bestBranchGrowthPercent }}%</h6>
-                            @else
-                                <h6 class="mb-0 text-muted">-</h6>
-                            @endif
-                        </div>
-                        <div class="bg-warning bg-opacity-10 rounded-circle p-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
-                            <i class="fas fa-trophy text-warning fa-lg"></i>
-                        </div>
-                    </div>
-                    @php
-                        $periodFrom = $bestBranchGrowthPeriod['from'] ?? null;
-                        $periodTo = $bestBranchGrowthPeriod['to'] ?? null;
-                        $periodLabel = null;
-                        if ($periodFrom && $periodTo) {
-                            $fromLabel = $labelBulan[($periodFrom['month'] ?? 1) - 1] ?? '';
-                            $toLabel = $labelBulan[($periodTo['month'] ?? 1) - 1] ?? '';
-                            $periodLabel = trim($fromLabel . ' → ' . $toLabel);
-                        }
-                    @endphp
-                    <div class="d-flex align-items-center gap-2">
-                        <span class="text-muted small">Pertumbuhan omset tertinggi{{ $periodLabel ? ' (' . $periodLabel . ')' : '' }}</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endif
+    {{-- Card 4: Toko Terbaik --}}
+
 </div>
 
 {{-- ======================================================= --}}
@@ -378,7 +337,7 @@
                                     <th class="text-center ps-4" style="width: 5%;">No</th>
                                     <th>Kode Transaksi</th>
                                     <th>Customer</th>
-                                    <th>Cabang</th>
+                                    <th>Toko</th>
                                     <th style="width: 25%; min-width:200px; max-width: 300px;">Item Dibeli</th>
                                     <th class="text-end">Harga Deal</th>
                                     <th class="text-center">Status</th>

@@ -27,7 +27,21 @@ class StorefrontTest extends TestCase
         $this->get('/contact')
             ->assertOk()
             ->assertSee('Pusat Kamera Malang')
-            ->assertDontSee('Pilih Cabang');
+            ->assertDontSee('Pilih Cabang')
+            ->assertSee('class="contact-map-frame"', false)
+            ->assertSee('https://www.google.com/maps/embed?q=Pusat+Kamera+Malang', false);
+    }
+
+    public function test_contact_map_falls_back_to_store_address_when_embed_is_empty(): void
+    {
+        DB::table('perusahaan_cabang')->insert([
+            'singleton_key' => true, 'nama' => 'Pusat Kamera Malang',
+            'alamat' => 'Jl. Mertojoyo E1a, Malang', 'nomor_telepon' => '082345672034',
+            'is_active' => true, 'created_at' => now(), 'updated_at' => now(),
+        ]);
+        $this->get('/contact')->assertOk()
+            ->assertSee('class="contact-map-frame"', false)
+            ->assertSee('https://www.google.com/maps?q=Pusat%20Kamera%20Malang%20Jl.%20Mertojoyo%20E1a%2C%20Malang&amp;output=embed', false);
     }
 
     public function test_database_rejects_a_second_store(): void

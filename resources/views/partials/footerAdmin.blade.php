@@ -1,6 +1,6 @@
 <footer id="main-footer" class="footer-area text-center py-4">
     <div class="container">
-        <span class="fw-semibold">Halaman Admin Dinoyo Kamera</span>
+        <span class="fw-semibold">Halaman Admin {{ \App\Helpers\Brand::name() }}</span>
         <br>
         <small style="color: var(--footer-muted);">Hanya untuk keperluan pengelolaan data dan inventaris. Bukan untuk akses publik.</small>
     </div>

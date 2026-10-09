@@ -23,7 +23,7 @@
             <span class="opacity-75">{{ $pembelian->created_at->format('H:i') }} WIB</span>
         </td>
 
-        {{-- Cabang --}}
+        {{-- Toko --}}
         <td class="text-dark small">
             {{ $pembelian->perusahaan_cabang->nama ?? '-' }}
         </td>

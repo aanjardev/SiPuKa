@@ -297,12 +297,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 filterForm.submit();
             });
 
-        const branchSelect = document.getElementById("branch_id");
-        if (branchSelect) {
-            branchSelect.addEventListener("change", function () {
-                filterForm.submit();
-            });
-        }
+
     }
 
     function initClickableRows() {

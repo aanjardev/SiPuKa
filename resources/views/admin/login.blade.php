@@ -1,12 +1,12 @@
 @extends('layouts.auth')
 
-@section('title', 'Masuk Admin | PusatKamera.id')
+@section('title', 'Masuk Admin | ' . \App\Helpers\Brand::name())
 
 @section('content')
     <div class="auth-heading mb-4">
         <span class="auth-eyebrow">AREA ADMIN</span>
         <h2>Selamat datang<span>.</span></h2>
-        <p>Masuk untuk mengelola operasional PusatKamera.id.</p>
+        <p>Masuk untuk mengelola operasional {{ \App\Helpers\Brand::name() }}.</p>
     </div>
 
     <form method="POST" action="{{ route('login') }}" id="loginForm">

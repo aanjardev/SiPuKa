@@ -218,12 +218,6 @@
     box-shadow: 9px 9px 0 #111;
     overflow: hidden;
 }
-.contact-map iframe {
-    width: 100%;
-    height: 100%;
-    border: 0;
-    filter: grayscale(1) contrast(1.1);
-}
 .contact-map > div {
     display: grid;
     place-items: center;
@@ -231,8 +225,92 @@
     gap: 1rem;
     height: 100%;
 }
-.contact-map > div i {
+.contact-map > div > i {
     font-size: 4rem;
+}
+.maps-link-card {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-content: center;
+    gap: 1.25rem;
+    width: 100%;
+    height: 100%;
+    padding: clamp(1.4rem, 4vw, 3rem);
+    color: #111;
+    text-decoration: none;
+    isolation: isolate;
+}
+.maps-link-card::before,
+.maps-link-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+        linear-gradient(90deg, rgba(17, 17, 17, 0.16) 3px, transparent 3px) 0 0 / 46px 46px,
+        linear-gradient(rgba(17, 17, 17, 0.12) 3px, transparent 3px) 0 0 / 46px 46px,
+        #ffd600;
+}
+.maps-link-card::after {
+    inset: auto 8% 12% auto;
+    width: min(62%, 360px);
+    height: min(44%, 240px);
+    border: 3px solid #111;
+    background: #fff;
+    box-shadow: 8px 8px 0 #111;
+    transform: rotate(-2deg);
+}
+.maps-link-card:hover {
+    color: #111;
+}
+.maps-link-card:hover .maps-button {
+    transform: translate(-2px, -2px);
+    box-shadow: 7px 7px 0 #111;
+}
+.maps-pin {
+    display: grid;
+    place-items: center;
+    width: clamp(72px, 12vw, 116px);
+    aspect-ratio: 1;
+    background: #111;
+    color: #ffd600;
+    border: 3px solid #111;
+    box-shadow: 8px 8px 0 #fff;
+}
+.maps-pin i {
+    font-size: clamp(2rem, 5vw, 4rem);
+}
+.maps-copy {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 520px;
+}
+.maps-copy small {
+    width: max-content;
+    margin-bottom: 0.75rem;
+    padding: 0.35rem 0.5rem;
+    background: #111;
+    color: #ffd600;
+    font-size: 0.68rem;
+    font-style: normal;
+    font-weight: 950;
+}
+.maps-copy strong {
+    font-size: clamp(2rem, 4.5vw, 4.8rem);
+    font-weight: 950;
+    letter-spacing: -0.05em;
+    line-height: 0.85;
+}
+.maps-copy em {
+    max-width: 36rem;
+    margin-top: 1rem;
+    color: #111;
+    font-size: clamp(0.92rem, 1.4vw, 1.05rem);
+    font-style: normal;
+    font-weight: 800;
+    line-height: 1.4;
 }
 .maps-button {
     position: absolute;
@@ -382,6 +460,27 @@
         font-size: 0.75rem;
         box-shadow: 4px 4px 0 #111;
     }
+    .maps-link-card {
+        grid-template-columns: 1fr;
+        align-content: start;
+        gap: 1rem;
+    }
+    .maps-link-card::after {
+        width: 64%;
+        height: 34%;
+        right: 1rem;
+        bottom: 4.5rem;
+    }
+    .maps-copy strong {
+        font-size: 2rem;
+        line-height: 0.95;
+    }
+    .maps-copy em {
+        display: -webkit-box;
+        overflow: hidden;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 4;
+    }
     .contact-form {
         grid-template-columns: 1fr;
     }
@@ -405,4 +504,19 @@
     .contact-brutal * {
         transition: none !important;
     }
+}
+
+/* Embedded store map fills the existing responsive location area. */
+.contact-map > .branch-map {
+    position: relative;
+    display: block;
+}
+.contact-map > .branch-map[hidden] {
+    display: none;
+}
+.contact-map-frame {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
 }

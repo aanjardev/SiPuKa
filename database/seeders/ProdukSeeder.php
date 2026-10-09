@@ -79,7 +79,7 @@ KELENGKAPAN:
 - Lensa
 - Baterai
 - Charger
-- Nota Pembelian Dinoyo Kamera'
+- Nota Pembelian PusatKamera.id'
         ]);
 
         $gambarList = [
@@ -128,12 +128,12 @@ KELENGKAPAN:
 ● Lensa
 ● Baterai
 ● Charger
-● Nota Pembelian Dinoyo Kamera
+● Nota Pembelian PusatKamera.id
 
 Kode Barang : #1267_DK
 
 Jual beli kamera malang raya
-Kalian juga bisa jual kamera anda di toko kami, langsung aja ke Dinoyo Kamera
+Kalian juga bisa jual kamera anda di toko kami, langsung aja ke PusatKamera.id
 
 Barang siap pakai, silahkan di order
 
@@ -192,12 +192,12 @@ KELENGKAPAN:
 ● Lensa
 ● Baterai
 ● Charger
-● Nota Pembelian Dinoyo Kamera
+● Nota Pembelian PusatKamera.id
 
 Kode Barang : #1271_DK
 
 Jual beli kamera malang raya
-Kalian juga bisa jual kamera anda di toko kami, langsung aja ke Dinoyo Kamera
+Kalian juga bisa jual kamera anda di toko kami, langsung aja ke PusatKamera.id
 
 Barang siap pakai, silahkan di order
 
@@ -296,12 +296,12 @@ KONDISI :
 KELENGKAPAN:
 ● Kamera
 ● Baterai
-● Nota Pembelian Dinoyo Kamera
+● Nota Pembelian PusatKamera.id
 
 Kode Barang : #1065_DK
 
 Jual beli kamera malang raya
-Kalian juga bisa jual kamera anda di toko kami, langsung aja ke Dinoyo Kamera
+Kalian juga bisa jual kamera anda di toko kami, langsung aja ke PusatKamera.id
 
 Barang siap pakai, silahkan di order
 
@@ -354,12 +354,12 @@ KELENGKAPAN:
 ● Kamera
 ● Baterai
 ● Charger
-● Nota Pembelian Dinoyo Kamera
+● Nota Pembelian PusatKamera.id
 
 Kode Barang : #1225_DK
 
 Jual beli kamera malang raya
-Kalian juga bisa jual kamera anda di toko kami, langsung aja ke Dinoyo Kamera
+Kalian juga bisa jual kamera anda di toko kami, langsung aja ke PusatKamera.id
 
 Barang siap pakai, silahkan di order
 
@@ -431,12 +431,12 @@ KELENGKAPAN:
 ● Box
 ● Kamera 4k dan 360
 ● Baterai
-● Nota Pembelian Dinoyo Kamera
+● Nota Pembelian PusatKamera.id
 
 Kode Barang : #1052_DK
 
 Jual beli kamera malang raya
-Kalian juga bisa jual kamera anda di toko kami, langsung aja ke Dinoyo Kamera
+Kalian juga bisa jual kamera anda di toko kami, langsung aja ke PusatKamera.id
 
 Barang siap pakai, silahkan di order
 
@@ -710,7 +710,7 @@ KELENGKAPAN :
 ● Lensa
 ● Tutup Depan
 ● Tutup Belakang
-● Nota Pembelian Dinoyo Kamera
+● Nota Pembelian PusatKamera.id
 
 Kode Barang : #1309_DK'
 
@@ -757,7 +757,7 @@ KELENGKAPAN:
 ● Lensa
 ● Baterai
 ● Charger
-● Nota Pembelian Dinoyo Kamera'
+● Nota Pembelian PusatKamera.id'
 
         ]);
 
@@ -807,7 +807,7 @@ KELENGKAPAN:
 ● Lensa
 ● Baterai
 ● Charger
-● Nota Pembelian Dinoyo Kamera
+● Nota Pembelian PusatKamera.id
 
 Kode Barang : #1298_DK'
 

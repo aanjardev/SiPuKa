@@ -97,6 +97,7 @@ class QCController extends Controller
         $action = $request->input('action', 'save');
 
         $rules = $this->buildQcRules($statusQc, $action);
+        $rules['submission_token'] = 'required|uuid';
         $data = $request->validate($rules);
 
         if ($action === 'archive') {
@@ -109,11 +110,17 @@ class QCController extends Controller
 
         $data['pembelian_id'] = null;
 
+        if (ItemPembelian::where('submission_token', $data['submission_token'])->exists()) {
+            return redirect()->route('admin.quality-control.index')->with('info', 'Item QC ini sudah tersimpan.');
+        }
         $item = new ItemPembelian();
+        $item->submission_token = $data['submission_token'];
 
         if ($statusQc === 'lolos_qc') {
             DB::beginTransaction();
             try {
+                $item->fill($data);
+                $item->save();
                 $kodeSku = $data['kode_sku'] ?? null;
                 if (empty($kodeSku)) {
                     $kodeSku = 'QC-' . time() . '-' . rand(100, 999);
@@ -122,6 +129,7 @@ class QCController extends Controller
 
                 $productPayload = [
                     'kode_sku' => $kodeSku,
+                    'id_kategori_harga' => $data['id_kategori_harga'] ?? null,
                     'id_kategori' => $data['kategori_id'] ?? null,
                     'nama_produk' => $data['nama_item'] ?? null,
                     'harga_jual' => $data['harga_jual'] ?? null,
@@ -135,10 +143,11 @@ class QCController extends Controller
                     'serial_lens' => $data['serial_lens'] ?? null,
                 ];
 
-                $existing = Produk::where('kode_sku', $kodeSku)->first();
+                $existing = Produk::where('kode_sku', $kodeSku)->lockForUpdate()->first();
                 if ($existing) {
                     $existing->nama_produk = $productPayload['nama_produk'];
                     $existing->id_kategori = $productPayload['id_kategori'];
+                    $existing->id_kategori_harga = $productPayload['id_kategori_harga'];
                     $existing->harga_jual = $productPayload['harga_jual'];
                     $existing->harga_beli = $productPayload['harga_beli'];
                     $existing->harga_servis = $productPayload['harga_servis'];
@@ -155,6 +164,7 @@ class QCController extends Controller
 
                 $item->fill($data);
                 $item->status_qc = 'lolos_qc';
+                $item->stock_posted_at = now();
                 $item->save();
 
                 DB::commit();
@@ -206,10 +216,13 @@ class QCController extends Controller
     {
         $item = ItemPembelian::findOrFail($id);
 
+        if ($item->stock_posted_at) {
+            return back()->with('info', 'Item QC sudah selesai. Ubah data melalui Data Produk.');
+        }
         $statusQc = $request->input('status_qc', $item->status_qc);
         $action = $request->input('action', 'save');
 
-        $rules = $this->buildQcRules($statusQc, $action);
+        $rules = $this->buildQcRules($statusQc, $action, $item->id_kategori_harga);
         $data = $request->validate($rules);
 
         if ($action === 'archive') {
@@ -224,6 +237,15 @@ class QCController extends Controller
 
             DB::beginTransaction();
             try {
+                $item = ItemPembelian::whereKey($id)->lockForUpdate()->firstOrFail();
+                if ($item->stock_posted_at) {
+                    DB::rollBack();
+                    return back()->with('info', 'Stok item QC ini sudah dicatat. Ubah produk melalui Data Produk.');
+                }
+                if ($item->pembelian && $item->pembelian->status_pembelian !== 'deal') {
+                    DB::rollBack();
+                    return back()->withErrors(['error' => 'Pembelian harus deal sebelum item diloloskan QC.']);
+                }
 
                 $kodeSku = $data['kode_sku'] ?? null;
                 if (empty($kodeSku)) {
@@ -233,6 +255,7 @@ class QCController extends Controller
 
                 $productPayload = [
                     'kode_sku' => $kodeSku,
+                    'id_kategori_harga' => $data['id_kategori_harga'] ?? null,
                     'id_kategori' => $data['kategori_id'] ?? $item->kategori_id,
                     'nama_produk' => $data['nama_item'] ?? $item->nama_item,
                     'harga_jual' => $data['harga_jual'] ?? $item->harga_jual,
@@ -246,10 +269,11 @@ class QCController extends Controller
                     'serial_lens' => $data['serial_lens'] ?? $item->serial_lens,
                 ];
 
-                $existing = Produk::where('kode_sku', $kodeSku)->first();
+                $existing = Produk::where('kode_sku', $kodeSku)->lockForUpdate()->first();
                 if ($existing) {
                     $existing->nama_produk = $productPayload['nama_produk'];
                     $existing->id_kategori = $productPayload['id_kategori'];
+                    $existing->id_kategori_harga = $productPayload['id_kategori_harga'];
                     $existing->harga_jual = $productPayload['harga_jual'];
                     $existing->harga_beli = $productPayload['harga_beli'];
                     $existing->harga_servis = $productPayload['harga_servis'];
@@ -267,6 +291,7 @@ class QCController extends Controller
 
                 $item->fill($data);
                 $item->status_qc = 'lolos_qc';
+                $item->stock_posted_at = now();
                 $item->save();
 
                 DB::commit();
@@ -419,16 +444,20 @@ class QCController extends Controller
     {
         $item = ItemPembelian::findOrFail($id);
 
+        if ($item->stock_posted_at) {
+            return back()->with('error', 'Item yang stoknya sudah dicatat tidak dapat diulang QC.');
+        }
         $item->status_qc = 'menunggu_qc';
         $item->save();
         return redirect()->back()->with('success', 'Item dikembalikan ke antrian QC untuk diperiksa ulang.');
     }
 
-    private function buildQcRules(?string $statusQc, ?string $action): array
+    private function buildQcRules(?string $statusQc, ?string $action, ?int $currentPriceCategory = null): array
     {
         $baseRules = [
             'nama_item' => 'nullable|string|max:200',
             'kategori_id' => 'nullable|exists:kategori,id',
+            'id_kategori_harga' => ['nullable', \Illuminate\Validation\Rule::exists('kategori_harga', 'id')->where(fn ($query) => $query->where('is_active', true)->orWhere('id', $currentPriceCategory))],
             'kode_sku' => 'nullable|string|max:20',
             'serial_number' => 'nullable|string|max:50',
             'serial_lens' => 'nullable|string|max:50',
@@ -455,8 +484,8 @@ class QCController extends Controller
             'harga_jual' => 'nullable|integer|min:0',
             'harga_beli' => 'nullable|integer|min:0',
             'harga_servis' => 'nullable|integer|min:0',
-            'grade' => 'nullable|in:Unggulan,Standar,Minus',
-            'status' => 'nullable|in:Second,Baru',
+            'grade' => ($statusQc === 'lolos_qc' ? 'required' : 'nullable') . '|in:Unggulan,Standar,Minus',
+            'status' => ($statusQc === 'lolos_qc' ? 'required' : 'nullable') . '|in:Second,Baru',
             'deskripsi_produk' => 'nullable|string',
             'status_qc' => 'nullable|in:menunggu_qc,lolos_qc,gagal_qc,diarsipkan',
             'catatan_qc' => 'nullable|string',

@@ -11,6 +11,7 @@ class ItemPembelian extends Model
     protected $table = 'item_pembelian_draft';
 
     protected $fillable = [
+        'id_kategori_harga',
         'pembelian_id',
         'kode_sku', // Diisi QC
         'nama_item',
@@ -46,6 +47,11 @@ class ItemPembelian extends Model
         'status_qc', // Default 'menunggu_qc'
         'catatan_qc', // Diisi QC
     ];
+
+    public function kategoriHarga()
+    {
+        return $this->belongsTo(KategoriHarga::class, 'id_kategori_harga');
+    }
 
     public function kategori()
     {

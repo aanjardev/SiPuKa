@@ -37,7 +37,7 @@ class AccountActivationMail extends Mailable
     {
         return new Envelope(
             from: new Address(config('mail.from.address'), config('mail.from.name')),
-            subject: 'Aktivasi Akun SiDiKa - ' . $this->user->name,
+            subject: 'Aktivasi Akun ' . \App\Helpers\Brand::name() . ' - ' . $this->user->name,
         );
     }
 

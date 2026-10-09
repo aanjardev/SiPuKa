@@ -2,7 +2,7 @@
 
 @php
     $setting = $cat_setting ?? \App\Models\CatalogSettings::first();
-    $rawPhone = preg_replace('/\D+/', '', $setting?->nomor_telepon ?? '');
+    $rawPhone = preg_replace('/\D+/', '', $setting?->nomor_telepon ?: (\App\Models\Branch::first()?->nomor_telepon ?? ''));
     if ($rawPhone && str_starts_with($rawPhone, '0')) {
         $rawPhone = '62' . substr($rawPhone, 1);
     } elseif ($rawPhone && str_starts_with($rawPhone, '8')) {
@@ -13,8 +13,8 @@
     $message = "Halo {$storeName}, saya tertarik dengan {$produk->nama_produk} (SKU: {$produk->kode_sku}). Apakah masih tersedia?";
     $whatsAppUrl = $rawPhone ? 'https://wa.me/' . $rawPhone . '?text=' . urlencode($message) : null;
 
-    // Gambar demo sementara untuk presentasi frontend.
-    $galleryImageUrls = collect([asset('mainIMG/produk.png')]);
+    $galleryImageUrls = $produk->gambar->sortByDesc('is_main')->pluck('url')->filter()->values();
+    if ($galleryImageUrls->isEmpty()) { $galleryImageUrls = collect([asset('mainIMG/produk.png')]); }
 @endphp
 
 @section('title', $produk->nama_produk . ' — PusatKamera.id')

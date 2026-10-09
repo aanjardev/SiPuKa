@@ -104,7 +104,7 @@
                 @endif
 
                 <div>
-                    <p class="text-muted small mb-2">Deskripsi Cabang</p>
+                    <p class="text-muted small mb-2">Deskripsi Toko</p>
                     @if($branch->deskripsi)
                         <div class="bg-light rounded p-3 text-muted" style="white-space: pre-line;">
                             {{ $branch->deskripsi }}

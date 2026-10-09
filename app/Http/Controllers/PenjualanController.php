@@ -19,6 +19,11 @@ use Illuminate\Support\Str;
 
 class PenjualanController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(\App\Http\Middleware\UseSingleStore::class);
+    }
+
 
     public function index(Request $request)
     {
@@ -209,6 +214,7 @@ class PenjualanController extends Controller
                 ->withErrors(['items' => 'Tidak ada produk yang dipilih.']);
         }
 
+        $decoded = collect($decoded)->groupBy('id')->map(fn ($rows, $id) => ['id' => $id, 'qty' => $rows->sum(fn ($row) => (int) ($row['qty'] ?? 0))])->values()->all();
         $productIds = collect($decoded)->pluck('id')->unique()->values()->all();
         $products = Produk::with(['gambarUtama', 'gambar', 'kategori'])
             ->where('is_archived', false)
@@ -258,7 +264,7 @@ class PenjualanController extends Controller
         $data_cabang = PerusahaanCabang::where('is_active', true)->orderBy('nama', 'asc')->get();
         if ($data_cabang->isEmpty()) {
             return redirect()->route('admin.sales.create')
-                ->withErrors(['perusahaan_cabang_id' => 'Tidak ada cabang aktif. Aktifkan cabang terlebih dahulu sebelum membuat transaksi.']);
+                ->withErrors(['perusahaan_cabang_id' => 'Lengkapi dan aktifkan Data Toko terlebih dahulu sebelum membuat transaksi.']);
         }
         $daftar_produk = Produk::with(['gambarUtama', 'gambar'])
             ->where('is_archived', false)
@@ -291,6 +297,7 @@ class PenjualanController extends Controller
         }
 
         $validated = $request->validate([
+            'submission_token' => 'required|uuid',
             'customer_id' => 'required|exists:customer,id',
             'perusahaan_cabang_id' => [
                 'required',
@@ -303,22 +310,23 @@ class PenjualanController extends Controller
             'keterangan' => 'nullable|string|max:200',
             'items' => 'required|string',
         ], [
-            'perusahaan_cabang_id.exists' => 'Cabang tidak tersedia atau sedang non-aktif.',
+            'perusahaan_cabang_id.exists' => 'Toko tidak tersedia atau sedang non-aktif.',
         ]);
 
-        [$detailItems, $subtotal, $products] = $this->prepareSaleItems($validated['items']);
-        if (empty($detailItems)) {
-            return back()->withErrors(['items' => 'Tidak ada item penjualan yang valid.'])->withInput();
+        if ($existing = Penjualan::where('submission_token', $validated['submission_token'])->first()) {
+            return redirect()->route('admin.sales.show', $existing->id)->with('info', 'Transaksi ini sudah tersimpan.');
         }
-
-        $diskon = (int) ($validated['diskon'] ?? 0);
-        $biayaTambahan = (int) ($validated['biaya_tambahan'] ?? 0);
-        $hargaTotal = max(0, $subtotal - $diskon + $biayaTambahan);
-        $hargaDepresiasi = (float) ($validated['depresiasi'] ?? 0);
-
         DB::beginTransaction();
         try {
+            [$detailItems, $subtotal, $products] = $this->prepareSaleItems($validated['items']);
+            if (empty($detailItems)) {
+                throw new \RuntimeException('Tidak ada item penjualan yang valid.');
+            }
+            $diskon = (int) ($validated['diskon'] ?? 0);
+            $hargaTotal = max(0, $subtotal - $diskon + (int) ($validated['biaya_tambahan'] ?? 0));
+            $hargaDepresiasi = (float) ($validated['depresiasi'] ?? 0);
             $penjualan = Penjualan::create([
+                'submission_token' => $validated['submission_token'],
                 'customer_id' => $validated['customer_id'],
                 'perusahaan_cabang_id' => $validated['perusahaan_cabang_id'],
                 'user_id' => Auth::id(),
@@ -480,7 +488,7 @@ class PenjualanController extends Controller
             'keterangan' => 'nullable|string|max:200',
             'items' => 'required|string',
         ], [
-            'perusahaan_cabang_id.exists' => 'Cabang tidak tersedia atau sedang non-aktif.',
+            'perusahaan_cabang_id.exists' => 'Toko tidak tersedia atau sedang non-aktif.',
         ]);
 
         $diskon = (int) ($validated['diskon'] ?? 0);
@@ -490,6 +498,7 @@ class PenjualanController extends Controller
 
         DB::beginTransaction();
         try {
+            $sale = Penjualan::whereKey($sale->id)->lockForUpdate()->firstOrFail();
             $sale->load('detail_penjualan.produk');
 
             foreach ($sale->detail_penjualan as $detail) {
@@ -542,6 +551,7 @@ class PenjualanController extends Controller
     {
         DB::beginTransaction();
         try {
+            $sale = Penjualan::whereKey($sale->id)->lockForUpdate()->firstOrFail();
             $sale->load('detail_penjualan.produk');
 
             foreach ($sale->detail_penjualan as $detail) {
@@ -568,6 +578,7 @@ class PenjualanController extends Controller
             return [[], 0, collect()];
         }
 
+        $decoded = collect($decoded)->groupBy('id')->map(fn ($rows, $id) => ['id' => $id, 'qty' => $rows->sum(fn ($row) => (int) ($row['qty'] ?? 0))])->values()->all();
         $productIds = collect($decoded)->pluck('id')->filter()->unique()->values();
         if ($productIds->isEmpty()) {
             return [[], 0, collect()];
@@ -576,7 +587,7 @@ class PenjualanController extends Controller
         $products = Produk::whereIn('id', $productIds)
             ->where('is_archived', false)
             ->where('is_visible', true)
-            ->get()
+            ->orderBy('id')->lockForUpdate()->get()
             ->keyBy('id');
 
         $detailItems = [];
@@ -595,7 +606,10 @@ class PenjualanController extends Controller
                 ? PHP_INT_MAX
                 : max((int) $product->stok_produk, 0);
 
-            $qty = min($requestedQty, $availableStock);
+            if ($requestedQty < 1 || $requestedQty > $availableStock) {
+                throw new \RuntimeException('Jumlah melebihi stok tersedia untuk ' . $product->nama_produk . '.');
+            }
+            $qty = $requestedQty;
             if ($qty < 1) {
                 continue;
             }
@@ -653,8 +667,8 @@ class PenjualanController extends Controller
         $query = Penjualan::with(['customer', 'perusahaan_cabang', 'detail_penjualan.produk'])
             ->whereBetween('created_at', [$start, $end]);
 
-        $branchLabel = 'Semua Cabang';
-        $branchSlug = 'semua-cabang';
+        $branchLabel = 'Toko';
+        $branchSlug = 'toko';
         if (!empty($validated['cabang'])) {
             $query->where('perusahaan_cabang_id', $validated['cabang']);
             $branch = PerusahaanCabang::find($validated['cabang']);
@@ -707,7 +721,7 @@ class PenjualanController extends Controller
         $query = Penjualan::with(['customer', 'perusahaan_cabang', 'detail_penjualan.produk'])
             ->whereBetween('created_at', [$start, $end]);
 
-        $branchSlug = 'semua-cabang';
+        $branchSlug = 'toko';
         if (!empty($validated['cabang'])) {
             $query->where('perusahaan_cabang_id', $validated['cabang']);
             $branch = PerusahaanCabang::find($validated['cabang']);

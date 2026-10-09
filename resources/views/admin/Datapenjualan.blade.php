@@ -132,17 +132,7 @@
             </div>
 
             <div class="d-flex align-items-center gap-2 pe-2 sales-filter-controls">
-                <select name="cabang"
-                    id="filter-cabang"
-                    class="form-select border-0 shadow-none bg-transparent text-secondary w-auto fw-medium"
-                    style="cursor: pointer;">
-                    <option value="">Semua Cabang</option>
-                    @foreach ($semua_cabang as $cab)
-                    <option value="{{ $cab->id }}" {{ request('cabang') == $cab->id ? 'selected' : '' }}>
-                        {{ $cab->nama }}
-                    </option>
-                    @endforeach
-                </select>
+
 
                 <select name="sort"
                     id="filter-sort"
@@ -169,7 +159,7 @@
                             <th>Customer</th>
                             <th>Tanggal</th>
                             <th style="width: 25%; max-width:300px; min-width: 250px;">Item Terjual</th>
-                            <th>Cabang</th>
+                            <th>Toko</th>
                             <th>Total</th>
                             <th class="text-center" style="width: 120px;">Aksi</th>
                         </tr>
@@ -224,13 +214,8 @@
                         <input type="hidden" name="month" id="export-sales-period" value="{{ now()->format('Y-m') }}">
                     </div>
                     <div class="mb-3">
-                        <label for="export-sales-cabang" class="form-label">Cabang</label>
-                        <select id="export-sales-cabang" name="cabang" class="form-select">
-                            <option value="">Semua Cabang</option>
-                            @foreach ($semua_cabang as $cab)
-                                <option value="{{ $cab->id }}">{{ $cab->nama }}</option>
-                            @endforeach
-                        </select>
+
+
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -270,7 +255,7 @@ document.addEventListener('DOMContentLoaded', function () {
             paginationSelector: '#pagination-links-container',
             baseUrl: baseUrl,
             searchInputSelector: '#search-input',
-            filterSelectors: ['#filter-cabang', '#filter-sort'],
+            filterSelectors: ['#filter-sort'],
             rowClick: {
                 selector: '.sales-row',
                 ignoreSelector: '.no-row-navigation',

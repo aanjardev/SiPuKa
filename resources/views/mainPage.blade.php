@@ -36,7 +36,7 @@
                 </div>
                 <div class="hero-art" aria-label="Ilustrasi kamera">
                     <span class="hero-burst">CEK<br>STOK!</span>
-                    <img class="hero-image" src="{{ asset('mainIMG/produk.png') }}" alt="Kamera di PusatKamera.id">
+                    <img class="hero-image" src="{{ $cat_setting?->hero_image_url ?? asset('mainIMG/produk.png') }}" alt="Kamera di PusatKamera.id">
                     <p>SIAP UNTUK<br>MULAI BERKARYA</p>
                 </div>
             </div>
@@ -76,10 +76,12 @@
                     @foreach ($latestProducts as $product)
                         <a href="{{ route('product.show', $product->id) }}" class="home-product-card">
                             <div class="home-product-media">
-                                @if ($product->grade === 'Unggulan')
+                                @if ($product->stok_produk <= 0)
+                                    <span class="product-badge">STOK HABIS</span>
+                                @elseif ($product->grade === 'Unggulan')
                                     <span class="product-badge">PILIHAN</span>
                                 @endif
-                                <img src="{{ asset('mainIMG/produk.png') }}" alt="{{ $product->nama_produk }}" loading="lazy">
+                                <img src="{{ $product->gambarUtama?->url ?? asset('mainIMG/produk.png') }}" alt="{{ $product->nama_produk }}" loading="lazy">
                             </div>
                             <div class="home-product-info">
                                 <h3>{{ $product->nama_produk }}</h3>

@@ -7,7 +7,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>@yield('title', 'Admin Panel') | SiDiKa</title>
+    <title>@yield('title', 'Admin Panel') | {{ $setting?->nama_website ?? 'PusatKamera.id' }}</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <link rel="icon" type="image/png" sizes="512x512" href="{{ asset('mainIMG/logopk.png') }}?v=pusatkamera-2">
@@ -175,13 +175,6 @@
                             <span>Foto Produk</span>
                         </a>
                     </div>
-
-                    <div class="submenu-item">
-                        <a href="{{ route('admin.smart-stock.index') }}" class="submenu-link">
-                            <i class="fas fa-chart-line submenu-icon"></i>
-                            <span>Smart Stock Analysis</span>
-                        </a>
-                    </div>
                 </div>
             </div>
 
@@ -189,7 +182,7 @@
             <div class="menu-section">
                 <button class="menu-link menu-toggle collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#manajemenMenu" aria-expanded="false" aria-controls="manajemenMenu">
                     <i class="fas fa-briefcase menu-icon"></i>
-                    <span>Manajemen</span>
+                    <span>Pengaturan</span>
                     <i class="fas fa-chevron-right menu-arrow"></i>
                 </button>
 
@@ -267,7 +260,7 @@
                 <div class="col-12 text-center">
                     <p class="text-muted mb-0">
                         &copy; <script>document.write(new Date().getFullYear())</script>
-                        <strong>Dinoyo Kamera</strong> - Sistem Informasi Dinoyo Kamera
+                        <strong>{{ $setting?->nama_website ?? 'PusatKamera.id' }}</strong> - Sistem Informasi Pusat Kamera
                     </p>
                 </div>
             </div>

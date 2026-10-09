@@ -86,11 +86,11 @@ class DashboardMetricsService
         $recentSales = $this->recentSales($year, $branchId);
         $recentPurchases = $this->recentPurchases($year, $branchId);
 
-        [$dataCabang, $namaCabangTerbaik, $bestBranchGrowthPercent, $bestBranchGrowthPeriod, $showBestBranch] = $this->branchPerformance(
-            $year,
-            $month,
-            $branchId
-        );
+        $dataCabang = collect();
+        $namaCabangTerbaik = '';
+        $bestBranchGrowthPercent = 0;
+        $bestBranchGrowthPeriod = [];
+        $showBestBranch = false;
 
         return [
             'totalPendapatan' => $totalPendapatan,
@@ -328,141 +328,4 @@ class DashboardMetricsService
     /**
      * @return array{0:Collection,1:string,2:float,3:array{from:array{year:int,month:int},to:array{year:int,month:int}},4:bool}
      */
-    private function branchPerformance(int $year, ?int $month, ?int $branchId): array
-    {
-
-        $showBestBranch = $branchId === null;
-
-        $branchesQuery = Branch::query();
-        if ($branchId) {
-            $branchesQuery->where('id', $branchId);
-        }
-
-        $branches = $branchesQuery->withSum([
-            'sales as pendapatanCabang' => function ($query) use ($year, $month, $branchId) {
-                $query->whereYear('created_at', $year);
-                if ($month) {
-                    $query->whereMonth('created_at', $month);
-                }
-                if ($branchId) {
-                    $query->where('perusahaan_cabang_id', $branchId);
-                }
-            }
-        ], 'harga_total')->get();
-
-        $hppPerBranch = DetailPenjualan::query()
-            ->selectRaw('penjualan.perusahaan_cabang_id, SUM(detail_penjualan.qty * (COALESCE(produk.harga_beli, 0) + COALESCE(produk.harga_servis, 0))) as total_hpp')
-            ->join('penjualan', 'detail_penjualan.penjualan_id', '=', 'penjualan.id')
-            ->leftJoin('produk', 'detail_penjualan.produk_id', '=', 'produk.id')
-            ->whereYear('penjualan.created_at', $year);
-
-        if ($month) {
-            $hppPerBranch->whereMonth('penjualan.created_at', $month);
-        }
-        if ($branchId) {
-            $hppPerBranch->where('penjualan.perusahaan_cabang_id', $branchId);
-        }
-
-        $hppPerBranch = $hppPerBranch
-            ->groupBy('penjualan.perusahaan_cabang_id')
-            ->pluck('total_hpp', 'penjualan.perusahaan_cabang_id');
-
-        $dataCabang = $branches->map(function ($branch) use ($hppPerBranch) {
-            $pendapatan = (int) ($branch->pendapatanCabang ?? 0);
-            $hpp = (int) ($hppPerBranch[$branch->id] ?? 0);
-            $laba = $pendapatan - $hpp;
-
-            return [
-                'id' => $branch->id,
-                'namaCabang' => $branch->nama,
-                'pendapatanCabang' => max($pendapatan, 0),
-                'hppCabang' => max($hpp, 0),
-                'labaBersihCabang' => max($laba, 0),
-            ];
-        })->values();
-
-        $referenceYear = $year;
-        $referenceMonth = $month;
-        if (!$referenceMonth) {
-            if ($year === (int) now()->year) {
-                $referenceYear = (int) now()->year;
-                $referenceMonth = (int) now()->month;
-            } else {
-                $referenceYear = $year;
-                $referenceMonth = 12;
-            }
-        }
-
-        [$prev1Year, $prev1Month] = $this->shiftMonth($referenceYear, $referenceMonth, -1);
-        [$prev2Year, $prev2Month] = $this->shiftMonth($referenceYear, $referenceMonth, -2);
-
-        $omsetPrev1 = Penjualan::query()
-            ->selectRaw('perusahaan_cabang_id, SUM(harga_total) as total')
-            ->whereYear('created_at', $prev1Year)
-            ->whereMonth('created_at', $prev1Month)
-            ->when($branchId, fn ($q) => $q->where('perusahaan_cabang_id', $branchId))
-            ->groupBy('perusahaan_cabang_id')
-            ->pluck('total', 'perusahaan_cabang_id');
-
-        $omsetPrev2 = Penjualan::query()
-            ->selectRaw('perusahaan_cabang_id, SUM(harga_total) as total')
-            ->whereYear('created_at', $prev2Year)
-            ->whereMonth('created_at', $prev2Month)
-            ->when($branchId, fn ($q) => $q->where('perusahaan_cabang_id', $branchId))
-            ->groupBy('perusahaan_cabang_id')
-            ->pluck('total', 'perusahaan_cabang_id');
-
-        $bestBranch = null;
-        $bestGrowth = 0.0;
-        $bestPrev1 = 0;
-        $bestPrev2 = 0;
-
-        foreach ($dataCabang as $branch) {
-            $prev1 = (int) ($omsetPrev1[$branch['id']] ?? 0);
-            $prev2 = (int) ($omsetPrev2[$branch['id']] ?? 0);
-
-            if ($prev2 > 0) {
-                $growth = (($prev1 - $prev2) / $prev2) * 100;
-            } else {
-                $growth = $prev1 > 0 ? 100.0 : 0.0;
-            }
-
-            if ($bestBranch === null || $growth > $bestGrowth) {
-                $bestBranch = $branch;
-                $bestGrowth = $growth;
-                $bestPrev1 = $prev1;
-                $bestPrev2 = $prev2;
-            }
-        }
-
-        $namaCabangTerbaik = '-';
-        if ($bestBranch && ($bestGrowth != 0.0 || $bestPrev1 > 0 || $bestPrev2 > 0)) {
-            $namaCabangTerbaik = $bestBranch['namaCabang'] ?? '-';
-        }
-
-        $bestBranchGrowthPeriod = [
-            'from' => ['year' => $prev2Year, 'month' => $prev2Month],
-            'to' => ['year' => $prev1Year, 'month' => $prev1Month],
-        ];
-
-        return [$dataCabang, $namaCabangTerbaik, $bestGrowth, $bestBranchGrowthPeriod, $showBestBranch];
-    }
-
-    /**
-     * @return array{0:int,1:int} year, month
-     */
-    private function shiftMonth(int $year, int $month, int $delta): array
-    {
-        $month += $delta;
-        while ($month <= 0) {
-            $month += 12;
-            $year -= 1;
-        }
-        while ($month > 12) {
-            $month -= 12;
-            $year += 1;
-        }
-
-        return [$year, $month];
-    }
 }

@@ -1,6 +1,6 @@
 @extends('layouts.auth')
 
-@section('title', 'Verifikasi Email | Dinoyo Kamera')
+@section('title', 'Verifikasi Email | ' . \App\Helpers\Brand::name() . '')
 
 @section('content')
     <div class="auth-logo">

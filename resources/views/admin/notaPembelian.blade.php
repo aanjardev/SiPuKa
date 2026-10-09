@@ -81,9 +81,9 @@
             <img src="{{ public_path('mainIMG/logopk.png') }}" alt="Logo Pusat Kamera Malang" style="height: 70px; background: #111;">
         </div>
         <div class="text-details">
-            <h3 style="margin: 0; color: #333;">DINOYO KAMERA</h3>
+            <h3 style="margin: 0; color: #333;">{{ \App\Helpers\Brand::name() }}</h3>
             <p style="margin: 0;">Alamat: {{ $pembelian->perusahaan_cabang->nama ?? '-' }} ({{ $pembelian->perusahaan_cabang->alamat ?? '-' }})</p>
-            <p style="margin: 0;">Kontak: {{ $pembelian->perusahaan_cabang->nomor_telepon ?? '-' }} | Instagram: @dinoyokamera</p>
+            <p style="margin: 0;">Kontak: {{ $pembelian->perusahaan_cabang->nomor_telepon ?? '-' }} | Instagram: {{ \App\Models\CatalogSettings::first()?->instagram_link ?? "-" }}</p>
         </div>
     </div>
 

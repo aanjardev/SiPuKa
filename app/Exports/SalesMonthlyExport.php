@@ -28,7 +28,7 @@ class SalesMonthlyExport implements FromCollection, WithHeadings, WithMapping
             'Tanggal',
             'Customer',
             'Item Terjual',
-            'Cabang',
+            'Toko',
             'Total',
         ];
     }

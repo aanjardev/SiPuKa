@@ -12,6 +12,13 @@ class CatalogSettings extends Model
     protected $table = 'catalog_settings';
     protected $fillable = [
         'nama_website',
+        'about_description',
+        'service_buy_title',
+        'service_buy_description',
+        'service_sell_title',
+        'service_sell_description',
+        'service_repair_title',
+        'service_repair_description',
         'singleton_key',
         'logo_path',
         'nomor_telepon',
@@ -19,6 +26,7 @@ class CatalogSettings extends Model
         'hero_eyebrow',
         'hero_title',
         'hero_description',
+        'hero_image_path',
         'seo_title',
         'seo_description',
         'og_image_path',
@@ -29,31 +37,18 @@ class CatalogSettings extends Model
     ];
     public function getLogoUrlAttribute()
     {
-        if (!$this->logo_path) {
-            return null;
-        }
-
-        $base = rtrim(config('filesystems.disks.r2.url', ''), '/');
-
-        if ($base) {
-            return $base . '/' . ltrim($this->logo_path, '/');
-        }
-
-        return Storage::disk('r2')->url($this->logo_path);
+        return \App\Helpers\StoredImage::url($this->logo_path);
     }
     protected $appends = ['logo_url'];
 
     public function getOgImageUrlAttribute(): ?string
     {
-        if (!$this->og_image_path) {
-            return $this->logo_url;
-        }
+        return \App\Helpers\StoredImage::url($this->og_image_path) ?? $this->logo_url;
+    }
 
-        $base = rtrim(config('filesystems.disks.r2.url', ''), '/');
-
-        return $base
-            ? $base . '/' . ltrim($this->og_image_path, '/')
-            : Storage::disk('r2')->url($this->og_image_path);
+    public function getHeroImageUrlAttribute(): ?string
+    {
+        return \App\Helpers\StoredImage::url($this->hero_image_path);
     }
 
     protected $casts = [

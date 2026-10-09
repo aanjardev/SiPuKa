@@ -1214,19 +1214,6 @@ input.form-control::placeholder {
   border-color: var(--bs-primary) !important;
 }
 
-  color: var(--bs-primary);
-  background: var(--bs-primary-tint-90);
-}
-
-  background: var(--bs-primary);
-}
-
-  background: var(--bs-primary);
-}
-
-  color: var(--bs-primary);
-}
-
 .nav-tabs .nav-link.active {
   color: var(--bs-white);
   background-color: var(--bs-primary);
