@@ -136,13 +136,12 @@
     <div class="d-flex align-items-start">
         <i class="fa-solid fa-info-circle me-3 mt-1"></i>
         <div>
-            <strong class="info-token-title">Informasi Token Aktivasi</strong><br>
+            <strong class="info-token-title">Informasi Aktivasi Akun</strong><br>
             <div class="row mt-2">
                 <div class="col-md-12">
                     <ul class="mb-0 ps-3 info-token-list" style="font-size: 0.85rem;">
-                        <li>Token aktivasi berlaku <strong>3 hari (72 jam)</strong></li>
+                        <li>Aktivasi menggunakan email terdaftar dengan status <strong>Pending</strong></li>
                         <li>User dengan status <span class="badge bg-warning">Pending</span> perlu segera aktivasi</li>
-                        <li>Jika token kadaluarsa, gunakan tombol 🔄 untuk generate ulang</li>
                     </ul>
                 </div>
             </div>
@@ -289,21 +288,6 @@
                                     onclick="event.stopPropagation();">
                                     <i class="fa-solid fa-pen-to-square"></i>
                                 </a>
-
-                                {{-- Regenerate Token Button - Only for pending users --}}
-                                @if($k->status == 'pending')
-                                <form action="{{ route('admin.permissions.regenerate-token', $k->id) }}" method="POST" class="d-inline">
-                                    @csrf
-                                    <button type="button"
-                                        class="btn-action btn-action-warning"
-                                        title="Generate Ulang Token (3 hari)"
-                                        data-bs-toggle="tooltip"
-                                        data-bs-placement="top"
-                                        onclick="event.stopPropagation(); handleRegenerateToken(this)">
-                                        <i class="fa-solid fa-rotate"></i>
-                                    </button>
-                                </form>
-                                @endif
 
                                 @if(!$isSelf)
                                 <form action="{{ route('admin.permissions.update-status', $k->id) }}" method="POST" class="d-inline">

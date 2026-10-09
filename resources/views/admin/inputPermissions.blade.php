@@ -138,7 +138,7 @@
                 <div class="card-body p-4">
                     <div class="form-text small text-muted mb-3">
                         <i class="fa-solid fa-info-circle me-1 text-primary"></i>
-                        User akan dibuat dengan status <strong>Pending</strong>. Karyawan perlu mengaktifkan akun melalui halaman aktivasi yang akan dikirim ke email.
+                        User akan dibuat dengan status <strong>Pending</strong>. Karyawan perlu mengaktifkan akun melalui halaman aktivasi dengan memasukkan email terdaftar.
                     </div>
 
                     {{-- Edukasi Token Expiry --}}
@@ -148,9 +148,9 @@
                             <div>
                                 <strong>⏰ Penting!</strong><br>
                                 <ul class="mb-0 mt-2 ps-3" style="font-size: 0.9rem;">
-                                    <li>Token aktivasi berlaku <strong>3 hari (72 jam)</strong></li>
-                                    <li>Karyawan harus segera aktivasi sebelum kadaluarsa</li>
-                                    <li>Jika token kadaluarsa, manager bisa generate ulang token</li>
+                                    <li>Email harus terdaftar dengan status <strong>Pending</strong></li>
+                                    <li>Setelah email divalidasi, karyawan membuat password sendiri</li>
+                                    <li>Aktivasi tidak memerlukan kode verifikasi email</li>
                                 </ul>
                             </div>
                         </div>

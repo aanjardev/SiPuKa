@@ -62,12 +62,9 @@ Route::middleware('guest')->group(function () {
 Route::post('/logout', [LoginController::class, 'logout'])->middleware('auth')->name('logout');
 
 Route::get('/activation', [AccountActivationController::class, 'showActivationForm'])->name('activation.form');
-Route::post('/activation/verify-email', [AccountActivationController::class, 'verifyEmail'])->name('activation.verify-email');
-Route::get('/activation/verify', [AccountActivationController::class, 'showVerificationForm'])->name('activation.verify-form');
-Route::post('/activation/verify-code', [AccountActivationController::class, 'verifyCode'])->name('activation.verify-code');
+Route::post('/activation/verify-email', [AccountActivationController::class, 'verifyEmail'])->middleware('throttle:5,1')->name('activation.verify-email');
 Route::get('/activation/setup-password/{token}', [AccountActivationController::class, 'showPasswordSetupForm'])->name('activation.setup-password');
 Route::post('/activation/setup-password/{token}', [AccountActivationController::class, 'setupPassword'])->name('activation.setup-password.post');
-Route::post('/activation/resend-code', [AccountActivationController::class, 'resendCode'])->name('activation.resend-code');
 
 Route::get('/forgot-password', [ProfileController::class, 'showPublicForgotPasswordForm'])->name('password.request');
 Route::post('/forgot-password', [ProfileController::class, 'publicForgotPassword'])->name('password.email');

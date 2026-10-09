@@ -45,7 +45,7 @@
 
         <div class="d-grid mb-3">
             <button type="submit" class="btn btn-primary py-2 fw-bold shadow-sm">
-                <i class="fa-solid fa-paper-plane me-2"></i> Kirim Kode Verifikasi
+                <i class="fa-solid fa-paper-plane me-2"></i> Lanjut Buat Password
             </button>
         </div>
 

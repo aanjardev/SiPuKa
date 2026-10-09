@@ -9,18 +9,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use App\Models\Employee;
 use App\Models\User;
-use App\Services\EmailService;
 use App\Models\Karyawan;
 
 class PermissionsController extends Controller
 {
-    protected $emailService;
-
-    public function __construct(EmailService $emailService)
-    {
-        $this->emailService = $emailService;
-    }
-
     public function index(Request $request)
     {
         $query = DB::table('users')
@@ -88,20 +80,11 @@ class PermissionsController extends Controller
             'role' => $request->role,
             'status' => 'pending',
             'activation_token' => $activationToken,
-            'token_expiry' => now()->addHours(72), // Token berlaku 3 hari
+            'token_expiry' => null,
         ]);
 
-        $emailSent = $this->emailService->sendActivationEmail($user, $activationToken);
-
-        if ($emailSent) {
-            return redirect()->route('admin.permissions.index')
-                ->with('success', 'User berhasil dibuat! Email aktivasi telah dikirim ke ' . $user->email);
-        } else {
-
-            return redirect()->route('admin.permissions.index')
-                ->with('success', 'User berhasil dibuat! Namun email aktivasi gagal dikirim. Silakan generate ulang token.')
-                ->with('warning', 'Email activation failed. Please check email configuration.');
-        }
+        return redirect()->route('admin.permissions.index')
+            ->with('success', 'User berhasil dibuat! Silakan aktivasi menggunakan email terdaftar di halaman aktivasi akun.');
     }
 
     public function edit($id)
@@ -138,14 +121,14 @@ class PermissionsController extends Controller
             $user->email_verified_at = null;
             $user->status = 'pending';
             $user->activation_token = bin2hex(random_bytes(32));
-            $user->token_expiry = now()->addHours(72);
+            $user->token_expiry = null;
         }
 
         $user->save();
 
         if ($emailChanged) {
 
-            $this->emailService->sendActivationEmail($user, $user->activation_token);
+
 
             try {
                 if (config('session.driver') === 'database') {
@@ -197,16 +180,8 @@ class PermissionsController extends Controller
             'token_expiry' => now()->addHours(72), // Extend 3 hari lagi
         ]);
 
-        $emailSent = $this->emailService->sendActivationEmail($user, $activationToken);
-
-        if ($emailSent) {
-            return redirect()->route('admin.permissions.index')
-                ->with('success', 'Token aktivasi berhasil diperbarui! Email baru telah dikirim ke ' . $user->email);
-        } else {
-            return redirect()->route('admin.permissions.index')
-                ->with('success', 'Token aktivasi berhasil diperbarui! Namun email gagal dikirim.')
-                ->with('warning', 'Email activation failed. Please check email configuration.');
-        }
+        return redirect()->route('admin.permissions.index')
+            ->with('success', 'Sesi aktivasi lama dibatalkan. User dapat memasukkan email kembali di halaman aktivasi.');
     }
 
     public function updateStatus(Request $request, $id)
