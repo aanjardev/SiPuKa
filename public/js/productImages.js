@@ -258,6 +258,8 @@
                 ) {
                     return;
                 }
+                event.preventDefault();
+                event.stopPropagation();
                 this.lastTargetBox = box;
                 this.hiddenInput?.click();
             });

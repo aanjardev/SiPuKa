@@ -214,7 +214,7 @@
                         <p class="user-name">{{ Auth::user()->name ?? 'User' }}</p>
                         <p class="user-role">{{ isset(Auth::user()->role) ? ucfirst(Auth::user()->role) : '' }}</p>
                     </div>
-                    <i class="fas fa-chevron-down" style="color: var(--text-muted); font-size: 0.8rem;"></i>
+
                 </button>
 
                 <ul class="dropdown-menu dropdown-menu-end sidebar-profile-menu" style="margin: 0.35rem 0;">
@@ -304,6 +304,7 @@
         </div>
     </div>
 
+    <script src="{{ asset('js/file-picker-recovery.js') }}?v=1"></script>
     @stack('scripts')
     <script>
     document.addEventListener('DOMContentLoaded', function () {

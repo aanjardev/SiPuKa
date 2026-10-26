@@ -279,7 +279,7 @@ body {
     transition: all 0.3s ease;
 }
 .user-profile:hover {
-    background: #e9ecef;
+    background: #e2e6ea;
 }
 .user-avatar {
     width: 36px;
@@ -299,13 +299,13 @@ body {
 .user-name {
     font-size: 0.9rem;
     font-weight: 600;
-    color: var(--text-dark);
+    color: #1a1a2e;
     margin: 0;
     line-height: 1.2;
 }
 .user-role {
     font-size: 0.75rem;
-    color: var(--text-muted);
+    color: #495057;
     margin: 0;
 }
 
@@ -335,7 +335,16 @@ body {
     padding-right: 0.85rem;
 }
 .sidebar-footer .dropdown-toggle::after {
-    display: none;
+    display: inline-block;
+    content: "";
+    margin-left: auto;
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 5px solid #495057;
+    vertical-align: middle;
+    transition: transform 0.2s ease;
 }
 .sidebar-footer .dropdown-toggle:focus {
     box-shadow: 0 0 0 3px rgba(78, 107, 255, 0.12);
@@ -357,6 +366,26 @@ body {
     min-width: 100%;
     width: auto;
     max-width: none;
+    padding: 0.35rem 0.4rem;
+    border-radius: 10px;
+}
+.sidebar-footer .dropdown-item {
+    padding: 0.55rem 0.85rem;
+    font-size: 0.85rem;
+    border-radius: 7px;
+    transition: all 0.15s ease;
+}
+.sidebar-footer .dropdown-item:hover,
+.sidebar-footer .dropdown-item:focus {
+    background-color: #edf0f7;
+    color: #1a1a2e;
+}
+.sidebar-footer .dropdown-item.text-danger:hover {
+    background-color: #fef2f2;
+    color: #dc3545;
+}
+.sidebar-footer .dropdown-divider {
+    margin: 0.25rem 0.5rem;
 }
 
 .main-content {
