@@ -12,6 +12,37 @@ class PusatKameraAdminTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_admin_can_save_separate_embed_and_location_links(): void
+    {
+        $branch = $this->storeRecord();
+        $payload = [
+            'nama' => $branch->nama,
+            'alamat' => $branch->alamat,
+            'nomor_telepon' => $branch->nomor_telepon,
+            'maps_embed_url' => 'https://www.google.com/maps/embed?pb=test',
+            'maps_url' => 'https://maps.app.goo.gl/TestLokasi',
+            'jam_operasional' => array_fill_keys(
+                ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'],
+                ['is_buka' => false]
+            ),
+        ];
+
+        $this->actingAs($this->owner())
+            ->put(route('admin.branches.update', $branch), $payload)
+            ->assertSessionHasNoErrors();
+
+        $this->assertDatabaseHas('perusahaan_cabang', [
+            'id' => $branch->id,
+            'maps_embed_url' => $payload['maps_embed_url'],
+            'maps_url' => $payload['maps_url'],
+        ]);
+
+        $payload['maps_url'] = $payload['maps_embed_url'];
+        $this->put(route('admin.branches.update', $branch), $payload)
+            ->assertSessionHasErrors('maps_url');
+        $this->assertSame('https://maps.app.goo.gl/TestLokasi', $branch->fresh()->maps_url);
+    }
+
     private function owner(): User
     {
         $id = DB::table('karyawan')->insertGetId([

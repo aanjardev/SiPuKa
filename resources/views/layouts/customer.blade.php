@@ -26,7 +26,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{ \App\Helpers\CssAssetHelper::css('css/legacy/header.css') }}?v=pk-navbar-3">
+    <link rel="stylesheet" href="{{ \App\Helpers\CssAssetHelper::css('css/legacy/header.css') }}?v=pk-navbar-4">
     <link rel="stylesheet" href="{{ \App\Helpers\CssAssetHelper::css('css/legacy/storefront.css') }}?v=2">
 
     @stack('styles')

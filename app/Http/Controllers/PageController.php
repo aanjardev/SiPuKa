@@ -53,7 +53,7 @@ class PageController extends Controller
                     'alamat' => $branch->alamat,
                     'telepon' => $branch->nomor_telepon,
                     'maps_embed_url' => $branch->maps_embed_url ?: ('https://www.google.com/maps?q=' . rawurlencode(trim($branch->nama . ' ' . $branch->alamat)) . '&output=embed'),
-                    'maps_url' => 'https://www.google.com/maps/search/?api=1&query=' . urlencode(trim($branch->nama . ' ' . $branch->alamat)),
+                    'maps_url' => $branch->maps_location_url,
                     'wa_phone' => $phone,
                     'jam' => $this->formatJamOperasional($branch->jamOperasional),
                 ];

@@ -22,6 +22,7 @@
     padding: 0;
     display: flex;
     align-items: center;
+    min-width: 0;
 }
 
 #main-header .navbar-brand img {
@@ -62,6 +63,7 @@
 }
 
 #main-header .navbar-toggler {
+    flex-shrink: 0;
     border: none;
     padding: 0.5rem;
 }
@@ -107,6 +109,24 @@
 
 /* Responsive styles */
 @media (max-width: 991px) {
+    #main-header .navbar-brand {
+        flex: 1 1 0;
+        overflow: hidden;
+    }
+
+    #main-header .brand-logo,
+    #main-header .navbar-brand > img {
+        flex-shrink: 0;
+    }
+
+    #main-header .brand-text {
+        display: block;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
     #main-header .navbar-collapse {
         background-color: var(--header-primary);
         padding: 1rem;

@@ -19,6 +19,7 @@ class StorefrontTest extends TestCase
             'alamat' => 'Jl. Mertojoyo E1a, Malang',
             'nomor_telepon' => '082345672034',
             'maps_embed_url' => 'https://www.google.com/maps/embed?q=Pusat+Kamera+Malang',
+            'maps_url' => 'https://maps.app.goo.gl/TestLokasiToko',
             'is_active' => true,
             'created_at' => now(),
             'updated_at' => now(),
@@ -29,7 +30,9 @@ class StorefrontTest extends TestCase
             ->assertSee('Pusat Kamera Malang')
             ->assertDontSee('Pilih Cabang')
             ->assertSee('class="contact-map-frame"', false)
-            ->assertSee('https://www.google.com/maps/embed?q=Pusat+Kamera+Malang', false);
+            ->assertSee('src="https://www.google.com/maps/embed?q=Pusat+Kamera+Malang"', false)
+            ->assertSee('href="https://maps.app.goo.gl/TestLokasiToko"', false)
+            ->assertDontSee('href="https://www.google.com/maps/embed', false);
     }
 
     public function test_contact_map_falls_back_to_store_address_when_embed_is_empty(): void
@@ -41,7 +44,8 @@ class StorefrontTest extends TestCase
         ]);
         $this->get('/contact')->assertOk()
             ->assertSee('class="contact-map-frame"', false)
-            ->assertSee('https://www.google.com/maps?q=Pusat%20Kamera%20Malang%20Jl.%20Mertojoyo%20E1a%2C%20Malang&amp;output=embed', false);
+            ->assertSee('https://www.google.com/maps?q=Pusat%20Kamera%20Malang%20Jl.%20Mertojoyo%20E1a%2C%20Malang&amp;output=embed', false)
+            ->assertSee('href="https://www.google.com/maps/search/?api=1&amp;query=Pusat+Kamera+Malang+Jl.+Mertojoyo+E1a%2C+Malang"', false);
     }
 
     public function test_database_rejects_a_second_store(): void

@@ -17,7 +17,7 @@
 @section('meta_description', $cat_setting?->seo_description ?? $cat_setting?->description ?? '')
 
 @push('styles')
-    <link rel="stylesheet" href="{{ \App\Helpers\CssAssetHelper::css('css/legacy/home-brutal.css') }}?v=7">
+    <link rel="stylesheet" href="{{ \App\Helpers\CssAssetHelper::css('css/legacy/home-brutal.css') }}?v=8">
 @endpush
 
 @section('content')
@@ -122,4 +122,25 @@
         </div>
     </section>
 </main>
+<button type="button" class="home-search-float" id="openProductSearch" aria-haspopup="dialog" aria-controls="homeProductSearch">
+    <i class="bi bi-search" aria-hidden="true"></i> CARI PRODUK
+</button>
+<dialog class="home-search-dialog" id="homeProductSearch" aria-labelledby="homeSearchTitle">
+    <div class="home-search-heading">
+        <h2 id="homeSearchTitle">CARI PRODUK</h2>
+        <form method="dialog"><button type="submit" aria-label="Tutup pencarian"><i class="bi bi-x-lg" aria-hidden="true"></i></button></form>
+    </div>
+    <form method="GET" action="{{ route('product.index') }}" class="home-search-form">
+        <label for="homeProductSearchInput">Produk apa yang kamu cari?</label>
+        <input type="search" id="homeProductSearchInput" name="search" placeholder="Contoh: Canon, Nikon, kamera pemula..." required autofocus>
+        <button type="submit">CARI PRODUK <i class="bi bi-arrow-right" aria-hidden="true"></i></button>
+    </form>
+</dialog>
 @endsection
+
+@push('scripts')
+<script>
+    const productSearchDialog = document.getElementById('homeProductSearch');
+    document.getElementById('openProductSearch').addEventListener('click', () => productSearchDialog.showModal());
+</script>
+@endpush

@@ -9,7 +9,7 @@
         $rawPhone = '62' . $rawPhone;
     }
     $waLink = $rawPhone ? "https://wa.me/{$rawPhone}" : null;
-    $mapLink = $store?->maps_embed_url;
+    $mapLink = $store?->maps_location_url;
     $openHours = $store?->jamOperasional?->where('is_buka', true);
     $firstHours = $openHours?->first();
     $hoursText = $firstHours && $firstHours->jam_buka && $firstHours->jam_tutup

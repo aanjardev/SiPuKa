@@ -93,10 +93,10 @@
                     Lokasi & Deskripsi
                 </h6>
 
-                @if($branch->maps_embed_url)
+                @if($branch->maps_location_url)
                     <div class="mb-4">
                         <p class="text-muted small mb-2">Lokasi Google Maps</p>
-                        <a href="{{ $branch->maps_embed_url }}" target="_blank" class="btn btn-outline-primary btn-sm">
+                        <a href="{{ $branch->maps_location_url }}" target="_blank" class="btn btn-outline-primary btn-sm">
                             <i class="fa-solid fa-external-link-alt me-1"></i>
                             Buka di Google Maps
                         </a>

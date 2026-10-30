@@ -20,7 +20,7 @@
 @section('title', $produk->nama_produk . ' — PusatKamera.id')
 
 @push('styles')
-    <link rel="stylesheet" href="{{ \App\Helpers\CssAssetHelper::css('css/legacy/product-detail-brutal.css') }}?v=7">
+    <link rel="stylesheet" href="{{ \App\Helpers\CssAssetHelper::css('css/legacy/product-detail-brutal.css') }}?v=8">
 @endpush
 
 @section('content')

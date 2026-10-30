@@ -15,6 +15,7 @@ class Branch extends Model
         'alamat',
         'nomor_telepon',
         'maps_embed_url',
+        'maps_url',
         'is_active',
         'email',
         'deskripsi',
@@ -24,6 +25,11 @@ class Branch extends Model
         'singleton_key' => 'boolean',
         'is_active' => 'boolean',
     ];
+
+    public function getMapsLocationUrlAttribute(): string
+    {
+        return $this->maps_url ?: 'https://www.google.com/maps/search/?api=1&query=' . urlencode(trim($this->nama . ' ' . $this->alamat));
+    }
 
     /**
      * Relasi ke jam operasional

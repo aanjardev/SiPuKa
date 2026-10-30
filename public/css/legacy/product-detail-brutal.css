@@ -269,13 +269,18 @@
     margin-top: 1rem;
     padding: 0.75rem;
     color: #111;
+    background: #ffd600;
+    box-shadow: 4px 4px 0 #111;
     border: 2px solid #111;
     font-size: 0.75rem;
     font-weight: 900;
 }
-.detail-video-link:hover {
-    background: #ffd600;
+.detail-video-link:hover,
+.detail-video-link:focus-visible {
+    background: #ffe85c;
     color: #111;
+    outline: 3px solid #111;
+    outline-offset: 3px;
 }
 .detail-description {
     padding: clamp(4rem, 7vw, 7rem) 0 3rem;

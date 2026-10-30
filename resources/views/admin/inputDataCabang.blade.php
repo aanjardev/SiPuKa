@@ -191,6 +191,18 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
+                                    <div class="mb-4">
+                                        <label for="maps_url" class="form-label fw-medium text-secondary small">Link Lokasi Google Maps</label>
+                                        <input type="url" class="form-control @error('maps_url') is-invalid @enderror"
+                                            id="maps_url" name="maps_url" maxlength="2048"
+                                            value="{{ old('maps_url', $branch->maps_url ?? '') }}"
+                                            placeholder="https://maps.app.goo.gl/..."
+                                            {{ isset($isShow) && $isShow ? 'readonly' : '' }}>
+                                        <div class="form-text small text-muted">Google Maps: Bagikan &gt; Salin link. Digunakan tombol Buka Maps. Jika kosong, lokasi dicari berdasarkan nama dan alamat toko.</div>
+                                        @error('maps_url')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
                                     {{-- URL embed Maps --}}
                                     <div class="mb-4">
                                         <label for="maps_embed_url" class="form-label fw-medium text-secondary small">URL Embed Google Maps</label>
@@ -209,7 +221,7 @@
                                         </div>
                                         @if(isset($isShow) && $isShow)
                                             <div class="form-text small">
-                                                <a href="{{ $branch->maps_embed_url ?? '#' }}" target="_blank" class="text-primary">
+                                                <a href="{{ $branch->maps_location_url ?? '#' }}" target="_blank" class="text-primary">
                                                     <i class="fa-solid fa-external-link-alt me-1"></i>Buka di Google Maps
                                                 </a>
                                             </div>

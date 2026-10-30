@@ -441,7 +441,7 @@
                             'Sound Mic' => $item->kondisi_sound_mic ?? '-',
                             'Lain-lain' => $item->kondisi_lain_lain ?? '-',
                             'Kelengkapan' => $item->kelengkapan ?? '-',
-                        ];
+                        ]; 
                         $conditionChunks = array_chunk($conditions, (int) ceil(count($conditions) / 2), true);
                     @endphp
                     <div class="condition-grid">

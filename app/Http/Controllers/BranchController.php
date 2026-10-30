@@ -52,6 +52,7 @@ class BranchController extends Controller
                 'required',
                 'regex:/^(?:\+62|62|0)[0-9]{8,15}$/'
             ],
+            'maps_url' => ['nullable', 'url', 'max:2048', new \App\Rules\GoogleMapsLocationUrl],
             'maps_embed_url' => [
                 'nullable',
                 'url',
@@ -188,6 +189,7 @@ class BranchController extends Controller
                 'required',
                 'regex:/^(?:\+62|62|0)[0-9]{8,15}$/'
             ],
+            'maps_url' => ['nullable', 'url', 'max:2048', new \App\Rules\GoogleMapsLocationUrl],
             'maps_embed_url' => [
                 'nullable',
                 'url',

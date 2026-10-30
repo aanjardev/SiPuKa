@@ -12,6 +12,46 @@ class AdminAccessTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_guest_can_view_login_form(): void
+    {
+        $this->get('/login')->assertOk()->assertViewIs('admin.login');
+    }
+
+    public function test_authenticated_manager_is_redirected_from_login_to_dashboard(): void
+    {
+        $this->actingAs($this->createUser('manager'))
+            ->get('/login')
+            ->assertRedirect(route('admin.dashboard'));
+    }
+
+    public function test_authenticated_operational_user_is_redirected_from_login_to_dashboard(): void
+    {
+        $this->actingAs($this->createUser('operasional'))
+            ->get('/login')
+            ->assertRedirect(route('admin.dashboard'));
+    }
+
+    public function test_successful_login_defaults_to_dashboard(): void
+    {
+        $user = $this->createUser('manager');
+
+        $this->post('/login', ['email' => $user->email, 'password' => 'testing-password'])
+            ->assertRedirect(route('admin.dashboard'));
+
+        $this->assertAuthenticatedAs($user);
+    }
+
+    public function test_successful_login_preserves_intended_admin_destination(): void
+    {
+        $user = $this->createUser('manager');
+        $this->get('/admin/employees')->assertRedirect(route('login'));
+
+        $this->post('/login', ['email' => $user->email, 'password' => 'testing-password'])
+            ->assertRedirect(url('/admin/employees'));
+
+        $this->assertAuthenticatedAs($user);
+    }
+
     public function test_guest_is_redirected_to_login_from_admin(): void
     {
         $this->get('/admin/dashboard')->assertRedirect('/login');

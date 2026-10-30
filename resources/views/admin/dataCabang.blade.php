@@ -83,8 +83,8 @@
                         </td>
 
                         <td>
-                            @if ($cabang->maps_embed_url)
-                                <a href="{{ $cabang->maps_embed_url }}"
+                            @if ($cabang->maps_location_url)
+                                <a href="{{ $cabang->maps_location_url }}"
                                    target="_blank"
                                    rel="noopener noreferrer"
                                    class="text-decoration-none text-muted small d-flex align-items-start gap-2"
