@@ -9,17 +9,12 @@ use App\Helpers\ImageUpload;
 
 class CatalogSettingsController extends Controller
 {
-    public function logo()
+    public function logo(Request $request, \App\Services\ImageResponseService $images)
     {
         $path = CatalogSettings::first()?->logo_path;
         abort_unless($path, 404);
-        $local = str_starts_with($path, 'public/');
-        $key = $local ? substr($path, 7) : $path;
-        // Serve only the configured image, never a path supplied by the request.
-        abort_if(str_contains($key, '..') || str_starts_with($key, '/'), 404);
-        $disk = \Illuminate\Support\Facades\Storage::disk($local ? 'public' : 'r2');
-        abort_unless($disk->exists($key), 404);
-        return $disk->response($key, null, ['Cache-Control' => 'no-cache', 'X-Content-Type-Options' => 'nosniff']);
+
+        return $images->respond($request, $path, 320);
     }
 
     public function edit()

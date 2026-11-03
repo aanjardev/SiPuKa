@@ -36,7 +36,7 @@ class DashboardMetricsService
     */
     public function getMetrics(int $year, ?int $month, ?int $branchId): array
     {
-        $penjualanBase = Penjualan::query()->whereYear('created_at', $year);
+        $penjualanBase = Penjualan::query()->where('created_at', '>=', ($year).'-01-01 00:00:00')->where('created_at', '<', ($year + 1).'-01-01 00:00:00');
         if ($month) {
             $penjualanBase->whereMonth('created_at', $month);
         }
@@ -47,7 +47,7 @@ class DashboardMetricsService
         $detailBase = DetailPenjualan::query()
             ->join('penjualan', 'detail_penjualan.penjualan_id', '=', 'penjualan.id')
             ->leftJoin('produk', 'detail_penjualan.produk_id', '=', 'produk.id')
-            ->whereYear('penjualan.created_at', $year);
+            ->where('penjualan.created_at', '>=', ($year).'-01-01 00:00:00')->where('penjualan.created_at', '<', ($year + 1).'-01-01 00:00:00');
 
         if ($month) {
             $detailBase->whereMonth('penjualan.created_at', $month);
@@ -64,7 +64,7 @@ class DashboardMetricsService
         $totalLabaBersih = $totalPendapatan - $totalHPP;
 
         $totalPenjualan = (clone $penjualanBase)->count();
-        $pembelianBase = Pembelian::query()->whereYear('created_at', $year);
+        $pembelianBase = Pembelian::query()->where('created_at', '>=', ($year).'-01-01 00:00:00')->where('created_at', '<', ($year + 1).'-01-01 00:00:00');
         if ($month) {
             $pembelianBase->whereMonth('created_at', $month);
         }
@@ -76,11 +76,11 @@ class DashboardMetricsService
         $totalPembelian = (clone $pembelianBase)->count();
         $totalTransaksi = $totalPenjualan + $totalPembelian;
 
-        $growthPercentage = $this->calculateGrowth($year, $month, $branchId);
+        $growthPercentage = $this->calculateGrowth($year, $month, $branchId, $totalPendapatan);
 
 
         [$dataPendapatanChart, $dataHppChart] = $this->buildAreaChartData($year, $branchId);
-        $dataTransaksiChart = $this->buildDonutChartData($year, $month, $branchId);
+        $dataTransaksiChart = [$totalPenjualan, $totalPembelian];
 
         $topProducts = $this->topProducts($year, $branchId);
         $recentSales = $this->recentSales($year, $branchId);
@@ -112,12 +112,9 @@ class DashboardMetricsService
         ];
     }
 
-    private function calculateGrowth(int $year, ?int $month, ?int $branchId): float
+    private function calculateGrowth(int $year, ?int $month, ?int $branchId, int $currentValue): float
     {
         if ($month) {
-            $current = Penjualan::query()
-                ->whereYear('created_at', $year)
-                ->whereMonth('created_at', $month);
             $previousMonth = $month - 1;
             $previousYear = $year;
             if ($previousMonth < 1) {
@@ -125,15 +122,13 @@ class DashboardMetricsService
                 $previousYear = $year - 1;
             }
             $previous = Penjualan::query()
-                ->whereYear('created_at', $previousYear)
+                ->where('created_at', '>=', ($previousYear).'-01-01 00:00:00')->where('created_at', '<', ($previousYear + 1).'-01-01 00:00:00')
                 ->whereMonth('created_at', $previousMonth);
 
             if ($branchId) {
-                $current->where('perusahaan_cabang_id', $branchId);
                 $previous->where('perusahaan_cabang_id', $branchId);
             }
 
-            $currentValue = (int) $current->sum('harga_total');
             $previousValue = (int) $previous->sum('harga_total');
 
             if ($previousValue > 0) {
@@ -143,14 +138,11 @@ class DashboardMetricsService
             return $currentValue > 0 ? 100.0 : 0.0;
         }
 
-        $current = Penjualan::query()->whereYear('created_at', $year);
-        $previous = Penjualan::query()->whereYear('created_at', $year - 1);
+        $previous = Penjualan::query()->where('created_at', '>=', ($year - 1).'-01-01 00:00:00')->where('created_at', '<', ($year - 1 + 1).'-01-01 00:00:00');
         if ($branchId) {
-            $current->where('perusahaan_cabang_id', $branchId);
             $previous->where('perusahaan_cabang_id', $branchId);
         }
 
-        $currentValue = (int) $current->sum('harga_total');
         $previousValue = (int) $previous->sum('harga_total');
 
         if ($previousValue > 0) {
@@ -169,7 +161,7 @@ class DashboardMetricsService
     {
         $pendapatanBulananQuery = Penjualan::query()
             ->selectRaw('MONTH(created_at) as bulan, SUM(harga_total) as total')
-            ->whereYear('created_at', $year);
+            ->where('created_at', '>=', ($year).'-01-01 00:00:00')->where('created_at', '<', ($year + 1).'-01-01 00:00:00');
 
         if ($branchId) {
             $pendapatanBulananQuery->where('perusahaan_cabang_id', $branchId);
@@ -183,7 +175,7 @@ class DashboardMetricsService
             ->selectRaw('MONTH(penjualan.created_at) as bulan, SUM(detail_penjualan.qty * COALESCE(produk.harga_beli, 0)) as total')
             ->join('penjualan', 'detail_penjualan.penjualan_id', '=', 'penjualan.id')
             ->leftJoin('produk', 'detail_penjualan.produk_id', '=', 'produk.id')
-            ->whereYear('penjualan.created_at', $year);
+            ->where('penjualan.created_at', '>=', ($year).'-01-01 00:00:00')->where('penjualan.created_at', '<', ($year + 1).'-01-01 00:00:00');
 
         if ($branchId) {
             $hppBulananQuery->where('penjualan.perusahaan_cabang_id', $branchId);
@@ -201,33 +193,6 @@ class DashboardMetricsService
         }
 
         return [$dataPendapatanChart, $dataHppChart];
-    }
-
-    /**
-     * Build donut chart data untuk total transaksi (Penjualan vs Pembelian).
-     * Mengikuti filter tahun, bulan (jika ada), dan cabang.
-     */
-    private function buildDonutChartData(int $year, ?int $month, ?int $branchId): array
-    {
-        $countPenjualan = Penjualan::query()->whereYear('created_at', $year);
-        $countPembelian = Pembelian::query()->whereYear('created_at', $year);
-
-        if ($month) {
-            $countPenjualan->whereMonth('created_at', $month);
-            $countPembelian->whereMonth('created_at', $month);
-        }
-
-        if ($branchId) {
-            $countPenjualan->where('perusahaan_cabang_id', $branchId);
-            $countPembelian->where('perusahaan_cabang_id', $branchId);
-        }
-
-        $countPembelian->where('status_pembelian', 'deal');
-
-        return [
-            (int) $countPenjualan->count(),
-            (int) $countPembelian->count(),
-        ];
     }
 
     private function topProducts(int $year, ?int $branchId): Collection
@@ -249,7 +214,7 @@ class DashboardMetricsService
             ])
             ->join('penjualan', 'detail_penjualan.penjualan_id', '=', 'penjualan.id')
             ->join('produk', 'detail_penjualan.produk_id', '=', 'produk.id')
-            ->whereYear('penjualan.created_at', $year)
+            ->where('penjualan.created_at', '>=', ($year).'-01-01 00:00:00')->where('penjualan.created_at', '<', ($year + 1).'-01-01 00:00:00')
             ->groupBy('produk.id', 'produk.nama_produk', 'produk.harga_jual', 'produk.kode_sku')
             ->orderByDesc('total_qty')
             ->limit(5)
@@ -279,7 +244,7 @@ class DashboardMetricsService
     {
         return Penjualan::query()
             ->with(['customer', 'branch'])
-            ->whereYear('created_at', $year)
+            ->where('created_at', '>=', ($year).'-01-01 00:00:00')->where('created_at', '<', ($year + 1).'-01-01 00:00:00')
             ->when($branchId, fn ($q) => $q->where('perusahaan_cabang_id', $branchId))
             ->orderBy('created_at', 'desc')
             ->limit(5)
@@ -301,7 +266,7 @@ class DashboardMetricsService
     {
         return Pembelian::query()
             ->with(['customer', 'perusahaan_cabang', 'item_pembelian_draft'])
-            ->whereYear('created_at', $year)
+            ->where('created_at', '>=', ($year).'-01-01 00:00:00')->where('created_at', '<', ($year + 1).'-01-01 00:00:00')
             ->when($branchId, fn ($q) => $q->where('perusahaan_cabang_id', $branchId))
             ->orderBy('created_at', 'desc')
             ->limit(5)

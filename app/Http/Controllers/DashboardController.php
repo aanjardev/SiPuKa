@@ -19,18 +19,23 @@ class DashboardController extends Controller
         $selectedMonth = $request->input('month');
         $selectedMonth = $selectedMonth ? (int) $selectedMonth : null;
 
-        $selectedBranch = Branch::first()?->id;
-        $selectedBranchName = Branch::first()?->nama ?? 'Toko';
+        $branch = Branch::first();
+        $selectedBranch = $branch?->id;
+        $selectedBranchName = $branch?->nama ?? 'Toko';
 
         $labelBulan = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
 
         $metrics = $this->dashboardMetrics->getMetrics($selectedYear, $selectedMonth, $selectedBranch);
 
+        $stock = \App\Models\Produk::where('is_archived', false)
+            ->selectRaw('COALESCE(SUM(stok_produk > 0), 0) as available, COALESCE(SUM(stok_produk <= 0), 0) as empty_count, COALESCE(SUM(is_visible = 0), 0) as hidden')
+            ->first();
+
         return view('admin.index', [
             'stockSummary' => [
-                'available' => \App\Models\Produk::where('is_archived', false)->where('stok_produk', '>', 0)->count(),
-                'empty' => \App\Models\Produk::where('is_archived', false)->where('stok_produk', '<=', 0)->count(),
-                'hidden' => \App\Models\Produk::where('is_archived', false)->where('is_visible', false)->count(),
+                'available' => (int) $stock->available,
+                'empty' => (int) $stock->empty_count,
+                'hidden' => (int) $stock->hidden,
             ],
             'selectedYear' => $selectedYear,
             'selectedMonth' => $selectedMonth,

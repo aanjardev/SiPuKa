@@ -25,7 +25,7 @@ class ProductStoreRequest extends FormRequest
             'deskripsi_produk' => ['nullable', 'string'],
             'instagram_link'   => ['nullable', 'url', 'max:255'],
             'status'           => ['required', 'in:Second,Baru'],
-            'grade'            => ['required', 'in:Unggulan,Standar,Minus'],
+            'grade'            => ['required', 'in:A,B,C'],
             'is_visible'       => ['required', 'boolean'],
             'images'           => ['nullable', 'array'],
             'images.*'         => ['image', 'max:10240'],

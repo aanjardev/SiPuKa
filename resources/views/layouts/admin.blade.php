@@ -1,5 +1,5 @@
 @php
-    $setting = \App\Models\CatalogSettings::first();
+    $setting = app(\App\Services\StorefrontData::class)->settings();
 @endphp
 <!doctype html>
 <html lang="en" dir="ltr">
@@ -10,9 +10,9 @@
     <title>@yield('title', 'Admin Panel') | {{ $setting?->nama_website ?? 'PusatKamera.id' }}</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <link rel="icon" href="{{ $setting?->logo_url ?: asset('mainIMG/logopk.png') }}">
-    <link rel="shortcut icon" href="{{ $setting?->logo_url ?: asset('mainIMG/logopk.png') }}">
-    <link rel="apple-touch-icon" href="{{ $setting?->logo_url ?: asset('mainIMG/logopk.png') }}">
+    <link rel="icon" href="{{ $setting?->logo_url ?: asset('mainIMG/logopk.webp') }}">
+    <link rel="shortcut icon" href="{{ $setting?->logo_url ?: asset('mainIMG/logopk.webp') }}">
+    <link rel="apple-touch-icon" href="{{ $setting?->logo_url ?: asset('mainIMG/logopk.webp') }}">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,11 +20,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     
     <!-- Font Awesome CSS (loaded early to prevent icon rendering issues) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <script src="https://kit.fontawesome.com/8794378048.js" crossorigin="anonymous"></script>
 
     <!-- Admin CSS (fallback assets) -->
     <link href="{{ \App\Helpers\CssAssetHelper::css('css/legacy/adminsidebar.css') }}" rel="stylesheet">
@@ -58,7 +56,7 @@
     <aside class="sidebar" id="sidebar">
         <!-- Sidebar Header -->
         <div class="sidebar-header">
-            <img src="{{ $setting?->logo_url ?: asset('mainIMG/logopk.png') }}"
+            <img src="{{ $setting?->logo_url ?: asset('mainIMG/logopk.webp') }}"
                 alt="Logo {{ $setting?->nama_website ?? 'Pusat Kamera Malang' }}"
                 class="sidebar-logo" style="background: #111;">
             <div class="sidebar-brand">
@@ -185,6 +183,13 @@
                     </div>
 
                     <div class="submenu-item">
+                        <a href="{{ route('admin.partners.index') }}" class="submenu-link">
+                            <i class="fas fa-handshake submenu-icon"></i>
+                            <span>Partner</span>
+                        </a>
+                    </div>
+
+                    <div class="submenu-item">
                         <a href="{{ route('admin.catalog-settings.index') }}" class="submenu-link">
                             <i class="fas fa-cog submenu-icon"></i>
                             <span>Setting Web Katalog</span>
@@ -264,7 +269,7 @@
         </footer>
     </main>
 
-    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
     <script src="{{ asset('js/form-validation.js') }}"></script>
 
     <!-- Logout Confirmation Modal -->

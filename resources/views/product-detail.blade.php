@@ -14,13 +14,13 @@
     $whatsAppUrl = $rawPhone ? 'https://wa.me/' . $rawPhone . '?text=' . urlencode($message) : null;
 
     $galleryImageUrls = $produk->gambar->sortByDesc('is_main')->pluck('url')->filter()->values();
-    if ($galleryImageUrls->isEmpty()) { $galleryImageUrls = collect([asset('mainIMG/produk.png')]); }
+    if ($galleryImageUrls->isEmpty()) { $galleryImageUrls = collect([asset('mainIMG/produk.webp')]); }
 @endphp
 
 @section('title', $produk->nama_produk . ' — PusatKamera.id')
 
 @push('styles')
-    <link rel="stylesheet" href="{{ \App\Helpers\CssAssetHelper::css('css/legacy/product-detail-brutal.css') }}?v=8">
+    <link rel="stylesheet" href="{{ \App\Helpers\CssAssetHelper::css('css/legacy/product-detail-brutal.css') }}?v=9">
 @endpush
 
 @section('content')
@@ -34,8 +34,8 @@
                     <span>{{ $produk->kategori?->nama_kategori ?? 'Produk' }}</span>
                 </nav>
                 <div class="detail-main-image" id="galleryPreview">
-                    <img id="mainProductImage" src="{{ $galleryImageUrls->first() }}" alt="{{ $produk->nama_produk }}">
-                    @if($produk->grade === 'Unggulan')<span class="detail-sticker">PRODUK UNGGULAN</span>@endif
+                    <img fetchpriority="high" decoding="async" id="mainProductImage" src="{{ $galleryImageUrls->first() }}" alt="{{ $produk->nama_produk }}">
+                    @if($produk->grade === 'A')<span class="detail-sticker">PRODUK UNGGULAN</span>@endif
                 </div>
 
                 @if($galleryImageUrls->count() > 1)
@@ -44,7 +44,7 @@
                         <div class="detail-thumbnail-track" id="thumbsRow">
                             @foreach($galleryImageUrls as $index => $imageUrl)
                                 <button type="button" class="detail-thumbnail {{ $index === 0 ? 'active' : '' }}" data-index="{{ $index }}" aria-label="Tampilkan foto {{ $index + 1 }}">
-                                    <img src="{{ $imageUrl }}" alt="Foto {{ $index + 1 }} {{ $produk->nama_produk }}">
+                                    <img loading="lazy" decoding="async" src="{{ $imageUrl }}" alt="Foto {{ $index + 1 }} {{ $produk->nama_produk }}">
                                 </button>
                             @endforeach
                         </div>
@@ -85,7 +85,7 @@
                 </dl>
 
                 @if($produk->instagram_link)
-                    <a href="{{ $produk->instagram_link }}" class="detail-video-link" target="_blank" rel="noopener"><i class="bi bi-instagram"></i> LIHAT VIDEO KONDISI FISIK <i class="bi bi-arrow-up-right"></i></a>
+                    <a href="{{ $produk->instagram_link }}" class="detail-video-link" target="_blank" rel="noopener"><i class="bi bi-youtube" aria-hidden="true"></i> LIHAT VIDEO KONDISI FISIK <i class="bi bi-arrow-up-right"></i></a>
                 @endif
 
                 <section class="detail-inline-description">

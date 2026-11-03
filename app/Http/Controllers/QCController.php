@@ -51,7 +51,7 @@ class QCController extends Controller
             $query->latest('created_at');
         }
 
-        $data_qc = $query->paginate(10);
+        $data_qc = $query->paginate(10)->withQueryString();
 
         if ($request->ajax() || $request->wantsJson()) {
             $table_html = view('admin.partials.qc_table_rows', compact('data_qc'))->render();
@@ -484,7 +484,7 @@ class QCController extends Controller
             'harga_jual' => 'nullable|integer|min:0',
             'harga_beli' => 'nullable|integer|min:0',
             'harga_servis' => 'nullable|integer|min:0',
-            'grade' => ($statusQc === 'lolos_qc' ? 'required' : 'nullable') . '|in:Unggulan,Standar,Minus',
+            'grade' => ($statusQc === 'lolos_qc' ? 'required' : 'nullable') . '|in:A,B,C',
             'status' => ($statusQc === 'lolos_qc' ? 'required' : 'nullable') . '|in:Second,Baru',
             'deskripsi_produk' => 'nullable|string',
             'status_qc' => 'nullable|in:menunggu_qc,lolos_qc,gagal_qc,diarsipkan',

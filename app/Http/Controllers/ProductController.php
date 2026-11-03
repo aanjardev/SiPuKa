@@ -59,7 +59,7 @@ class ProductController extends Controller
             ->where('is_visible', true)
             ->where('is_archived', false)
             ->findOrFail($id);
-        $cat_setting = CatalogSettings::first();
+        $cat_setting = app(\App\Services\StorefrontData::class)->settings();
 
         return view('product-detail', compact('produk', 'cat_setting'));
     }
@@ -122,7 +122,7 @@ class ProductController extends Controller
                 $query->orderBy('harga_jual', 'desc');
                 break;
             case 'rekomendasi':
-                $query->where('grade', 'Unggulan')
+                $query->where('grade', 'A')
                     ->orderBy('created_at', 'desc');
                 break;
             case 'terbaru':

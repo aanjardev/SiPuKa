@@ -381,9 +381,9 @@
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-medium text-secondary small">Grade</label>
                             <select name="grade" class="form-select" {{ $disabledAttr }}>
-                                <option value="Unggulan" {{ (old('grade', $item->grade) == 'Unggulan') ? 'selected' : '' }}>Unggulan</option>
-                                <option value="Standar" {{ (old('grade', $item->grade) == 'Standar') ? 'selected' : '' }}>Standar</option>
-                                <option value="Minus" {{ (old('grade', $item->grade) == 'Minus') ? 'selected' : '' }}>Minus</option>
+                                <option value="A" {{ (old('grade', $item->grade) == 'A') ? 'selected' : '' }}>A</option>
+                                <option value="B" {{ (old('grade', $item->grade) == 'B') ? 'selected' : '' }}>B</option>
+                                <option value="C" {{ (old('grade', $item->grade) == 'C') ? 'selected' : '' }}>C</option>
                             </select>
                         </div>
                         <div class="col-md-6 mb-3">

@@ -317,19 +317,19 @@ $backRoute = route('admin.products.index');
                         <label class="form-label text-secondary small fw-medium">Grade</label>
                         <select class="form-select py-2 text-secondary" name="grade">
                             <option
-                                value="Unggulan"
-                                {{ old('grade', $isEdit ? $product->grade : '') === 'Unggulan' ? 'selected' : '' }}>
-                                Unggulan
+                                value="A"
+                                {{ old('grade', $isEdit ? $product->grade : '') === 'A' ? 'selected' : '' }}>
+                                A
                             </option>
                             <option
-                                value="Standar"
-                                {{ old('grade', $isEdit ? $product->grade : '') === 'Standar' ? 'selected' : '' }}>
-                                Standar
+                                value="B"
+                                {{ old('grade', $isEdit ? $product->grade : '') === 'B' ? 'selected' : '' }}>
+                                B
                             </option>
                             <option
-                                value="Minus"
-                                {{ old('grade', $isEdit ? $product->grade : '') === 'Minus' ? 'selected' : '' }}>
-                                Minus
+                                value="C"
+                                {{ old('grade', $isEdit ? $product->grade : '') === 'C' ? 'selected' : '' }}>
+                                C
                             </option>
                         </select>
                     </div>

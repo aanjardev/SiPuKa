@@ -458,3 +458,10 @@
         transition: none !important;
     }
 }
+
+
+/* Product status is an informational label. */
+.detail-sticker {
+    border: 0;
+    box-shadow: none;
+}

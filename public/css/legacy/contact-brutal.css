@@ -520,3 +520,19 @@
     height: 100%;
     border: 0;
 }
+
+
+/* Store information is plain content; action links keep their affordance. */
+.contact-brutal .contact-kicker,
+.contact-brutal .store-label {
+    border: 0;
+    box-shadow: none;
+    background: transparent;
+    padding: 0;
+}
+.contact-brutal .store-card,
+.contact-brutal .store-card li > i {
+    border: 0;
+    box-shadow: none;
+    background: transparent;
+}

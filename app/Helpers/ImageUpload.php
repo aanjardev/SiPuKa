@@ -2,33 +2,32 @@
 
 namespace App\Helpers;
 
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\File;
-use Intervention\Image\ImageManagerStatic as Image;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Intervention\Image\ImageManagerStatic as Image;
 
 class ImageUpload
 {
-
     private static int $MAX_DIMENSION = 5000;
+
     private static int $WEBP_QUALITY = 92;
 
     /**
      * Upload single optimized image (WebP)
      * Fallback to local storage jika R2 gagal
      *
-     * @param mixed $file
-     * @param string $prefix
+     * @param  mixed  $file
      * @return array {
-     *   path, original_hash
-     * }
+     *               path, original_hash
+     *               }
      */
-    public static function upload($file, string $prefix = 'uploads'): array
+    public static function upload($file, string $prefix = 'uploads', int $maxDimension = 1920, bool $checkExisting = true): array
     {
 
         $info = @getimagesize($file);
-        if (!$info) {
-            throw new \Exception("File bukan gambar valid.");
+        if (! $info) {
+            throw new \Exception('File bukan gambar valid.');
         }
 
         $w = $info[0];
@@ -40,17 +39,21 @@ class ImageUpload
 
         $img = Image::make($file)->orientate();
 
-        $encoded = Image::make($img)->encode("webp", self::$WEBP_QUALITY);
+        $img->resize($maxDimension, $maxDimension, function ($constraint) {
+            $constraint->aspectRatio();
+            $constraint->upsize();
+        });
+        $encoded = $img->encode('webp', self::$WEBP_QUALITY);
         $hash = sha1($encoded);
 
-        $baseName = $hash . '.webp';
+        $baseName = $hash.'.webp';
         $path = "$prefix/$baseName";
 
         // PERBAIKAN: Try R2 first, fallback to local
         try {
-            if (Storage::disk('r2')->exists($path)) {
+            if ($checkExisting && Storage::disk('r2')->exists($path)) {
                 return [
-                    'path'          => $path,
+                    'path' => $path,
                     'original_hash' => $hash,
                 ];
             }
@@ -59,14 +62,14 @@ class ImageUpload
             self::uploadToR2($encoded, $path);
 
             return [
-                'path'          => $path,
+                'path' => $path,
                 'original_hash' => $hash,
             ];
         } catch (\Throwable $e) {
             // PERBAIKAN: Fallback ke local storage jika R2 gagal
-            \Log::warning("R2 upload failed, fallback to local storage", [
+            \Log::warning('R2 upload failed, fallback to local storage', [
                 'error' => $e->getMessage(),
-                'path' => $path
+                'path' => $path,
             ]);
 
             return self::uploadToLocal($encoded, $path);
@@ -82,17 +85,17 @@ class ImageUpload
         $buffer->save($temp);
 
         try {
-            $stored = Storage::disk("r2")->putFileAs(
+            $stored = Storage::disk('r2')->putFileAs(
                 dirname($path),
                 new File($temp),
                 basename($path),
                 [
                     'visibility' => 'public',
                     'ContentType' => 'image/webp',
-                    'CacheControl' => 'public, max-age=31536000, immutable'
+                    'CacheControl' => 'public, max-age=31536000, immutable',
                 ]
             );
-            if (!$stored) {
+            if (! $stored) {
                 throw new \RuntimeException('Gagal menyimpan gambar ke R2.');
             }
         } finally {
@@ -113,7 +116,7 @@ class ImageUpload
 
             // Ensure directory exists
             $dir = dirname($path);
-            if (!$localDisk->exists($dir)) {
+            if (! $localDisk->exists($dir)) {
                 $localDisk->makeDirectory($dir, 0755, true);
             }
 
@@ -127,13 +130,13 @@ class ImageUpload
                 ]
             );
 
-            if (!$stored) {
+            if (! $stored) {
                 throw new \RuntimeException('Gagal menyimpan gambar ke penyimpanan lokal.');
             }
 
             // Return public accessible path
             return [
-                'path'          => "public/{$path}",
+                'path' => "public/{$path}",
                 'original_hash' => null,
             ];
         } finally {

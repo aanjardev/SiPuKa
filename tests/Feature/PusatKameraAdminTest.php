@@ -12,6 +12,13 @@ class PusatKameraAdminTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        Storage::fake('local');
+    }
+
+
     public function test_admin_can_save_separate_embed_and_location_links(): void
     {
         $branch = $this->storeRecord();
@@ -72,7 +79,7 @@ class PusatKameraAdminTest extends TestCase
             'nama_produk'=>'Kamera '.Str::random(6), 'kode_sku'=>Str::random(12),
             'id_kategori'=>Kategori::firstOrCreate(['nama_kategori'=>'Mirrorless'])->id,
             'harga_jual'=>9000000, 'harga_beli'=>5000000, 'stok_produk'=>3,
-            'status'=>'Second', 'grade'=>'Standar', 'is_visible'=>true, 'is_archived'=>false,
+            'status'=>'Second', 'grade'=>'B', 'is_visible'=>true, 'is_archived'=>false,
         ], $attributes));
     }
 
@@ -80,7 +87,7 @@ class PusatKameraAdminTest extends TestCase
     {
         return ['nama_item'=>$product->nama_produk, 'kategori_id'=>$product->id_kategori,
             'kode_sku'=>$product->kode_sku, 'qty'=>2, 'harga_jual'=>9000000,
-            'deskripsi_produk'=>'Kamera sudah diperiksa', 'status'=>'Second', 'grade'=>'Standar',
+            'deskripsi_produk'=>'Kamera sudah diperiksa', 'status'=>'Second', 'grade'=>'B',
             'status_qc'=>'lolos_qc', 'action'=>'save'];
     }
 
@@ -122,7 +129,7 @@ class PusatKameraAdminTest extends TestCase
     public function test_product_camera_category_is_required_and_price_category_is_optional(): void
     {
         $this->actingAs($this->owner());
-        $payload = ['nama_produk'=>'Produk Baru', 'kode_sku'=>'NEW-TEST', 'status'=>'Second', 'grade'=>'Standar', 'is_visible'=>0];
+        $payload = ['nama_produk'=>'Produk Baru', 'kode_sku'=>'NEW-TEST', 'status'=>'Second', 'grade'=>'B', 'is_visible'=>0];
         $this->post('/admin/products', $payload)->assertSessionHasErrors('id_kategori');
         $payload['id_kategori'] = Kategori::firstOrCreate(['nama_kategori'=>'DSLR'])->id;
         $this->post('/admin/products', $payload)->assertSessionHasNoErrors()->assertRedirect(route('admin.products.index'));
@@ -299,19 +306,21 @@ class PusatKameraAdminTest extends TestCase
         $product->gambar()->create(['path_gambar'=>'public/test/main.webp','is_main'=>true]);
         $product->gambar()->create(['path_gambar'=>'public/test/extra.webp','is_main'=>false]);
         foreach (['/','/katalog','/katalog/'.$product->id] as $url) {
-            $this->get($url)->assertOk()->assertSee(\App\Helpers\StoredImage::url('public/test/main.webp'));
+            $this->get($url)->assertOk()->assertSee(\App\Helpers\StoredImage::url('public/test/main.webp', $url === '/katalog/'.$product->id ? 0 : 640));
         }
         $this->get('/katalog/'.$product->id)->assertSee(\App\Helpers\StoredImage::url('public/test/extra.webp'));
     }
 
     public function test_logo_upload_falls_back_when_r2_returns_false_and_updates_all_branding(): void
     {
+        $cache = Storage::disk('local');
         $local = Storage::fake('public');
         $remote = \Mockery::mock(\Illuminate\Contracts\Filesystem\Filesystem::class);
         $remote->shouldReceive('exists')->andReturn(false);
         $remote->shouldReceive('putFileAs')->once()->andReturn(false);
         Storage::shouldReceive('disk')->with('r2')->andReturn($remote);
         Storage::shouldReceive('disk')->with('public')->andReturn($local);
+        Storage::shouldReceive('disk')->with('local')->andReturn($cache);
         $this->actingAs($this->owner());
         $this->post('/admin/catalog-settings', [
             'site_name' => 'Uploaded Brand',
@@ -333,11 +342,11 @@ class PusatKameraAdminTest extends TestCase
     public function test_logo_endpoint_streams_remote_logo_without_public_bucket_url(): void
     {
         Storage::fake('r2');
-        Storage::disk('r2')->put('catalog/logo/remote.webp', 'remote-image');
+        Storage::disk('r2')->put('catalog/logo/remote.webp', (string) \Intervention\Image\ImageManagerStatic::make(\Illuminate\Http\UploadedFile::fake()->image('logo.png', 100, 60))->encode('webp'));
         $setting = CatalogSettings::firstOrCreate(['singleton_key' => true], ['nama_website' => 'Brand']);
         $setting->update(['logo_path' => 'catalog/logo/remote.webp']);
         $firstUrl = $setting->logo_url;
-        $this->get($firstUrl)->assertOk()->assertStreamedContent('remote-image');
+        $this->get($firstUrl)->assertOk()->assertHeader('Content-Type', 'image/webp');
         $setting->update(['logo_path' => 'catalog/logo/missing.webp']);
         $this->assertNotSame($firstUrl, $setting->logo_url);
         $this->get($setting->logo_url)->assertNotFound();
@@ -345,11 +354,13 @@ class PusatKameraAdminTest extends TestCase
 
     public function test_hero_and_seo_uploads_are_accessible_from_local_fallback(): void
     {
+        $cache = Storage::disk('local');
         $local = Storage::fake('public');
         $remote = \Mockery::mock(\Illuminate\Contracts\Filesystem\Filesystem::class);
         $remote->shouldReceive('exists')->andThrow(new \RuntimeException('R2 unavailable'));
         Storage::shouldReceive('disk')->with('r2')->andReturn($remote);
         Storage::shouldReceive('disk')->with('public')->andReturn($local);
+        Storage::shouldReceive('disk')->with('local')->andReturn($cache);
         $this->actingAs($this->owner());
         $this->post('/admin/catalog-settings', [
             'site_name' => 'Image Test',
@@ -375,15 +386,17 @@ class PusatKameraAdminTest extends TestCase
         config(['filesystems.disks.r2.url' => null]);
         Storage::disk('public')->put('category/test.webp', 'local-image');
         Storage::disk('r2')->put('product/test.webp', 'remote-image');
-        $this->get(\App\Helpers\StoredImage::url('public/category/test.webp'))->assertOk()->assertStreamedContent('local-image');
+        $localResponse = $this->get(\App\Helpers\StoredImage::url('public/category/test.webp'))->assertOk();
+        $this->assertSame('local-image', file_get_contents($localResponse->baseResponse->getFile()->getPathname()));
         $url = \App\Helpers\StoredImage::url('product/test.webp');
-        $this->get($url)->assertOk()->assertStreamedContent('remote-image');
+        $remoteResponse = $this->get($url)->assertOk();
+        $this->assertSame('remote-image', file_get_contents($remoteResponse->baseResponse->getFile()->getPathname()));
         $this->get(str_replace('product', 'private', $url))->assertForbidden();
         $this->get('/media/image?path=public/category/test.webp')->assertForbidden();
         $this->get(\App\Helpers\StoredImage::url('public/../secret.webp'))->assertNotFound();
         $this->get(\App\Helpers\StoredImage::url('public/private.txt'))->assertNotFound();
         $this->get(\App\Helpers\StoredImage::url('public/missing.webp'))->assertNotFound();
-        config(['filesystems.disks.r2.url' => 'https://images.example.com']);
+        config(['filesystems.disks.r2.url' => 'https://images.example.com', 'filesystems.disks.r2.serve_via_app' => false]);
         $this->assertSame('https://images.example.com/product/test.webp', \App\Helpers\StoredImage::url('product/test.webp'));
     }
 

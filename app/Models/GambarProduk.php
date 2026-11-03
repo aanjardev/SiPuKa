@@ -33,6 +33,11 @@ class GambarProduk extends Model
         return \App\Helpers\StoredImage::url($this->path_gambar);
     }
 
+    public function getThumbnailUrlAttribute(): ?string
+    {
+        return \App\Helpers\StoredImage::url($this->path_gambar, 640);
+    }
+
     private function deleteVariants(?string $path): void
     {
         \App\Helpers\StoredImage::delete($path);

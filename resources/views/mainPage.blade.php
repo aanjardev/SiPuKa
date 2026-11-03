@@ -17,7 +17,7 @@
 @section('meta_description', $cat_setting?->seo_description ?? $cat_setting?->description ?? '')
 
 @push('styles')
-    <link rel="stylesheet" href="{{ \App\Helpers\CssAssetHelper::css('css/legacy/home-brutal.css') }}?v=8">
+    <link rel="stylesheet" href="{{ \App\Helpers\CssAssetHelper::css('css/legacy/home-brutal.css') }}?v=14">
 @endpush
 
 @section('content')
@@ -36,7 +36,7 @@
                 </div>
                 <div class="hero-art" aria-label="Ilustrasi kamera">
                     <span class="hero-burst">CEK<br>STOK!</span>
-                    <img class="hero-image" src="{{ $cat_setting?->hero_image_url ?? asset('mainIMG/produk.png') }}" alt="Kamera di PusatKamera.id">
+                    <img fetchpriority="high" decoding="async" class="hero-image" src="{{ $cat_setting?->hero_image_url ?? asset('mainIMG/produk.webp') }}" alt="Kamera di PusatKamera.id">
                     <p>SIAP UNTUK<br>MULAI BERKARYA</p>
                 </div>
             </div>
@@ -46,7 +46,7 @@
     <section class="brutal-section brutal-section-yellow">
         <div class="container">
             <div class="section-heading">
-                <div><span class="section-number">01</span><h2>KATEGORI</h2></div>
+                <div><h2>PILIHAN HARGA</h2></div>
                 <a href="{{ route('product.index') }}">LIHAT SEMUA <i class="bi bi-arrow-right"></i></a>
             </div>
             <div class="category-grid budget-category-grid">
@@ -63,10 +63,30 @@
         </div>
     </section>
 
+    <section class="brutal-section camera-category-section">
+        <div class="container">
+            <div class="section-heading">
+                <div><h2>JENIS KAMERA</h2></div>
+                <a href="{{ route('product.index') }}">LIHAT SEMUA <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+            </div>
+            <div class="camera-type-grid">
+                @forelse ($kategoris as $kategori)
+                    <a href="{{ route('product.index', ['kategori' => $kategori->id]) }}" class="camera-type-link">
+                        <i class="bi bi-camera" aria-hidden="true"></i>
+                        <span>{{ $kategori->nama_kategori }}</span>
+                        <i class="bi bi-arrow-up-right" aria-hidden="true"></i>
+                    </a>
+                @empty
+                    <p class="mb-0">Kategori kamera akan segera tersedia.</p>
+                @endforelse
+            </div>
+        </div>
+    </section>
+
     <section class="brutal-section products-section">
         <div class="container">
             <div class="section-heading">
-                <div><span class="section-number">02</span><h2>PRODUK TERBARU</h2></div>
+                <div><h2>PRODUK TERBARU</h2></div>
                 {{-- <p>Pilihan terbaru untuk memulai perjalanan fotografimu.</p> --}}
             </div>
             @if ($latestProducts->isEmpty())
@@ -78,10 +98,10 @@
                             <div class="home-product-media">
                                 @if ($product->stok_produk <= 0)
                                     <span class="product-badge">STOK HABIS</span>
-                                @elseif ($product->grade === 'Unggulan')
+                                @elseif ($product->grade === 'A')
                                     <span class="product-badge">PILIHAN</span>
                                 @endif
-                                <img src="{{ $product->gambarUtama?->url ?? asset('mainIMG/produk.png') }}" alt="{{ $product->nama_produk }}" loading="lazy">
+                                <img src="{{ $product->gambarUtama?->thumbnail_url ?? asset('mainIMG/produk.webp') }}" alt="{{ $product->nama_produk }}" loading="lazy" decoding="async">
                             </div>
                             <div class="home-product-info">
                                 <h3>{{ $product->nama_produk }}</h3>
@@ -100,30 +120,33 @@
     <section class="brutal-section trust-section">
         <div class="container">
             <div class="trust-grid">
-                <article><span>01</span><i class="bi bi-camera-fill"></i><h3>RAMAH UNTUK PEMULA</h3><p>Pilihan kamera yang mudah dipahami untuk mulai belajar fotografi.</p></article>
+                <article><i class="bi bi-camera-fill"></i><h3>RAMAH UNTUK PEMULA</h3><p>Pilihan kamera yang mudah dipahami untuk mulai belajar fotografi.</p></article>
                 <article>
-                    <span>02</span>
+
                     <i class="bi bi-tags-fill"></i>
                     <h3>HARGA SESUAI BUDGET</h3>
                     <p>Pilih kamera dari berbagai rentang harga sesuai anggaranmu.</p>
                 </article>
-                <article><span>03</span><i class="bi bi-people-fill"></i><h3>PAKET SESUAI KEBUTUHAN</h3><p>Paket untuk fotografer pemula, kegiatan ekstrakurikuler, mahasiswa jurusan DKV, dan anggota komunitas fotografi.</p></article>
+                <article><i class="bi bi-people-fill"></i><h3>PAKET SESUAI KEBUTUHAN</h3><p>Paket untuk fotografer pemula, kegiatan ekstrakurikuler, mahasiswa jurusan DKV, dan anggota komunitas fotografi.</p></article>
             </div>
         </div>
     </section>
 
+    @include('partials.home-partners')
+
     <section class="cta-brutal">
         <div class="container">
             <div class="cta-box">
-                <span>MASIH BINGUNG PILIH KAMERA?</span>
-                <h2>CERITAKAN KEBUTUHANMU.</h2>
-                <a href="/contact" class="brutal-btn brutal-btn-yellow">MULAI KONSULTASI <i class="bi bi-arrow-up-right"></i></a>
+                <span>PILIH KAMERA YANG PAS.</span>
+                <h2>KAMERA MAHAL BELUM TENTU PAS.</h2>
+                <p>Jangan sampai bayar mahal untuk kamera yang kurang sesuai. Kami bantu pilih sesuai kebutuhan dan budget kamu.</p>
+                <a href="/contact" class="brutal-btn brutal-btn-yellow">KONSULTASI GRATIS <i class="bi bi-arrow-up-right" aria-hidden="true"></i></a>
             </div>
         </div>
     </section>
 </main>
 <button type="button" class="home-search-float" id="openProductSearch" aria-haspopup="dialog" aria-controls="homeProductSearch">
-    <i class="bi bi-search" aria-hidden="true"></i> CARI PRODUK
+    <i class="bi bi-search" aria-hidden="true"></i> <span>Cari produk</span>
 </button>
 <dialog class="home-search-dialog" id="homeProductSearch" aria-labelledby="homeSearchTitle">
     <div class="home-search-heading">

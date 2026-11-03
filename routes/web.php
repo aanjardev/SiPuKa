@@ -116,6 +116,8 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::post('/quality-control/{id}/restore', [QCController::class, 'restore'])->name('quality-control.restore');
     Route::resource('/quality-control', QCController::class)->names('quality-control');
 
+    Route::resource('/partners', \App\Http\Controllers\PartnerController::class)->except('show')->names('partners');
+
     Route::get('/catalog-settings', [CatalogSettingsController::class, 'edit'])->name('catalog-settings.index');
     Route::post('/catalog-settings', [CatalogSettingsController::class, 'update'])->name('catalog-settings.update');
     Route::delete('/catalog-settings/gallery/{id}', [CatalogSettingsController::class, 'destroyGallery'])->name('catalog-settings.gallery.destroy');

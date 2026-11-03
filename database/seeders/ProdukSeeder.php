@@ -61,7 +61,7 @@ class ProdukSeeder extends Seeder
             'harga_jual' => 900000,
             'stok_produk' => 1,
             'status' => 'Second',
-            'grade' => 'Unggulan',
+            'grade' => 'A',
             'deskripsi_produk' => 'KONDISI :
 - Layar Flip 180°
 - Flash Baik
@@ -106,7 +106,7 @@ KELENGKAPAN:
             'harga_jual' => 2450000,
             'stok_produk' => 1,
             'status' => 'Second',
-            'grade' => 'Standar',
+            'grade' => 'B',
             'deskripsi_produk' => 'TYPE  : Nikon D5200 + kit 18 55mm
 
 HARGA : 2.450.000
@@ -169,7 +169,7 @@ Untuk memaksimalkan pengiriman :
             'harga_jual' => 3300000,
             'stok_produk' => 1,
             'status' => 'Second',
-            'grade' => 'Unggulan',
+            'grade' => 'A',
             'deskripsi_produk' => 'TYPE  : Fujifilm X a10 + kit 16 50mm (Pink)
 
 HARGA : 3.300.000
@@ -278,7 +278,7 @@ Untuk memaksimalkan pengiriman :
             'harga_jual' => 1900000,
             'stok_produk' => 1,
             'status' => 'Second',
-            'grade' => 'Unggulan',
+            'grade' => 'A',
             'deskripsi_produk' => 'TYPE  : Instax mini Li Play Brown Second
 
 HARGA : 1.900.000
@@ -334,7 +334,7 @@ Untuk memaksimalkan pengiriman :
             'harga_jual' => 2350000,
             'stok_produk' => 1,
             'status' => 'Second',
-            'grade' => 'Unggulan',
+            'grade' => 'A',
             'deskripsi_produk' => 'TYPE : Canon Ixus 185
 
 HARGA : 2.350.000
@@ -395,7 +395,7 @@ Untuk memaksimalkan pengiriman :
             'harga_jual' => 5250000,
             'stok_produk' => 1,
             'status' => 'Second',
-            'grade' => 'Unggulan',
+            'grade' => 'A',
             'deskripsi_produk' => 'TYPE : Insta 360 One RS Twin double lensa (4k dan  360)
 HARGA: 5.250.000
 
@@ -786,7 +786,7 @@ KELENGKAPAN:
             'nama_produk' => 'Sony a5100 + kit 16 50mm (Black) Second Kondisi Baik',
             'harga_jual' => 5250000,
             'stok_produk' => 1,
-            'grade' => 'Unggulan',
+            'grade' => 'A',
             'status' => 'Second',
             'deskripsi_produk' => 'KONDISI :
 ● Toucscreen Baik

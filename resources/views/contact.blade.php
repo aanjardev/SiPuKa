@@ -21,7 +21,7 @@
 @section('meta_description', 'Alamat, jam operasional, WhatsApp, dan lokasi toko ' . ($cat_setting?->nama_website ?? 'PusatKamera.id') . '.')
 
 @push('styles')
-    <link rel="stylesheet" href="{{ \App\Helpers\CssAssetHelper::css('css/legacy/contact-brutal.css') }}?v=3">
+    <link rel="stylesheet" href="{{ \App\Helpers\CssAssetHelper::css('css/legacy/contact-brutal.css') }}?v=4">
 @endpush
 
 @section('content')
@@ -45,7 +45,7 @@
         <div class="container">
             <div class="contact-grid">
                 <div class="contact-details">
-                    <div class="contact-section-title"><span>01</span><h2>KUNJUNGI TOKO</h2></div>
+                    <div class="contact-section-title"><h2>KUNJUNGI TOKO</h2></div>
                     @if($stores->count() > 1)
                         <div class="d-flex flex-wrap gap-2 mb-3" role="tablist" aria-label="Pilih cabang">
                             @foreach($stores as $index => $branch)
@@ -89,7 +89,7 @@
                 </div>
 
                 <div class="contact-map-wrap">
-                    <div class="contact-section-title"><span>02</span><h2>LOKASI KAMI</h2></div>
+                    <div class="contact-section-title"><h2>LOKASI KAMI</h2></div>
                     <div class="contact-map">
                         @forelse($stores as $index => $branch)
                             <div class="branch-map" data-branch="{{ $branch['id'] }}" @if($index !== 0) hidden @endif>
@@ -118,7 +118,7 @@
 
     <section class="contact-form-section">
         <div class="container">
-            <div class="contact-form-heading"><span>03 / CERITAKAN KEBUTUHANMU</span><h2>BINGUNG PILIH<br>KAMERA YANG MANA?</h2></div>
+            <div class="contact-form-heading"><span>CERITAKAN KEBUTUHANMU</span><h2>BINGUNG PILIH<br>KAMERA YANG MANA?</h2></div>
             <form id="whatsappContactForm" class="contact-form" data-phone="{{ $store['wa_phone'] ?? '' }}">
                 @if($stores->count() > 1)<label><span>CABANG</span><select id="contactBranch">@foreach($stores as $branch)<option value="{{ $branch['id'] }}" data-phone="{{ $branch['wa_phone'] }}">{{ $branch['nama'] }}</option>@endforeach</select></label>@endif
                 <label><span>NAMA</span><input type="text" id="contactName" placeholder="Nama kamu" required></label>

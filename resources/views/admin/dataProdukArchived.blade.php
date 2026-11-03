@@ -78,7 +78,7 @@
                             <div class="d-flex align-items-center gap-3">
                                 <div class="flex-shrink-0 position-relative">
                                     @if ($product->gambarUtama)
-                                    <img src="{{ $product->gambarUtama->url }}" loading="lazy"
+                                    <img src="{{ $product->gambarUtama->thumbnail_url }}" loading="lazy"
                                          alt="Img"
                                          class="rounded-3 shadow-sm"
                                          style="width: 45px; height: 45px; object-fit: cover;">

@@ -441,3 +441,10 @@
     </script>
     @endif
 @endpush
+
+@push('animation-styles')
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+@endpush
+@push('animation-scripts')
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+@endpush

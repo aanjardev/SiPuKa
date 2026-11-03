@@ -20,22 +20,24 @@ class PageController extends Controller
             ->take(8)
             ->get();
 
-        $cat_setting = CatalogSettings::first();
-        $kategoris = Kategori::orderBy('id')->take(6)->get();
+        $cat_setting = app(\App\Services\StorefrontData::class)->settings();
+        $kategoris = Kategori::orderBy('nama_kategori')->get();
         $managedBudgetCategories = KategoriHarga::active()->get();
+        $partners = \App\Models\Partner::where('is_active', true)->orderBy('id')->get();
+        $showPartnerDemo = !\App\Models\Partner::exists();
 
-        return view('mainPage', compact('latestProducts', 'cat_setting', 'kategoris', 'managedBudgetCategories'));
+        return view('mainPage', compact('latestProducts', 'cat_setting', 'kategoris', 'managedBudgetCategories', 'partners', 'showPartnerDemo'));
 
     }
 
     public function about(){
-        $cat_setting = CatalogSettings::first();
+        $cat_setting = app(\App\Services\StorefrontData::class)->settings();
         $gallery = CatalogCustomerGallery::orderBy('sort_order')->orderBy('id')->get();
         return view("AboutStore", compact('cat_setting', 'gallery'));
     }
 
     public function contact(){
-        $cat_setting = CatalogSettings::first();
+        $cat_setting = app(\App\Services\StorefrontData::class)->settings();
         $stores = Branch::with('jamOperasional')
             ->where('is_active', true)
             ->get()

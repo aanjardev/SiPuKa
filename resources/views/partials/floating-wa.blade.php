@@ -1,5 +1,5 @@
 @php
-    $setting = $cat_setting ?? \App\Models\CatalogSettings::first();
+    $setting = $cat_setting ?? app(\App\Services\StorefrontData::class)->settings();
 
     $rawPhone = preg_replace('/\D+/', '', $setting?->nomor_telepon ?? '');
     if ($rawPhone && str_starts_with($rawPhone, '0')) {
@@ -22,4 +22,3 @@
 @endif
 
 <!-- WhatsApp Button Styles -->
-<link rel="stylesheet" href="{{ \App\Helpers\CssAssetHelper::css('css/legacy/components/floating-wa.css') }}">

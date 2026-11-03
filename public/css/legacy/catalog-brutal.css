@@ -781,3 +781,358 @@
         min-height: 43px;
     }
 }
+
+
+/* Static labels do not share the outline of interactive controls. */
+.catalog-brutal .catalog-kicker,
+.catalog-brutal .catalog-badge {
+    border: 0;
+    box-shadow: none;
+}
+
+/* Open toolbar: typography and underlines replace nested boxed controls. */
+.catalog-brutal .catalog-controls {
+    background: var(--pkm-paper);
+    border-bottom: 1px solid #d8d5cc;
+    padding: 2rem 0;
+}
+.catalog-brutal .catalog-dropdown-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 2.5rem;
+}
+.catalog-brutal .catalog-dropdown-row > details {
+    flex: 0 1 280px;
+    min-width: 0;
+}
+.catalog-brutal .catalog-dropdown summary,
+.catalog-brutal .catalog-dropdown summary:hover,
+.catalog-brutal .catalog-dropdown[open] summary,
+.catalog-brutal .catalog-sort-custom .sort-dropdown summary {
+    min-height: 56px;
+    padding: 0.5rem 0;
+    gap: 1rem;
+    border: 0;
+    border-bottom: 1px solid #aaa79e;
+    background: transparent;
+    color: var(--pkm-black);
+    box-shadow: none;
+    transform: none;
+}
+.catalog-brutal .catalog-dropdown summary:hover,
+.catalog-brutal .catalog-dropdown[open] summary {
+    border-bottom-color: #111;
+}
+.catalog-brutal .catalog-dropdown summary small,
+.catalog-brutal .catalog-search > label,
+.catalog-brutal .catalog-sort-custom > span {
+    color: #626058;
+    font-size: 0.7rem;
+    font-weight: 650;
+    letter-spacing: 0.08em;
+}
+.catalog-brutal .catalog-dropdown summary strong {
+    font-size: 1rem;
+    font-weight: 650;
+}
+.catalog-brutal .catalog-dropdown summary > i {
+    flex: 0 0 auto;
+    width: auto;
+    height: auto;
+    margin: 0;
+    border: 0;
+    font-size: 0.85rem;
+}
+.catalog-brutal .catalog-search-form {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(180px, 240px);
+    align-items: end;
+    gap: 2.5rem;
+    margin-top: 1.5rem;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+}
+.catalog-brutal .catalog-search {
+    display: block;
+    min-width: 0;
+}
+.catalog-brutal .catalog-search > div {
+    grid-template-columns: 24px minmax(0, 1fr) auto;
+    align-items: center;
+    min-height: 56px;
+    border: 0;
+    border-bottom: 1px solid #aaa79e;
+}
+.catalog-brutal .catalog-search > div:focus-within {
+    border-bottom-color: #111;
+    box-shadow: 0 1px 0 #111;
+}
+.catalog-brutal .catalog-search i,
+.catalog-brutal .catalog-search input {
+    border: 0;
+    background: transparent;
+    font-weight: 500;
+}
+.catalog-brutal .catalog-search input {
+    min-height: 48px;
+    padding: 0.65rem 0.5rem;
+}
+.catalog-brutal .catalog-search button {
+    min-height: 44px;
+    padding: 0.5rem 0;
+    margin-left: 0.75rem;
+    border: 0;
+    background: transparent;
+    color: #111;
+    font-size: 0.8rem;
+    font-weight: 750;
+}
+.catalog-brutal .catalog-search button:hover {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+.catalog-brutal .catalog-dropdown-menu {
+    border: 1px solid #dedbd2;
+    border-radius: 8px;
+    box-shadow: 0 8px 28px rgb(0 0 0 / 12%);
+}
+.catalog-brutal .catalog-dropdown-menu p {
+    border: 0;
+    background: transparent;
+    color: #626058;
+    font-weight: 600;
+}
+.catalog-brutal .catalog-dropdown-menu a {
+    border: 0;
+    font-weight: 500;
+}
+.catalog-brutal .catalog-dropdown-menu a:hover,
+.catalog-brutal .catalog-dropdown-menu a.active {
+    background: #fff5bd;
+}
+.catalog-brutal .catalog-dropdown-menu a i {
+    width: auto;
+    height: auto;
+    border: 0;
+    background: transparent;
+    color: #111;
+}
+.catalog-brutal .active-filter-row b {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    font-weight: 600;
+}
+.catalog-brutal .active-filter-row b::after {
+    content: ' /';
+    margin-left: 0.5rem;
+    color: #888;
+}
+.catalog-brutal .catalog-controls :is(summary, button, a):focus-visible {
+    outline: 2px solid #8a6900;
+    outline-offset: 4px;
+}
+@media (max-width: 767px) {
+    .catalog-brutal .catalog-dropdown-row {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1.25rem;
+    }
+    .catalog-brutal .catalog-search-form {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 1.25rem;
+    }
+    .catalog-brutal .catalog-sort-custom {
+        width: min(100%, 280px);
+        justify-self: end;
+    }
+}
+@media (max-width: 380px) {
+    .catalog-brutal .catalog-dropdown-row {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+/* Warm accents give the open toolbar character without raised cards. */
+.catalog-brutal .catalog-controls {
+    background: var(--pkm-paper);
+    border-bottom-color: #e5dcae;
+}
+.catalog-brutal .catalog-dropdown-row {
+    padding-left: 1rem;
+    border-left: 4px solid var(--pkm-yellow);
+}
+.catalog-brutal .catalog-dropdown summary small,
+.catalog-brutal .catalog-search > label,
+.catalog-brutal .catalog-sort-custom > span {
+    display: block;
+    margin-bottom: 0.3rem;
+    color: #796000;
+    font-size: 0.7rem;
+    font-weight: 750;
+    letter-spacing: 0.09em;
+}
+.catalog-brutal .catalog-dropdown summary,
+.catalog-brutal .catalog-sort-custom .sort-dropdown summary {
+    border-bottom-color: #c8bb88;
+}
+.catalog-brutal .catalog-dropdown summary:hover,
+.catalog-brutal .catalog-dropdown[open] summary {
+    border-bottom-color: #8a6900;
+    color: #795c00;
+}
+.catalog-brutal .catalog-dropdown summary > i {
+    color: #8a6900;
+}
+.catalog-brutal .catalog-search > div {
+    padding: 0 0.75rem;
+    border-bottom: 2px solid #c6a829;
+    border-radius: 8px 8px 0 0;
+    background: rgb(255 255 255 / 65%);
+}
+.catalog-brutal .catalog-search > div:focus-within {
+    border-bottom-color: #8a6900;
+    background: #fffdf3;
+    box-shadow: none;
+}
+.catalog-brutal .catalog-search i {
+    color: #8a6900;
+}
+.catalog-brutal .catalog-search button {
+    min-height: 36px;
+    padding: 0.4rem 0.85rem;
+    border-radius: 999px;
+    background: var(--pkm-yellow);
+    color: #111;
+}
+.catalog-brutal .catalog-search button:hover {
+    background: #ebc400;
+    text-decoration: none;
+}
+.catalog-brutal .catalog-dropdown-menu a.active {
+    border-left: 3px solid #c49b00;
+    padding-left: calc(1rem - 3px);
+    font-weight: 750;
+}
+.catalog-brutal .results-heading h2 {
+    margin: 0;
+    padding-left: 0.8rem;
+    border-left: 4px solid var(--pkm-yellow);
+}
+.catalog-brutal .results-heading p strong {
+    color: #806200;
+}
+.catalog-brutal .active-filter-row {
+    color: #796000;
+}
+.catalog-brutal .active-filter-row b {
+    color: #111;
+}
+
+/* Match search, filters, and sorting as one family of flat fields. */
+.catalog-brutal .catalog-dropdown-row {
+    padding-left: 0;
+    border-left: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
+}
+.catalog-brutal .catalog-search-form {
+    gap: 1.5rem;
+}
+.catalog-brutal .catalog-dropdown summary,
+.catalog-brutal .catalog-dropdown summary:hover,
+.catalog-brutal .catalog-dropdown[open] summary,
+.catalog-brutal .catalog-sort-custom .sort-dropdown summary {
+    min-height: 56px;
+    padding: 0.65rem 0.85rem;
+    border: 0;
+    border-bottom: 2px solid #c6a829;
+    border-radius: 8px 8px 0 0;
+    background: rgb(255 255 255 / 65%);
+    color: #111;
+    box-shadow: none;
+    transform: none;
+}
+.catalog-brutal .catalog-dropdown-row summary {
+    flex-wrap: wrap;
+    position: relative;
+    gap: 0;
+}
+.catalog-brutal .catalog-dropdown-row summary > span {
+    width: 100%;
+    padding-right: 1.75rem;
+}
+.catalog-brutal .catalog-dropdown-row summary > i {
+    position: absolute;
+    right: 0.85rem;
+    bottom: 1rem;
+}
+.catalog-brutal .catalog-dropdown summary:hover,
+.catalog-brutal .catalog-dropdown[open] summary,
+.catalog-brutal .catalog-search > div:focus-within {
+    background: #fffdf3;
+    border-bottom-color: #8a6900;
+    box-shadow: none;
+}
+.catalog-brutal .catalog-dropdown-row summary {
+    min-height: 82px;
+}
+.catalog-brutal .catalog-search,
+.catalog-brutal .catalog-sort-custom {
+    display: grid;
+    grid-template-rows: auto 56px;
+    gap: 0.3rem;
+    align-self: stretch;
+}
+.catalog-brutal .catalog-search > label,
+.catalog-brutal .catalog-sort-custom > span,
+.catalog-brutal .catalog-dropdown summary small {
+    margin: 0 0 0.3rem;
+    font-size: 0.7rem;
+    line-height: 1.4;
+    font-weight: 750;
+    color: #796000;
+    letter-spacing: 0.09em;
+}
+.catalog-brutal .catalog-search > div {
+    padding: 0 0.85rem;
+    min-height: 56px;
+}
+.catalog-brutal .catalog-dropdown summary strong,
+.catalog-brutal .catalog-search input {
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.5;
+}
+@media (max-width: 767px) {
+    .catalog-brutal .catalog-sort-custom {
+        width: 100%;
+        justify-self: stretch;
+    }
+}
+@media (max-width: 380px) {
+    .catalog-brutal .catalog-dropdown-row {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.catalog-brutal .catalog-filter-field {
+    display: grid;
+    grid-template-rows: auto 56px;
+    gap: 0.3rem;
+    min-width: 0;
+}
+.catalog-brutal .catalog-field-label {
+    margin: 0 0 0.3rem;
+    font-size: 0.7rem;
+    line-height: 1.4;
+    font-weight: 750;
+    color: #796000;
+    letter-spacing: 0.09em;
+}
+.catalog-brutal .catalog-dropdown-row summary {
+    min-height: 56px;
+}

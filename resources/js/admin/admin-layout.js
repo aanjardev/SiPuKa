@@ -148,3 +148,33 @@ document.addEventListener("DOMContentLoaded", function () {
         collapse.addEventListener('hidden.bs.collapse', () => toggle.classList.add('collapsed'));
     });
 });
+
+// Lock partner forms after native validation and confirmation have succeeded.
+document.addEventListener('submit', (event) => {
+    const form = event.target;
+    if (!form.matches('form[data-prevent-double-submit]') || event.defaultPrevented) return;
+    if (form.dataset.submitting === 'true') {
+        event.preventDefault();
+        return;
+    }
+    form.dataset.submitting = 'true';
+    form.setAttribute('aria-busy', 'true');
+    form.querySelectorAll('button[type="submit"], input[type="submit"]').forEach((button) => {
+        button.dataset.originalLabel = button.tagName === 'INPUT' ? button.value : button.innerHTML;
+        button.disabled = true;
+        if (button.tagName === 'INPUT') button.value = 'Memproses...';
+        else button.textContent = 'Memproses...';
+    });
+});
+window.addEventListener('pageshow', () => {
+    document.querySelectorAll('form[data-prevent-double-submit]').forEach((form) => {
+        delete form.dataset.submitting;
+        form.removeAttribute('aria-busy');
+        form.querySelectorAll('[data-original-label]').forEach((button) => {
+            button.disabled = false;
+            if (button.tagName === 'INPUT') button.value = button.dataset.originalLabel;
+            else button.innerHTML = button.dataset.originalLabel;
+            delete button.dataset.originalLabel;
+        });
+    });
+});

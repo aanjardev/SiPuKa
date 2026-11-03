@@ -431,5 +431,6 @@
             labelBulan: @json($labelBulan)
         };
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     @vite('resources/js/admin/pages/dashboard.js')
 @endpush

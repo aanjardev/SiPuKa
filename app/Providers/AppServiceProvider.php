@@ -12,7 +12,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-
+        $this->app->scoped(\App\Services\StorefrontData::class);
     }
 
     /**
@@ -20,6 +20,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        \Illuminate\Pagination\Paginator::useBootstrapFive();
+
         if (env('FORCE_HTTPS', false)) {
             URL::forceScheme('https');
         }

@@ -1,6 +1,6 @@
 @php
-    $setting = $cat_setting ?? \App\Models\CatalogSettings::first();
-    $store = \App\Models\Branch::with('jamOperasional')->where('is_active', true)->first();
+    $setting = $cat_setting ?? app(\App\Services\StorefrontData::class)->settings();
+    $store = app(\App\Services\StorefrontData::class)->branch();
     $phone = $store?->nomor_telepon ?: $setting?->nomor_telepon;
     $rawPhone = preg_replace('/\D+/', '', $phone ?? '');
     if ($rawPhone && str_starts_with($rawPhone, '0')) {
@@ -27,7 +27,7 @@
     <div class="container">
         <div class="footer-main pt-5">
             <div class="footer-intro">
-                <span class="footer-logo"><img src="{{ $setting?->logo_url ?: asset('mainIMG/logopk.png') }}" onerror="this.onerror=null;this.src='{{ asset('mainIMG/logopk.png') }}'" alt="Logo {{ $setting?->nama_website ?? 'PusatKamera.id' }}"></span>
+                <span class="footer-logo"><img src="{{ $setting?->logo_url ?: asset('mainIMG/logopk.webp') }}" onerror="this.onerror=null;this.src='{{ asset('mainIMG/logopk.webp') }}'" alt="Logo {{ $setting?->nama_website ?? 'PusatKamera.id' }}"></span>
                 <h2>{{ $setting?->nama_website ?? 'PusatKamera.id' }}</h2>
                 <p>{{ $setting?->description ?? 'Spesialis kamera pemula untuk pelajar, mahasiswa, ekstrakurikuler fotografi, dan lembaga pendidikan.' }}</p>
             </div>
@@ -66,5 +66,3 @@
         </div>
     </div>
 </footer>
-
-<link rel="stylesheet" href="{{ \App\Helpers\CssAssetHelper::css('css/legacy/footer-brutal.css') }}?v=2">

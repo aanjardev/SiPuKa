@@ -1,5 +1,5 @@
 @php
-    $setting = \App\Models\CatalogSettings::first();
+    $setting = app(\App\Services\StorefrontData::class)->settings();
 @endphp
 <!DOCTYPE html>
 <html lang="id">
@@ -14,9 +14,9 @@
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:type" content="website">
     @if($setting?->og_image_url)<meta property="og:image" content="{{ $setting->og_image_url }}">@endif
-    <link rel="icon" href="{{ $setting?->logo_url ?: asset('mainIMG/logopk.png') }}">
-    <link rel="shortcut icon" href="{{ $setting?->logo_url ?: asset('mainIMG/logopk.png') }}">
-    <link rel="apple-touch-icon" href="{{ $setting?->logo_url ?: asset('mainIMG/logopk.png') }}">
+    <link rel="icon" href="{{ $setting?->logo_url ?: asset('mainIMG/logopk.webp') }}">
+    <link rel="shortcut icon" href="{{ $setting?->logo_url ?: asset('mainIMG/logopk.webp') }}">
+    <link rel="apple-touch-icon" href="{{ $setting?->logo_url ?: asset('mainIMG/logopk.webp') }}">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,9 +25,12 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    @stack('animation-styles')
     <link rel="stylesheet" href="{{ \App\Helpers\CssAssetHelper::css('css/legacy/header.css') }}?v=pk-navbar-4">
     <link rel="stylesheet" href="{{ \App\Helpers\CssAssetHelper::css('css/legacy/storefront.css') }}?v=2">
+
+    <link rel="stylesheet" href="{{ \App\Helpers\CssAssetHelper::css('css/legacy/footer-brutal.css') }}?v=2">
+    <link rel="stylesheet" href="{{ \App\Helpers\CssAssetHelper::css('css/legacy/components/floating-wa.css') }}">
 
     @stack('styles')
 </head>
@@ -40,7 +43,7 @@
     @include('partials.floating-wa')
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    @stack('animation-scripts')
     @stack('scripts')
 </body>
 </html>

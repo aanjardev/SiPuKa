@@ -16,6 +16,8 @@ class Kernel extends ConsoleKernel
 
 
 
+        $schedule->command('images:prune-cache')->daily()->withoutOverlapping();
+
         $schedule->command('queue:work --stop-when-empty --tries=3')
                  ->everyMinute()
                  ->withoutOverlapping();
