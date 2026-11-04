@@ -20,7 +20,7 @@
 @section('title', $produk->nama_produk . ' — PusatKamera.id')
 
 @push('styles')
-    <link rel="stylesheet" href="{{ \App\Helpers\CssAssetHelper::css('css/legacy/product-detail-brutal.css') }}?v=9">
+    <link rel="stylesheet" href="{{ \App\Helpers\CssAssetHelper::css('css/legacy/product-detail-brutal.css') }}?v=12">
 @endpush
 
 @section('content')
@@ -33,7 +33,12 @@
                     <span>/</span>
                     <span>{{ $produk->kategori?->nama_kategori ?? 'Produk' }}</span>
                 </nav>
-                <div class="detail-main-image" id="galleryPreview">
+                <div class="detail-main-image {{ $produk->video_url ? 'has-video' : '' }}" id="galleryPreview">
+                    @if($produk->video_url)
+                        <a href="{{ $produk->video_url }}" class="detail-video-link" target="_blank" rel="noopener noreferrer" aria-label="Lihat video {{ $produk->nama_produk }}">
+                            <i class="bi bi-youtube" aria-hidden="true"></i> Video produk <i class="bi bi-arrow-up-right" aria-hidden="true"></i>
+                        </a>
+                    @endif
                     <img fetchpriority="high" decoding="async" id="mainProductImage" src="{{ $galleryImageUrls->first() }}" alt="{{ $produk->nama_produk }}">
                     @if($produk->grade === 'A')<span class="detail-sticker">PRODUK UNGGULAN</span>@endif
                 </div>
@@ -80,13 +85,11 @@
                 <dl class="detail-meta">
                     <div><dt>KODE PRODUK</dt><dd>{{ $produk->kode_sku }}</dd></div>
                     <div><dt>KONDISI</dt><dd>{{ $produk->status }}</dd></div>
-                    <div><dt>GRADE</dt><dd>{{ $produk->grade }}</dd></div>
+                    <div><dt>GRADE</dt><dd>{{ $produk->grade_label }}</dd></div>
                     <div><dt>KATEGORI</dt><dd>{{ $produk->kategori?->nama_kategori ?? '—' }}</dd></div>
                 </dl>
 
-                @if($produk->instagram_link)
-                    <a href="{{ $produk->instagram_link }}" class="detail-video-link" target="_blank" rel="noopener"><i class="bi bi-youtube" aria-hidden="true"></i> LIHAT VIDEO KONDISI FISIK <i class="bi bi-arrow-up-right"></i></a>
-                @endif
+
 
                 <section class="detail-inline-description">
                     <h2>DESKRIPSI PRODUK</h2>

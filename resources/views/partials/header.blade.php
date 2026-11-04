@@ -26,6 +26,12 @@
                     <a class="nav-link {{ Request::is('katalog*') ? 'active' : '' }}" href="/katalog">KATALOG</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link {{ Request::is('jual-kamera') ? 'active' : '' }}" href="{{ route('sell-camera') }}">JUAL KAMERA</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ Request::is('testimoni') ? 'active' : '' }}" href="{{ route('testimonials') }}">TESTIMONI</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link {{ Request::is('contact') ? 'active' : '' }}" href="/contact">KONTAK</a>
                 </li>
             </ul>

@@ -1,0 +1,21 @@
+.sell-camera-page { padding: clamp(2rem, 5vw, 4rem) 0; background: var(--pkm-paper, #f7f4ec); color: #111; }
+.sell-camera-heading { max-width: 800px; margin: 0 auto 2rem; text-align: center; }
+.sell-camera-heading h1 { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 900; margin-bottom: 1rem; }
+.sell-camera-heading p, .sell-camera-empty { color: #626058; line-height: 1.7; }
+.sell-camera-posters { display: grid; gap: 1.5rem; max-width: 800px; margin: 0 auto; }
+.sell-camera-poster { display: block; width: 100%; padding: 0; border: 0; background: transparent; cursor: zoom-in; box-shadow: none; }
+.sell-camera-poster img { display: block; width: 100%; height: auto; object-fit: contain; }
+.sell-camera-poster:focus-visible { outline: 3px solid #806200; outline-offset: 4px; }
+.sell-camera-action { text-align: center; margin: 2rem auto 0; max-width: 800px; }
+.sell-camera-cta { display: inline-flex; align-items: center; justify-content: center; gap: .7rem; min-height: 48px; padding: .9rem 1.2rem; background: #ffd600; color: #111; border: 3px solid #111; font-weight: 800; text-decoration: none; }
+.sell-camera-cta:hover { background: #ffe34d; color: #111; }
+.sell-camera-cta:focus-visible { outline: 3px solid #806200; outline-offset: 4px; }
+.poster-dialog { width: min(1500px, calc(100% - 2rem)); max-width: none; max-height: calc(100dvh - 2rem); padding: 1rem; border: 0; background: #fff; color: #111; }
+.poster-dialog::backdrop { background: rgb(0 0 0 / 78%); }
+.poster-dialog-heading { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.poster-dialog-heading h2 { font-size: 1rem; margin: 0; }
+.poster-dialog-heading button { display: grid; place-items: center; width: 44px; height: 44px; border: 0; background: #ffd600; color: #111; }
+.poster-dialog-hint { font-size: .8rem; color: #626058; margin: .5rem 0; }
+.poster-dialog-image { max-height: calc(100dvh - 10rem); overflow: auto; }
+.poster-dialog-image img { display: block; width: auto; max-width: none; height: auto; }
+@media (max-width: 575px) { .sell-camera-cta { width: 100%; font-size: .85rem; } }

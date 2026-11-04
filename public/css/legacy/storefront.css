@@ -3,3 +3,55 @@ html{scroll-behavior:smooth}body{background:var(--pkm-paper);color:var(--pkm-bla
 .navbar#main-header .navbar-brand{gap:.7rem}.navbar#main-header .brand-logo{display:grid;place-items:center;width:48px;height:44px;background:var(--pkm-black);color:var(--pkm-yellow);border:3px solid var(--pkm-black);box-shadow:4px 4px 0 var(--pkm-white);font-size:1.45rem;transform:rotate(-2deg)}.navbar#main-header .brand-text{color:var(--pkm-black)!important;text-shadow:none!important}.navbar#main-header .nav-link{color:var(--pkm-black)!important;border-radius:0!important}.navbar#main-header .nav-link:hover,.navbar#main-header .nav-link.active{color:var(--pkm-black)!important;background:var(--pkm-white)!important}.navbar#main-header .navbar-toggler-icon{filter:none;background-image:var(--bs-navbar-toggler-icon-bg)}
 .navbar#main-header .brand-logo img{width:100%;height:100%;max-width:none;object-fit:contain;background:var(--pkm-black)}
 @media(max-width:991px){body{padding-top:76px}.navbar#main-header .navbar-collapse{background:var(--pkm-yellow);padding:1rem 0}.navbar#main-header .nav-link{margin:.3rem 0;text-align:left;padding:.75rem}}
+
+/* Product content and direct video actions are separate links. */
+.home-brutal .home-product-card,
+.catalog-brutal .catalog-product-card {
+    display: flex;
+    flex-direction: column;
+}
+.home-product-link,
+.catalog-product-link {
+    display: block;
+    flex: 1;
+    min-width: 0;
+    color: inherit;
+    text-decoration: none;
+}
+.home-product-link:hover,
+.catalog-product-link:hover {
+    color: inherit;
+}
+.home-brutal .product-card-video,
+.catalog-brutal .product-card-video {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 44px;
+    margin: 0 0.75rem 0.75rem;
+    padding: 0.6rem;
+    border: 0;
+    border-radius: 6px;
+    background: #fff3bd;
+    color: #111;
+    font-size: 0.8rem;
+    font-weight: 750;
+    text-decoration: none;
+    box-shadow: none;
+}
+.product-card-video > .bi-youtube {
+    color: #c62828;
+    font-size: 1.1rem;
+}
+.home-brutal .product-card-video:hover,
+.catalog-brutal .product-card-video:hover {
+    background: #ffd600;
+    color: #111;
+}
+.product-card-video:focus-visible,
+.home-product-link:focus-visible,
+.catalog-product-link:focus-visible {
+    outline: 2px solid #806200;
+    outline-offset: 3px;
+}

@@ -183,6 +183,18 @@
                     </div>
 
                     <div class="submenu-item">
+                        <a href="{{ route('admin.sell-camera-posters.index') }}" class="submenu-link">
+                            <i class="fas fa-images submenu-icon"></i><span>Panduan Jual Kamera</span>
+                        </a>
+                    </div>
+
+                    <div class="submenu-item">
+                        <a href="{{ route('admin.testimonials.index') }}" class="submenu-link">
+                            <i class="fas fa-comment-dots submenu-icon"></i><span>Testimoni</span>
+                        </a>
+                    </div>
+
+                    <div class="submenu-item">
                         <a href="{{ route('admin.partners.index') }}" class="submenu-link">
                             <i class="fas fa-handshake submenu-icon"></i>
                             <span>Partner</span>

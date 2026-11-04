@@ -2,3 +2,4 @@
 .footer-logo img{width:100%;height:100%;object-fit:contain;background:#111}
 .footer-logo{width:70px;height:70px;background:#111;border:0;box-shadow:none;transform:none;overflow:hidden}
 @media(max-width:767px){.footer-marquee{justify-content:flex-start;margin-bottom:3rem}.footer-main{grid-template-columns:1fr;padding-bottom:3rem}.brutal-footer .footer-bottom{grid-template-columns:1fr;justify-items:start}.footer-socials{justify-content:flex-start}.footer-panel{box-shadow:6px 6px 0 #fff}.footer-intro h2{max-width:100%;font-size:clamp(1.75rem,8.5vw,2.7rem)}}
+.brutal-footer .footer-bottom nav { flex-wrap: wrap; max-width: 100%; row-gap: .75rem; }

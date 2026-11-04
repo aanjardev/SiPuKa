@@ -35,6 +35,22 @@ class Produk extends Model
         'is_archived' => 'boolean',
     ];
 
+    public function getGradeLabelAttribute(): string
+    {
+        return config('product_grades.labels.'.$this->grade, $this->grade ?: '-');
+    }
+
+    public function getVideoUrlAttribute(): ?string
+    {
+        $url = $this->instagram_link;
+        if (! is_string($url) || ! filter_var($url, FILTER_VALIDATE_URL)
+            || ! in_array(strtolower((string) parse_url($url, PHP_URL_SCHEME)), ['http', 'https'], true)) {
+            return null;
+        }
+
+        return $url;
+    }
+
     public function kategoriHarga()
     {
         return $this->belongsTo(KategoriHarga::class, 'id_kategori_harga');
@@ -55,7 +71,6 @@ class Produk extends Model
         return $this->hasOne(GambarProduk::class, 'id_produk', 'id')->where('is_main', true);
     }
 
-
     public function semuaGambar()
     {
         return $this->hasMany(GambarProduk::class, 'id_produk', 'id');
@@ -69,5 +84,4 @@ class Produk extends Model
     {
         return $this->gambar();
     }
-
 }

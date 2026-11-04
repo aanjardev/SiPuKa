@@ -54,7 +54,7 @@
         <div class="footer-bottom">
             <p>© {{ date('Y') }} PusatKamera.id</p>
             <nav aria-label="Navigasi footer">
-                <a href="/">BERANDA</a><a href="{{ route('product.index') }}">KATALOG</a><a href="/contact">KONTAK</a>
+                <a href="/">BERANDA</a><a href="{{ route('product.index') }}">KATALOG</a><a href="{{ route('sell-camera') }}">JUAL KAMERA</a><a href="{{ route('testimonials') }}">TESTIMONI</a><a href="/contact">KONTAK</a>
             </nav>
             <div class="footer-socials">
                 @foreach($socials as $social)

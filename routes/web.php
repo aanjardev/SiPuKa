@@ -35,6 +35,8 @@ Route::get("/", [PageController::class,"index"]);
 Route::get('/media/image', [\App\Http\Controllers\StoredImageController::class, 'show'])->middleware('signed:relative')->name('stored-image');
 Route::get('/catalog-logo', [CatalogSettingsController::class, 'logo'])->name('catalog.logo');
 Route::get("/about", [PageController::class,"about"]);
+Route::get('/testimoni', [\App\Http\Controllers\TestimonialController::class, 'publicIndex'])->name('testimonials');
+Route::get('/jual-kamera', \App\Http\Controllers\SellCameraController::class)->name('sell-camera');
 Route::get("/contact", [PageController::class,"contact"]);
 Route::get('/sitemap.xml', [PageController::class, 'sitemap'])->name('sitemap');
 Route::get('/robots.txt', [PageController::class, 'robots'])->name('robots');
@@ -115,6 +117,15 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::get('/quality-control/history', [QCController::class, 'history'])->name('quality-control.history');
     Route::post('/quality-control/{id}/restore', [QCController::class, 'restore'])->name('quality-control.restore');
     Route::resource('/quality-control', QCController::class)->names('quality-control');
+
+    Route::get('/sell-camera-posters', [\App\Http\Controllers\SellCameraPosterController::class, 'index'])->name('sell-camera-posters.index');
+    Route::post('/sell-camera-posters', [\App\Http\Controllers\SellCameraPosterController::class, 'store'])->name('sell-camera-posters.store');
+    Route::get('/sell-camera-posters/{poster}/edit', [\App\Http\Controllers\SellCameraPosterController::class, 'edit'])->name('sell-camera-posters.edit');
+    Route::put('/sell-camera-posters/{poster}', [\App\Http\Controllers\SellCameraPosterController::class, 'update'])->name('sell-camera-posters.update');
+    Route::delete('/sell-camera-posters/{poster}', [\App\Http\Controllers\SellCameraPosterController::class, 'destroy'])->name('sell-camera-posters.destroy');
+    Route::patch('/sell-camera-posters/{poster}/move', [\App\Http\Controllers\SellCameraPosterController::class, 'move'])->name('sell-camera-posters.move');
+
+    Route::resource('/testimonials', \App\Http\Controllers\TestimonialController::class)->except('show')->names('testimonials');
 
     Route::resource('/partners', \App\Http\Controllers\PartnerController::class)->except('show')->names('partners');
 

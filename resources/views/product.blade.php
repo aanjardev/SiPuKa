@@ -3,7 +3,7 @@
 @section('title', 'Katalog Kamera — PusatKamera.id')
 
 @push('styles')
-    <link rel="stylesheet" href="{{ \App\Helpers\CssAssetHelper::css('css/legacy/catalog-brutal.css') }}?v=10">
+    <link rel="stylesheet" href="{{ \App\Helpers\CssAssetHelper::css('css/legacy/catalog-brutal.css') }}?v=11">
 @endpush
 
 @section('content')
@@ -116,18 +116,25 @@
             @else
                 <div class="catalog-product-grid">
                     @foreach($products as $product)
-                        <a href="{{ route('product.show', $product->id) }}" class="catalog-product-card">
-                            <div class="catalog-product-media">
-                                @if($product->grade === 'A')<span class="catalog-badge">PILIHAN</span>@endif
-                                @if($product->stok_produk <= 0)<span class="catalog-badge sold">STOK HABIS</span>@endif
-                                <img src="{{ $product->gambarUtama?->thumbnail_url ?? asset('mainIMG/produk.webp') }}" alt="{{ $product->nama_produk }}" loading="lazy" decoding="async">
-                            </div>
-                            <div class="catalog-product-info">
-                                <small>{{ $product->kategori?->nama_kategori ?? 'Kamera' }}</small>
-                                <h3>{{ $product->nama_produk }}</h3>
-                                <div><strong>Rp {{ number_format($product->harga_jual, 0, ',', '.') }}</strong><span><i class="bi bi-arrow-up-right"></i></span></div>
-                            </div>
-                        </a>
+                        <article class="catalog-product-card">
+                            <a href="{{ route('product.show', $product->id) }}" class="catalog-product-link">
+                                <div class="catalog-product-media">
+                                    @if($product->grade === 'A')<span class="catalog-badge">PILIHAN</span>@endif
+                                    @if($product->stok_produk <= 0)<span class="catalog-badge sold">STOK HABIS</span>@endif
+                                    <img src="{{ $product->gambarUtama?->thumbnail_url ?? asset('mainIMG/produk.webp') }}" alt="{{ $product->nama_produk }}" loading="lazy" decoding="async">
+                                </div>
+                                <div class="catalog-product-info">
+                                    <small>{{ $product->kategori?->nama_kategori ?? 'Kamera' }}</small>
+                                    <h3>{{ $product->nama_produk }}</h3>
+                                    <div><strong>Rp {{ number_format($product->harga_jual, 0, ',', '.') }}</strong><span><i class="bi bi-arrow-up-right"></i></span></div>
+                                </div>
+                            </a>
+                            @if($product->video_url)
+                                <a href="{{ $product->video_url }}" class="product-card-video" target="_blank" rel="noopener noreferrer" aria-label="Lihat video {{ $product->nama_produk }}">
+                                    <i class="bi bi-youtube" aria-hidden="true"></i> Lihat video <i class="bi bi-arrow-up-right" aria-hidden="true"></i>
+                                </a>
+                            @endif
+                        </article>
                     @endforeach
                 </div>
 

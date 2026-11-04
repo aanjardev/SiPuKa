@@ -17,7 +17,7 @@
 @section('meta_description', $cat_setting?->seo_description ?? $cat_setting?->description ?? '')
 
 @push('styles')
-    <link rel="stylesheet" href="{{ \App\Helpers\CssAssetHelper::css('css/legacy/home-brutal.css') }}?v=14">
+    <link rel="stylesheet" href="{{ \App\Helpers\CssAssetHelper::css('css/legacy/home-brutal.css') }}?v=15">
 @endpush
 
 @section('content')
@@ -94,20 +94,27 @@
             @else
                 <div class="home-product-grid">
                     @foreach ($latestProducts as $product)
-                        <a href="{{ route('product.show', $product->id) }}" class="home-product-card">
-                            <div class="home-product-media">
-                                @if ($product->stok_produk <= 0)
-                                    <span class="product-badge">STOK HABIS</span>
-                                @elseif ($product->grade === 'A')
-                                    <span class="product-badge">PILIHAN</span>
-                                @endif
-                                <img src="{{ $product->gambarUtama?->thumbnail_url ?? asset('mainIMG/produk.webp') }}" alt="{{ $product->nama_produk }}" loading="lazy" decoding="async">
-                            </div>
-                            <div class="home-product-info">
-                                <h3>{{ $product->nama_produk }}</h3>
-                                <div><strong>Rp {{ number_format($product->harga_jual, 0, ',', '.') }}</strong><span><i class="bi bi-arrow-up-right"></i></span></div>
-                            </div>
-                        </a>
+                        <article class="home-product-card">
+                            <a href="{{ route('product.show', $product->id) }}" class="home-product-link">
+                                <div class="home-product-media">
+                                    @if ($product->stok_produk <= 0)
+                                        <span class="product-badge">STOK HABIS</span>
+                                    @elseif ($product->grade === 'A')
+                                        <span class="product-badge">PILIHAN</span>
+                                    @endif
+                                    <img src="{{ $product->gambarUtama?->thumbnail_url ?? asset('mainIMG/produk.webp') }}" alt="{{ $product->nama_produk }}" loading="lazy" decoding="async">
+                                </div>
+                                <div class="home-product-info">
+                                    <h3>{{ $product->nama_produk }}</h3>
+                                    <div><strong>Rp {{ number_format($product->harga_jual, 0, ',', '.') }}</strong><span><i class="bi bi-arrow-up-right"></i></span></div>
+                                </div>
+                            </a>
+                            @if($product->video_url)
+                                <a href="{{ $product->video_url }}" class="product-card-video" target="_blank" rel="noopener noreferrer" aria-label="Lihat video {{ $product->nama_produk }}">
+                                    <i class="bi bi-youtube" aria-hidden="true"></i> Lihat video <i class="bi bi-arrow-up-right" aria-hidden="true"></i>
+                                </a>
+                            @endif
+                        </article>
                     @endforeach
                 </div>
             @endif
