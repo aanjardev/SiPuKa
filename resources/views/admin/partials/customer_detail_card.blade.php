@@ -32,14 +32,14 @@
             {{-- Nama --}}
             <div class="{{ $colClass }}">
                 <label class="form-label fw-semibold text-secondary small">Nama Lengkap <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" maxlength="50" name="nama" value="{{ old('nama', $pelanggan->nama ?? '') }}"
+                <input type="text" class="form-control" name="nama" maxlength="50" value="{{ old('nama', $pelanggan->nama ?? '') }}"
                     {{ isset($readOnly) && $readOnly ? 'readonly style=background-color:#f8f9fa;' : 'required' }}>
             </div>
 
             {{-- No Telp --}}
             <div class="{{ $colClass }}">
                 <label class="form-label fw-semibold text-secondary small">No. Telepon <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" name="no_telp" value="{{ old('no_telp', $pelanggan->no_telp ?? '') }}"
+                <input type="text" class="form-control" name="no_telp" data-pattern-message="Nomor telepon hanya boleh berisi angka." pattern="[0-9]+" maxlength="20" value="{{ old('no_telp', $pelanggan->no_telp ?? '') }}"
                     {{ isset($readOnly) && $readOnly ? 'readonly style=background-color:#f8f9fa;' : 'required' }}>
             </div>
 
@@ -59,21 +59,21 @@
             {{-- NIK --}}
             <div class="{{ $colClass }}">
                 <label class="form-label fw-semibold text-secondary small">NIK</label>
-                <input type="text" class="form-control" name="identitas" value="{{ old('identitas', $pelanggan->identitas ?? '') }}"
+                <input type="text" class="form-control" name="identitas" data-pattern-message="NIK hanya boleh berisi angka." pattern="[0-9]+" maxlength="20" value="{{ old('identitas', $pelanggan->identitas ?? '') }}"
                     {{ isset($readOnly) && $readOnly ? 'readonly style=background-color:#f8f9fa;' : '' }}>
             </div>
 
             {{-- Email (Full Width) --}}
             {{-- <div class="col-12">
                 <label class="form-label fw-semibold text-secondary small">Email</label>
-                <input type="email" class="form-control" name="email" value="{{ old('email', $pelanggan->email ?? '') }}"
+                <input type="email" class="form-control" name="email" maxlength="100" value="{{ old('email', $pelanggan->email ?? '') }}"
                     {{ isset($readOnly) && $readOnly ? 'readonly style=background-color:#f8f9fa;' : '' }}>
             </div> --}}
 
             {{-- Alamat (Full Width) --}}
             <div class="col-12">
                 <label class="form-label fw-semibold text-secondary small">Alamat Lengkap</label>
-                <textarea class="form-control" name="alamat" rows="3" maxlength="100" {{ isset($readOnly) && $readOnly ? 'readonly style=background-color:#f8f9fa;' : '' }}>{{ old('alamat', $pelanggan->alamat ?? '') }}</textarea>
+                <textarea class="form-control" name="alamat" maxlength="100" rows="3" {{ isset($readOnly) && $readOnly ? 'readonly style=background-color:#f8f9fa;' : '' }}>{{ old('alamat', $pelanggan->alamat ?? '') }}</textarea>
             </div>
 
             {{-- Keterangan (Full Width) --}}

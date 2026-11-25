@@ -70,7 +70,7 @@ return [
 @endphp
 
 <form action="{{ $isEdit ? route('admin.sales.update', $penjualan->id) : route('admin.sales.store') }}"
-    method="POST" id="formPenjualan" data-is-edit="{{ $isEdit ? '1' : '0' }}">
+    method="POST" id="formPenjualan" data-validate-form data-is-edit="{{ $isEdit ? '1' : '0' }}">
     @csrf
     <input type="hidden" name="submission_token" value="{{ old('submission_token', (string) \Illuminate\Support\Str::uuid()) }}">
     <input type="hidden" name="items" id="itemsInput" value='{{ $raw_items ?? '[]' }}'>
@@ -363,7 +363,7 @@ return [
                     <div class="row g-3">
                         <div class="col-12">
                             <label class="form-label fw-semibold text-secondary small">Nama Customer <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control required-field" maxlength="50" id="customer_nama_modal" name="nama" required data-error-message="Nama customer wajib diisi" autofocus>
+                            <input type="text" class="form-control required-field" id="customer_nama_modal" name="nama" maxlength="50" required data-error-message="Nama customer wajib diisi" autofocus>
                             <div class="invalid-feedback">
                                 Nama customer wajib diisi.
                             </div>
@@ -373,7 +373,7 @@ return [
                             <input type="text"
                                    class="form-control required-field"
                                    id="customer_no_telp_modal"
-                                   name="no_telp"
+                                   name="no_telp" maxlength="22"
                                    required
                                    inputmode="numeric"
                                    pattern="[0-9]*"
@@ -396,20 +396,20 @@ return [
                         </div>
                         <div class="col-12">
                             <label class="form-label fw-semibold text-secondary small">Alamat</label>
-                            <input type="text" class="form-control" name="alamat">
+                            <input type="text" class="form-control" name="alamat" maxlength="100">
                         </div>
                         <div class="col-md-6">
                             <label class="form-label fw-semibold text-secondary small">No. Identitas (KTP/SIM)</label>
                             <input type="text"
                                    class="form-control"
-                                   name="identitas"
+                                   name="identitas" maxlength="20"
                                    inputmode="numeric"
                                    pattern="[0-9]*"
                                    data-max-digits="20">
                         </div>
                         <div class="col-md-6">
                             <label class="form-label fw-semibold text-secondary small">Referensi</label>
-                            <input type="text" class="form-control" name="referensi">
+                            <input type="text" class="form-control" name="referensi" maxlength="100">
                         </div>
                         <div class="col-12">
                             <label class="form-label fw-semibold text-secondary small">Keterangan</label>
@@ -446,7 +446,7 @@ return [
                     <div class="row g-3">
                         <div class="col-12">
                             <label class="form-label fw-semibold text-secondary small">Nama Customer <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control required-field" maxlength="50" id="edit_customer_nama_modal" name="nama" required data-error-message="Nama customer wajib diisi">
+                            <input type="text" class="form-control required-field" id="edit_customer_nama_modal" name="nama" maxlength="50" required data-error-message="Nama customer wajib diisi">
                             <div class="invalid-feedback">
                                 Nama customer wajib diisi.
                             </div>
@@ -456,7 +456,7 @@ return [
                             <input type="text"
                                    class="form-control required-field"
                                    id="edit_customer_no_telp_modal"
-                                   name="no_telp"
+                                   name="no_telp" maxlength="22"
                                    required
                                    inputmode="numeric"
                                    pattern="[0-9]*"
@@ -479,20 +479,20 @@ return [
                         </div>
                         <div class="col-12">
                             <label class="form-label fw-semibold text-secondary small">Alamat</label>
-                            <input type="text" class="form-control" name="alamat">
+                            <input type="text" class="form-control" name="alamat" maxlength="100">
                         </div>
                         <div class="col-md-6">
                             <label class="form-label fw-semibold text-secondary small">No. Identitas (KTP/SIM)</label>
                             <input type="text"
                                    class="form-control"
-                                   name="identitas"
+                                   name="identitas" maxlength="20"
                                    inputmode="numeric"
                                    pattern="[0-9]*"
                                    data-max-digits="20">
                         </div>
                         <div class="col-md-6">
                             <label class="form-label fw-semibold text-secondary small">Referensi</label>
-                            <input type="text" class="form-control" name="referensi">
+                            <input type="text" class="form-control" name="referensi" maxlength="100">
                         </div>
                         <div class="col-12">
                             <label class="form-label fw-semibold text-secondary small">Keterangan</label>

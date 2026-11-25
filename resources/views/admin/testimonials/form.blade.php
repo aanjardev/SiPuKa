@@ -5,7 +5,7 @@
     <h1 class="h3 mb-4">{{ $testimonial->exists ? 'Edit Testimoni' : 'Tambah Testimoni' }}</h1>
     <div class="card"><div class="card-body">
         <p class="text-muted small">Masukkan ulasan asli yang boleh ditampilkan, tanpa mengubah maknanya. Screenshot dan rating boleh dikosongkan.</p>
-        <form method="POST" action="{{ $testimonial->exists ? route('admin.testimonials.update', $testimonial) : route('admin.testimonials.store') }}" enctype="multipart/form-data" data-prevent-double-submit data-testimonial-form>
+        <form data-validate-form method="POST" action="{{ $testimonial->exists ? route('admin.testimonials.update', $testimonial) : route('admin.testimonials.store') }}" enctype="multipart/form-data" data-prevent-double-submit data-testimonial-form>
             @csrf
             @if($testimonial->exists) @method('PUT') @else<input type="hidden" name="submission_token" value="{{ old('submission_token', (string) \Illuminate\Support\Str::uuid()) }}">@endif
             @error('submission_token')<p class="text-danger small">{{ $message }}</p>@enderror
@@ -51,7 +51,7 @@
                     <div class="mb-2"><img src="{{ $testimonial->screenshot_preview_url }}" alt="Screenshot ulasan {{ $testimonial->customer_name }}" style="max-width:100%;height:220px;object-fit:contain"></div>
                     <div class="form-check mb-2"><input type="checkbox" id="remove_screenshot" name="remove_screenshot" value="1" class="form-check-input" @checked(old('remove_screenshot', false))><label for="remove_screenshot" class="form-check-label">Hapus screenshot tersimpan</label></div>
                 @endif
-                <input type="file" name="screenshot" id="screenshot" accept="image/png,image/jpeg,image/webp" class="form-control @error('screenshot') is-invalid @enderror">
+                <input type="file" name="screenshot" data-max-bytes="2097152" id="screenshot" accept="image/png,image/jpeg,image/webp" class="form-control @error('screenshot') is-invalid @enderror">
                 <div class="form-text">PNG/JPG/WebP, maksimal 2 MB dan 5000 x 5000 piksel. Kosongkan untuk mempertahankan screenshot lama.</div>
                 @error('screenshot')<div class="invalid-feedback">{{ $message }}</div>@enderror
             </div>

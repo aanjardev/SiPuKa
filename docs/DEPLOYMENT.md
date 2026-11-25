@@ -24,6 +24,14 @@ Jangan menjalankan `db:seed` atau `migrate:fresh` pada production. Seeder proyek
 
 Jika migration gagal, hentikan deployment dan pulihkan backup database sebelum mengulang. Jangan menjalankan rollback otomatis bila migration berisi transformasi data tanpa terlebih dahulu memeriksa dampaknya.
 
+## Catatan kondisi pembelian
+
+Migration `2026_11_25_000000_expand_purchase_condition_notes` memperluas kolom
+`item_pembelian_draft.kondisi_lain_lain` menjadi TEXT. Jalankan migration sebelum
+memakai kode pembelian yang menerima catatan hingga 5.000 karakter, lalu gunakan
+aset hasil `npm run build`. Data lama tetap tersimpan. Rollback ditolak bila masih
+ada catatan melebihi 255 karakter agar data tidak terpotong.
+
 ## Perubahan grade A/B/C
 
 Migration `2026_11_03_000000_convert_product_grades_to_abc` mengubah grade pada

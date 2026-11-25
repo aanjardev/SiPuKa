@@ -12,6 +12,8 @@
 
 window.FormValidator = (function () {
     "use strict";
+    let feedbackId = 0;
+    const initializedForms = new WeakSet();
 
     const defaultMessages = {
         required: "Field ini wajib diisi",
@@ -31,6 +33,7 @@ window.FormValidator = (function () {
      * Set field as invalid
      */
     function setInvalid(field, message) {
+        field.setAttribute("aria-invalid", "true");
         field.classList.add("is-invalid");
         field.classList.remove("is-valid");
 
@@ -40,6 +43,15 @@ window.FormValidator = (function () {
         }
 
         let feedback = findFeedbackElement(field);
+        if (!feedback) {
+            feedback = document.createElement("div");
+            feedback.className = "invalid-feedback";
+            (inputGroup || field).insertAdjacentElement("afterend", feedback);
+        }
+        if (!feedback.id) feedback.id = `validation-error-${++feedbackId}`;
+        const describedBy = new Set((field.getAttribute("aria-describedby") || "").split(/\s+/).filter(Boolean));
+        describedBy.add(feedback.id);
+        field.setAttribute("aria-describedby", [...describedBy].join(" "));
         if (feedback) {
             feedback.textContent = message || getDefaultMessage(field);
             feedback.classList.add("d-block");
@@ -53,6 +65,7 @@ window.FormValidator = (function () {
      * Set field as valid
      */
     function setValid(field) {
+        field.removeAttribute("aria-invalid");
         field.classList.remove("is-invalid");
 
 
@@ -72,6 +85,7 @@ window.FormValidator = (function () {
      * Clear validation state
      */
     function clearValidation(field) {
+        field.removeAttribute("aria-invalid");
         field.classList.remove("is-invalid", "is-valid");
 
         const inputGroup = field.closest(".input-group");
@@ -153,13 +167,26 @@ window.FormValidator = (function () {
      * Validate a single field
      */
     function validateField(field) {
-        const value = field.value.trim();
-        const validateType = field.dataset.validate;
+        if (field.disabled || field.readOnly || field.type === "hidden") return true;
+        const maskedAmount = field.classList.contains("rupiah-mask");
+        const maskedPhone = field.hasAttribute("data-phone-validation");
+        const value = maskedAmount ? field.value.trim().replace(/\./g, "") : maskedPhone ? field.value.trim().replace(/-/g, "") : field.value.trim();
+        const validateType = field.dataset.validate || (maskedAmount ? "amount" : "");
+
+        const validity = field.validity || {};
+        if (validity.badInput) {
+            setInvalid(field, defaultMessages.number);
+            return false;
+        }
+        if (validity.customError) {
+            setInvalid(field, field.validationMessage);
+            return false;
+        }
 
         if (
             !field.classList.contains("required-field") &&
             !field.hasAttribute("required") &&
-            !value
+            !value && !validity.valueMissing
         ) {
             clearValidation(field);
             return true;
@@ -168,10 +195,55 @@ window.FormValidator = (function () {
         if (
             (field.classList.contains("required-field") ||
                 field.hasAttribute("required")) &&
-            !value
+            (!value || validity.valueMissing)
         ) {
-            setInvalid(field);
+            setInvalid(field, field.dataset.errorMessage || defaultMessages.required);
             return false;
+        }
+
+        if (maskedPhone && value && (!/^\d+$/.test(value) || value.length > Number(field.dataset.maxDigits || 20))) {
+            setInvalid(field, `Nomor telepon hanya boleh berisi angka, maksimal ${field.dataset.maxDigits || 20} digit.`);
+            return false;
+        }
+        if (validity.typeMismatch || (validity.patternMismatch && !maskedPhone) || validity.stepMismatch || validity.rangeUnderflow || validity.rangeOverflow) {
+            const message = validity.typeMismatch
+                ? (field.type === "email" ? defaultMessages.email : "Format URL tidak valid")
+                : validity.patternMismatch ? (field.dataset.patternMessage || "Format isian tidak sesuai")
+                : validity.stepMismatch ? `Nilai harus sesuai kelipatan ${field.step || 1}`
+                : validity.rangeUnderflow ? defaultMessages.min.replace("{min}", field.min)
+                : defaultMessages.max.replace("{max}", field.max);
+            setInvalid(field, message);
+            return false;
+        }
+        const after = field.dataset.afterField && field.form?.elements.namedItem(field.dataset.afterField);
+        if (value && after?.value && value < after.value) {
+            setInvalid(field, "Tanggal keluar tidak boleh sebelum tanggal masuk.");
+            return false;
+        }
+        if (field.name?.endsWith("_confirmation")) {
+            const original = field.form?.elements.namedItem(field.name.slice(0, -13));
+            if (original && field.value !== original.value) {
+                setInvalid(field, "Konfirmasi password tidak cocok.");
+                return false;
+            }
+        }
+        const lower = field.dataset.greaterThan && field.form?.elements.namedItem(field.dataset.greaterThan);
+        if (value && lower?.value && Number(value) <= Number(lower.value)) {
+            setInvalid(field, "Harga maksimum harus lebih besar dari harga minimum.");
+            return false;
+        }
+        if (field.type === "file") {
+            const accepted = (field.accept || "").split(",").map(type => type.trim().toLowerCase()).filter(Boolean);
+            for (const file of field.files || []) {
+                if (field.dataset.maxBytes && file.size > Number(field.dataset.maxBytes)) {
+                    setInvalid(field, `Ukuran file maksimal ${Number(field.dataset.maxBytes) / 1024 / 1024} MB.`);
+                    return false;
+                }
+                if (accepted.length && !accepted.some(type => type.startsWith(".") ? file.name.toLowerCase().endsWith(type) : type.endsWith("/*") ? file.type.startsWith(type.slice(0, -1)) : file.type === type)) {
+                    setInvalid(field, `Format file harus sesuai: ${field.accept}.`);
+                    return false;
+                }
+            }
         }
 
         if (
@@ -204,8 +276,14 @@ window.FormValidator = (function () {
                     }
                     break;
                 case "number":
-                    if (isNaN(parseFloat(value))) {
+                    if (!Number.isFinite(Number(value))) {
                         setInvalid(field, defaultMessages.number);
+                        return false;
+                    }
+                    break;
+                case "amount":
+                    if (!/^\d+$/.test(value)) {
+                        setInvalid(field, "Nilai harus berupa bilangan bulat minimal 0.");
                         return false;
                     }
                     break;
@@ -221,12 +299,12 @@ window.FormValidator = (function () {
             }
         }
 
-        if (field.min && parseFloat(value) < parseFloat(field.min)) {
+        if (field.type !== "date" && field.type !== "time" && field.min && Number(value) < Number(field.min)) {
             setInvalid(field, defaultMessages.min.replace("{min}", field.min));
             return false;
         }
 
-        if (field.max && parseFloat(value) > parseFloat(field.max)) {
+        if (field.type !== "date" && field.type !== "time" && field.max && Number(value) > Number(field.max)) {
             setInvalid(field, defaultMessages.max.replace("{max}", field.max));
             return false;
         }
@@ -247,7 +325,7 @@ window.FormValidator = (function () {
         }
 
         if (
-            field.maxLength &&
+            !maskedPhone && field.maxLength &&
             field.maxLength > 0 &&
             value.length > field.maxLength
         ) {
@@ -269,7 +347,7 @@ window.FormValidator = (function () {
      * Validate entire form
      */
     function validateForm(form, options = {}) {
-        const fields = form.querySelectorAll(".required-field, [required]");
+        const fields = form.querySelectorAll("input, select, textarea");
         let isValid = true;
         let firstInvalid = null;
 
@@ -278,7 +356,8 @@ window.FormValidator = (function () {
             if (
                 field.type === "hidden" ||
                 field.disabled ||
-                !isVisible(field)
+                ["submit", "button", "reset"].includes(field.type) ||
+                (!isVisible(field) && !field.closest(".accordion-collapse, .tab-pane"))
             ) {
                 return;
             }
@@ -313,6 +392,21 @@ window.FormValidator = (function () {
      * Scroll to element smoothly
      */
     function scrollToElement(element) {
+        const collapsed = element.closest(".accordion-collapse:not(.show)");
+        if (collapsed && window.bootstrap?.Collapse) {
+            collapsed.addEventListener("shown.bs.collapse", () => scrollToElement(element), { once: true });
+            bootstrap.Collapse.getOrCreateInstance(collapsed, { toggle: false }).show();
+            return;
+        }
+        const tab = element.closest(".tab-pane:not(.active)");
+        if (tab && window.bootstrap?.Tab) {
+            const toggle = [...document.querySelectorAll('[data-bs-toggle="tab"]')].find(el => el.getAttribute("data-bs-target") === `#${tab.id}` || el.getAttribute("href") === `#${tab.id}`);
+            if (toggle) {
+                toggle.addEventListener("shown.bs.tab", () => scrollToElement(element), { once: true });
+                bootstrap.Tab.getOrCreateInstance(toggle).show();
+                return;
+            }
+        }
         const rect = element.getBoundingClientRect();
         const isInViewport = rect.top >= 0 && rect.bottom <= window.innerHeight;
 
@@ -345,11 +439,12 @@ window.FormValidator = (function () {
      * Initialize validation on a form
      */
     function initForm(form, options = {}) {
-        if (!form) return;
+        if (!form || initializedForms.has(form)) return;
+        initializedForms.add(form);
 
         form.setAttribute("novalidate", "true");
 
-        const fields = form.querySelectorAll(".required-field, [required]");
+        const fields = form.querySelectorAll("input, select, textarea");
 
         let isNavigating = false;
         let navigationTimeout = null;
@@ -444,10 +539,10 @@ window.FormValidator = (function () {
 
             if (!validateForm(this, options)) {
                 e.preventDefault();
-                e.stopPropagation();
+                e.stopImmediatePropagation();
                 return false;
             }
-        });
+        }, true);
     }
 
     /**
@@ -469,6 +564,17 @@ window.FormValidator = (function () {
         fields.forEach((field) => clearValidation(field));
     }
 
+    function showErrors(form, errors) {
+        let first;
+        Object.entries(errors).forEach(([name, messages]) => {
+            const field = form.elements.namedItem(name);
+            if (!field?.classList || field.type === "hidden") return;
+            setInvalid(field, [].concat(messages).join("\n"));
+            first ||= field;
+        });
+        if (first) scrollToElement(first);
+    }
+
     return {
         init: init,
         initForm: initForm,
@@ -478,6 +584,7 @@ window.FormValidator = (function () {
         setValid: setValid,
         clearValidation: clearValidation,
         resetForm: resetForm,
+        showErrors: showErrors,
         isValidEmail: isValidEmail,
         isValidPhone: isValidPhone,
     };

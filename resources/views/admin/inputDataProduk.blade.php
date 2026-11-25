@@ -119,7 +119,7 @@ $backRoute = route('admin.products.index');
                             <input
                                 type="url"
                                 class="form-control border-start-0 ps-2 py-2 @error('instagram_link') is-invalid @enderror"
-                                name="instagram_link"
+                                name="instagram_link" maxlength="255"
                                 value="{{ old('instagram_link', $isEdit ? $product->instagram_link : '') }}"
                                 placeholder="https://www.instagram.com/username">
                         </div>
@@ -289,7 +289,7 @@ $backRoute = route('admin.products.index');
                         <input
                             type="text"
                             class="form-control border-start-0 ps-2 py-2 numeric-only @error('stok_produk') is-invalid @enderror"
-                            name="stok_produk"
+                            name="stok_produk" data-pattern-message="Stok harus berupa bilangan bulat minimal 0." pattern="[0-9]+" min="0" data-validate="number"
                             value="{{ old('stok_produk', $isEdit ? $product->stok_produk : '') }}"
                             placeholder="0"
                             data-maxdigits="4">

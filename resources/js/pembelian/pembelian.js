@@ -222,60 +222,7 @@ class PurchaseDraftController {
     async handleSaveItem() {
         const formValues = this.itemForm.collect();
         const namaItem = (formValues.nama_item || "").trim();
-        const kategoriId = formValues.kategori_id;
-
-        const namaInput = document.getElementById("item_nama_item");
-        const kategoriSelect = document.getElementById("item_kategori_id");
-
-        let hasError = false;
-
-        if (!namaItem) {
-            if (window.FormValidator) {
-                FormValidator.setInvalid(namaInput, "Nama item wajib diisi");
-            } else {
-                namaInput?.classList.add("is-invalid");
-            }
-            hasError = true;
-        } else {
-            if (window.FormValidator) {
-                FormValidator.clearValidation(namaInput);
-            } else {
-                namaInput?.classList.remove("is-invalid");
-            }
-        }
-
-        if (!kategoriId) {
-            if (window.FormValidator) {
-                FormValidator.setInvalid(
-                    kategoriSelect,
-                    "Kategori wajib dipilih"
-                );
-            } else {
-                kategoriSelect?.classList.add("is-invalid");
-            }
-            hasError = true;
-        } else {
-            if (window.FormValidator) {
-                FormValidator.clearValidation(kategoriSelect);
-            } else {
-                kategoriSelect?.classList.remove("is-invalid");
-            }
-        }
-
-        if (hasError) {
-
-            const firstError = document.querySelector(
-                "#modalTambahItem .is-invalid"
-            );
-            if (firstError) {
-                firstError.scrollIntoView({
-                    behavior: "smooth",
-                    block: "center",
-                });
-                firstError.focus();
-            }
-            return;
-        }
+        if (!this.itemForm.validate()) return;
 
         formValues.nama_item = namaItem;
 
@@ -329,7 +276,7 @@ class PurchaseDraftController {
             this.markDirty();
         } catch (err) {
             console.error(err);
-            alert(err.message || "Gagal menyimpan data.");
+            if (!this.itemForm.showErrors(err.errors)) alert(err.message || "Gagal menyimpan data.");
         } finally {
             this.el.btnSimpanItem.disabled = false;
             this.setItemModalMode(isEditing ? "edit" : "add");

@@ -121,7 +121,7 @@
                                 <span class="input-group-text bg-light border-end-0 text-muted ps-3"><i class="fa-solid fa-briefcase"></i></span>
                                 <input type="text"
                                     class="form-control border-start-0 ps-2 required-field @error('jabatan') is-invalid @enderror"
-                                    name="jabatan"
+                                    name="jabatan" maxlength="50"
                                     style="height: 45px;"
                                     value="{{ old('jabatan', $employee->jabatan ?? '') }}"
                                     placeholder="Masukkan jabatan"
@@ -144,7 +144,7 @@
                                 {{-- Input tampilan (formatted) --}}
                                 <input type="text"
                                     class="form-control border-start-0 ps-2 required-field @error('nomor_telepon') is-invalid @enderror"
-                                    id="nomor_telepon_display"
+                                    id="nomor_telepon_display" maxlength="17" data-phone-validation data-max-digits="15"
                                     style="height: 45px;"
                                     value="{{ old('nomor_telepon', $employee->nomor_telepon ?? '') }}"
                                     placeholder="08xx-xxxx-xxxx"
@@ -195,7 +195,7 @@
                                 <span class="input-group-text bg-light border-end-0 text-muted ps-3"><i class="fa-regular fa-calendar"></i></span>
                                 <input type="date"
                                     class="form-control border-start-0 ps-2 required-field @error('tanggal_masuk') is-invalid @enderror"
-                                    name="tanggal_masuk"
+                                    name="tanggal_masuk" max="{{ now()->toDateString() }}"
                                     style="height: 45px;"
                                     value="{{ old('tanggal_masuk', isset($employee) && $employee->tanggal_masuk ? $employee->tanggal_masuk->format('Y-m-d') : '') }}"
                                     {{ isset($readOnly) && $readOnly ? 'readonly' : 'required' }}
@@ -236,7 +236,7 @@
                                 <span class="input-group-text bg-light border-end-0 text-muted ps-3"><i class="fa-regular fa-calendar-xmark"></i></span>
                                 <input type="date"
                                     class="form-control border-start-0 ps-2 @error('tanggal_keluar') is-invalid @enderror"
-                                    name="tanggal_keluar"
+                                    name="tanggal_keluar" data-after-field="tanggal_masuk"
                                     style="height: 45px;"
                                     value="{{ old('tanggal_keluar', isset($employee) && $employee->tanggal_keluar ? $employee->tanggal_keluar->format('Y-m-d') : '') }}"
                                     {{ isset($readOnly) && $readOnly ? 'readonly' : '' }}>
@@ -249,7 +249,7 @@
                             <div class="input-group">
                                 <span class="input-group-text bg-light border-end-0 text-muted ps-3"><i class="fa-solid fa-map-location-dot"></i></span>
                                 <textarea class="form-control border-start-0 ps-2 @error('alamat') is-invalid @enderror"
-                                    name="alamat"
+                                    name="alamat" maxlength="100"
                                     rows="3"
                                     placeholder="Masukkan alamat domisili..."
                                     {{ isset($readOnly) && $readOnly ? 'readonly' : '' }}>{{ old('alamat', $employee->alamat ?? '') }}</textarea>

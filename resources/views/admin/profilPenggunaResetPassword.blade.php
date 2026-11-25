@@ -38,7 +38,7 @@
                     </div>
                 @endif
 
-                <form action="{{ route('admin.profile.resetPassword.post') }}" method="POST">
+                <form action="{{ route('admin.profile.resetPassword.post') }}" method="POST" data-validate-form>
 
                     <div class="row">
                         <div class="col-md-7 col-lg-6">
@@ -76,7 +76,7 @@
                                         <i class="fa-solid fa-key"></i>
                                     </span>
                                     <input type="password"
-                                        name="new_password"
+                                        name="new_password" minlength="6"
                                         id="new_password" 
                                         class="form-control border-start-0 border-end-0 ps-2 @error('new_password') is-invalid @enderror" 
                                         style="height: 50px;" 

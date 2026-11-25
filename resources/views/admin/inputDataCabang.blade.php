@@ -53,7 +53,7 @@
                             <input type="text"
                                 class="form-control border-start-0 ps-2 required-field @error('nama') is-invalid @enderror"
                                 id="namaToko"
-                                name="nama"
+                                name="nama" maxlength="50"
                                 style="height: 45px;"
                                 value="{{ old('nama', $branch->nama ?? '') }}"
                                 placeholder="Contoh: PusatKamera.id"
@@ -105,7 +105,7 @@
                             <input type="email"
                                 class="form-control border-start-0 ps-2 @error('email') is-invalid @enderror"
                                 id="email"
-                                name="email"
+                                name="email" maxlength="100"
                                 style="height: 45px;"
                                 value="{{ old('email', $branch->email ?? '') }}"
                                 placeholder="email@toko.com"
@@ -126,7 +126,7 @@
                             <textarea
                                 class="form-control border-start-0 ps-2 @error('deskripsi') is-invalid @enderror"
                                 id="deskripsi"
-                                name="deskripsi"
+                                name="deskripsi" maxlength="500"
                                 rows="3"
                                 placeholder="Deskripsi singkat tentang toko..."
                                 {{ isset($isShow) && $isShow ? 'readonly' : '' }}>{{ old('deskripsi', $branch->deskripsi ?? '') }}</textarea>
@@ -170,7 +170,7 @@
                                             </span>
                                             <input type="text"
                                                 class="form-control border-start-0 ps-2 required-field @error('nomor_telepon') is-invalid @enderror"
-                                                id="branch_nomor_telepon_display"
+                                                id="branch_nomor_telepon_display" maxlength="19" data-phone-validation data-max-digits="17"
                                                 style="height: 45px;"
                                                 value="{{ old('nomor_telepon', $branch->nomor_telepon ?? '') }}"
                                                 placeholder="08xx-xxxx-xxxx"
@@ -213,7 +213,7 @@
                                             <input type="text"
                                                 class="form-control border-start-0 ps-2 @error('maps_embed_url') is-invalid @enderror"
                                                 id="maps_embed_url"
-                                                name="maps_embed_url"
+                                                name="maps_embed_url" maxlength="2048"
                                                 style="height: 45px;"
                                                 value="{{ old('maps_embed_url', $branch->maps_embed_url ?? '') }}"
                                                 placeholder="https://www.google.com/maps/embed?pb=..."
@@ -365,7 +365,7 @@
                                 <div id="catatan-collapse-{{ strtolower($hari) }}" class="collapse mt-1">
                                     <input type="text"
                                         class="form-control form-control-sm"
-                                        name="jam_operasional[{{ $hari }}][catatan]"
+                                        name="jam_operasional[{{ $hari }}][catatan]" maxlength="200"
                                         value="{{ old("jam_operasional.{$hari}.catatan", $jamOperasionalData[$hari]->catatan ?? '') }}"
                                         placeholder="Catatan khusus (opsional)"
                                         {{ isset($isShow) && $isShow ? 'readonly' : '' }}>

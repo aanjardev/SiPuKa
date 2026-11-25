@@ -8,7 +8,7 @@
 @if($errors->any())
 <div class="alert alert-danger"><strong>Pengaturan belum tersimpan.</strong><ul class="mb-0">@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul></div>
 @endif
-<form id="catalogSettingsForm" action="{{ route('admin.catalog-settings.update') }}" method="POST" enctype="multipart/form-data">
+<form data-validate-form id="catalogSettingsForm" action="{{ route('admin.catalog-settings.update') }}" method="POST" enctype="multipart/form-data">
 @csrf
 <div class="row g-4">
 <div class="col-lg-6">
@@ -18,7 +18,7 @@
         <input id="site_name" name="site_name" class="form-control mb-3" value="{{ old('site_name', $cat_setting->nama_website) }}" maxlength="255" required>
         <img id="logoPreview" src="{{ $cat_setting->logo_url ?: asset('mainIMG/logopk.png') }}" alt="Preview logo" class="img-fluid mb-2" style="max-height:100px">
         <label for="photo_logo" class="form-label d-block">Logo</label>
-        <input id="photo_logo" name="photo_logo" type="file" class="form-control" accept="image/jpeg,image/png,image/webp">
+        <input id="photo_logo" name="photo_logo" data-max-bytes="2097152" type="file" class="form-control" accept="image/jpeg,image/png,image/webp">
         <p class="form-text">JPG, PNG, atau WebP. Maksimal 2 MB. Kosongkan untuk mempertahankan logo.</p>
     </div></section>
 </div>
@@ -40,7 +40,7 @@
         <p class="text-muted small">Teks pada bagian utama beranda. Kosongkan untuk memakai teks bawaan.</p>
         <label for="hero_image" class="form-label d-block">Gambar Hero</label>
         <img src="{{ $cat_setting->hero_image_url ?? asset('mainIMG/produk.png') }}" alt="Gambar hero saat ini" class="img-fluid d-block mb-2" style="max-height:240px">
-        <input id="hero_image" name="hero_image" type="file" class="form-control" accept="image/jpeg,image/png,image/webp">
+        <input id="hero_image" name="hero_image" data-max-bytes="4194304" type="file" class="form-control" accept="image/jpeg,image/png,image/webp">
         <p class="form-text">Gambar pada bagian utama beranda. JPG, PNG, atau WebP, maksimal 4 MB. Kosongkan untuk mempertahankan gambar saat ini.</p>
         <div class="row g-3">
         @foreach(['hero_eyebrow'=>['Label Hero',100],'hero_title'=>['Judul Hero',120],'hero_description'=>['Deskripsi Hero',500]] as $field => $config)
@@ -79,7 +79,7 @@
         <textarea id="seo_description" name="seo_description" maxlength="320" rows="3" class="form-control mb-3">{{ old('seo_description', $cat_setting->seo_description) }}</textarea>
         <label for="og_image" class="form-label">Gambar Berbagi Tautan</label>
         <img src="{{ $cat_setting->og_image_url ?: asset('mainIMG/logopk.png') }}" alt="Preview gambar berbagi tautan" class="img-fluid d-block mb-2" style="max-height:160px">
-        <input id="og_image" name="og_image" type="file" class="form-control" accept="image/jpeg,image/png,image/webp">
+        <input id="og_image" name="og_image" data-max-bytes="4194304" type="file" class="form-control" accept="image/jpeg,image/png,image/webp">
         <p class="form-text">Maksimal 4 MB. Kosongkan untuk mempertahankan gambar saat ini.</p>
     </div></section>
 </div>

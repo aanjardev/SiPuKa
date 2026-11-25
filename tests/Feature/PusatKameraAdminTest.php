@@ -263,6 +263,44 @@ class PusatKameraAdminTest extends TestCase
         $this->post('/admin/sales',$payload)->assertSessionHas('error');
         $this->assertEquals(3,$product->fresh()->stok_produk); $this->assertEquals(0,Penjualan::count());
     }
+    public function test_purchase_items_accept_long_condition_notes_and_preserve_data_on_validation_failure(): void
+    {
+        $owner = $this->owner();
+        $store = $this->storeRecord();
+        $category = Kategori::firstOrCreate(['nama_kategori' => 'Mirrorless']);
+        $payload = [
+            'customer_id' => $this->customer(),
+            'perusahaan_cabang_id' => $store->id,
+            'user_id' => $owner->id,
+            'nama_item' => 'Kamera uji catatan panjang',
+            'kategori_id' => $category->id,
+            'kondisi_lain_lain' => str_repeat('Catatan kondisi kamera. ', 30),
+            'kelengkapan_awal' => 'Charger, baterai 2, strap',
+        ];
+
+        $response = $this->actingAs($owner)
+            ->postJson('/admin/purchases/store-item-draft', $payload)
+            ->assertOk()->assertJsonPath('success', true);
+        $id = $response->json('item.id');
+        $this->assertDatabaseHas('item_pembelian_draft', [
+            'id' => $id, 'kondisi_lain_lain' => $payload['kondisi_lain_lain'],
+            'kelengkapan' => $payload['kelengkapan_awal'],
+        ]);
+
+        $payload['kondisi_lain_lain'] = str_repeat('K', 5000);
+        $payload['kelengkapan'] = 'Charger dan baterai';
+        $this->putJson('/admin/purchases/update-item-draft/'.$id, $payload)
+            ->assertOk()->assertJsonPath('item.kondisi_lain_lain', $payload['kondisi_lain_lain']);
+
+        $payload['kondisi_lain_lain'] .= 'K';
+        $this->putJson('/admin/purchases/update-item-draft/'.$id, $payload)
+            ->assertUnprocessable()->assertJsonValidationErrors('kondisi_lain_lain');
+        $this->postJson('/admin/purchases/store-item-draft', $payload)
+            ->assertUnprocessable()->assertJsonValidationErrors('kondisi_lain_lain');
+        $this->assertSame(1, ItemPembelian::count());
+        $this->assertSame(str_repeat('K', 5000), ItemPembelian::findOrFail($id)->kondisi_lain_lain);
+    }
+
     public function test_purchase_qc_sale_flow_and_receipts_work_for_one_store(): void
     {
         $this->actingAs($owner=$this->owner()); $store=$this->storeRecord(); $reference=$this->product();

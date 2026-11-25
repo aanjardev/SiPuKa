@@ -480,7 +480,7 @@ class QCController extends Controller
             'kondisi_kalibrasi_fokus' => 'nullable|string|max:50',
             'kondisi_flash' => 'nullable|string|max:100',
             'kondisi_sound_mic' => 'nullable|string|max:50',
-            'kondisi_lain_lain' => 'nullable|string|max:255',
+            'kondisi_lain_lain' => 'nullable|string|max:5000',
             'harga_jual' => 'nullable|integer|min:0',
             'harga_beli' => 'nullable|integer|min:0',
             'harga_servis' => 'nullable|integer|min:0',

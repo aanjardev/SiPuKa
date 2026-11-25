@@ -325,12 +325,12 @@ $backRoute = route('admin.purchases.show', $pembelian->id);
                         <div class="row g-3 px-2">
                             <div class="col-md-8">
                                 <label class="form-label fw-semibold text-secondary small">Nama Item <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control form-control-lg fs-6 shadow-none required-field" id="item_nama_item" placeholder="Contoh: Canon EOS 60D Body Only" data-error-message="Nama item wajib diisi" autofocus>
+                                <input type="text" class="form-control form-control-lg fs-6 shadow-none required-field" id="item_nama_item" required placeholder="Contoh: Canon EOS 60D Body Only" data-error-message="Nama item wajib diisi" autofocus maxlength="200">
                                 <div class="invalid-feedback">Nama item wajib diisi</div>
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label fw-semibold text-secondary small">Kategori <span class="text-danger">*</span></label>
-                                <select class="form-select form-select-lg fs-6 shadow-none required-field" id="item_kategori_id" style="height: calc(2.5rem + 10px);" data-error-message="Kategori wajib dipilih">
+                                <select class="form-select form-select-lg fs-6 shadow-none required-field" id="item_kategori_id" required style="height: calc(2.5rem + 10px);" data-error-message="Kategori wajib dipilih">
                                     <option value="" selected disabled>Pilih...</option>
                                     @foreach($semua_kategori as $kat)
                                     <option value="{{ $kat->id }}">{{ $kat->nama_kategori }}</option>
@@ -340,11 +340,11 @@ $backRoute = route('admin.purchases.show', $pembelian->id);
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-semibold text-secondary small">Serial Number (Body)</label>
-                                <input type="text" class="form-control font-monospace shadow-none" id="item_serial_number" placeholder="SN Body">
+                                <input type="text" class="form-control font-monospace shadow-none" id="item_serial_number" placeholder="SN Body" maxlength="50">
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-semibold text-secondary small">Serial Number (Lensa)</label>
-                                <input type="text" class="form-control font-monospace shadow-none" id="item_serial_lens" placeholder="SN Lensa (Jika ada)">
+                                <input type="text" class="form-control font-monospace shadow-none" id="item_serial_lens" placeholder="SN Lensa (Jika ada)" maxlength="50">
                             </div>
                         </div>
                     </div>
@@ -372,21 +372,21 @@ $backRoute = route('admin.purchases.show', $pembelian->id);
                                         <div class="row">
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label small text-muted">Kondisi Fisik Overall</label>
-                                                <input type="text" id="item_kondisi_fisik" class="form-control form-control-sm" placeholder="Contoh: Oke/Paintloss">
+                                                <input type="text" id="item_kondisi_fisik" class="form-control form-control-sm" placeholder="Contoh: Oke/Paintloss" maxlength="100">
                                             </div>
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label small text-muted">Kondisi Baut</label>
-                                                <input type="text" id="item_kondisi_baut" class="form-control form-control-sm" placeholder="Utuh/Segel/Lecet">
+                                                <input type="text" id="item_kondisi_baut" class="form-control form-control-sm" placeholder="Utuh/Segel/Lecet" maxlength="50">
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label small text-muted">Tutup USB/Mic</label>
-                                                <input type="text" id="item_kondisi_tutup_usb" class="form-control form-control-sm" placeholder="Ada/Putus/Hilang">
+                                                <input type="text" id="item_kondisi_tutup_usb" class="form-control form-control-sm" placeholder="Ada/Putus/Hilang" maxlength="50">
                                             </div>
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label small text-muted">Karet Grip</label>
-                                                <input type="text" id="item_kondisi_grip" class="form-control form-control-sm" placeholder="Rapat/Melar/Putih">
+                                                <input type="text" id="item_kondisi_grip" class="form-control form-control-sm" placeholder="Rapat/Melar/Putih" maxlength="50">
                                             </div>
                                         </div>
                                     </div>
@@ -405,31 +405,31 @@ $backRoute = route('admin.purchases.show', $pembelian->id);
                                         <div class="row">
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label small text-muted">Jamur Lensa</label>
-                                                <input type="text" id="item_kondisi_jamur_lensa" class="form-control form-control-sm" placeholder="Tidak ada / Ada Tipis / Tebal">
+                                                <input type="text" id="item_kondisi_jamur_lensa" class="form-control form-control-sm" placeholder="Tidak ada / Ada Tipis / Tebal" maxlength="100">
                                             </div>
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label small text-muted">Jamur Sensor</label>
-                                                <input type="text" id="item_kondisi_jamur_sensor" class="form-control form-control-sm" placeholder="Tidak ada / Ada">
+                                                <input type="text" id="item_kondisi_jamur_sensor" class="form-control form-control-sm" placeholder="Tidak ada / Ada" maxlength="100">
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label small text-muted">Auto Fokus (AF)</label>
-                                                <input type="text" id="item_kondisi_af_lensa" class="form-control form-control-sm" placeholder="Normal / Error / Lambat">
+                                                <input type="text" id="item_kondisi_af_lensa" class="form-control form-control-sm" placeholder="Normal / Error / Lambat" maxlength="50">
                                             </div>
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label small text-muted">Diafragma (Aperture)</label>
-                                                <input type="text" id="item_kondisi_diafragma_lensa" class="form-control form-control-sm" placeholder="Normal / Blade error / Sticking">
+                                                <input type="text" id="item_kondisi_diafragma_lensa" class="form-control form-control-sm" placeholder="Normal / Blade error / Sticking" maxlength="50">
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label small text-muted">Zooming</label>
-                                                <input type="text" id="item_kondisi_zoom_lensa" class="form-control form-control-sm" placeholder="Normal / Seret / Macet">
+                                                <input type="text" id="item_kondisi_zoom_lensa" class="form-control form-control-sm" placeholder="Normal / Seret / Macet" maxlength="50">
                                             </div>
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label small text-muted">Kalibrasi Fokus</label>
-                                                <input type="text" id="item_kondisi_kalibrasi_fokus" class="form-control form-control-sm" placeholder="Normal / Front / Back">
+                                                <input type="text" id="item_kondisi_kalibrasi_fokus" class="form-control form-control-sm" placeholder="Normal / Front / Back" maxlength="50">
                                             </div>
                                         </div>
                                     </div>
@@ -448,40 +448,41 @@ $backRoute = route('admin.purchases.show', $pembelian->id);
                                         <div class="row">
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label small text-muted">Mounting</label>
-                                                <input type="text" id="item_kondisi_mounting" class="form-control form-control-sm" placeholder="Bersih/Kotor">
+                                                <input type="text" id="item_kondisi_mounting" class="form-control form-control-sm" placeholder="Bersih/Kotor" maxlength="50">
                                             </div>
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label small text-muted">Slot Memori</label>
-                                                <input type="text" id="item_kondisi_slot_memori" class="form-control form-control-sm" placeholder="Normal/Error">
+                                                <input type="text" id="item_kondisi_slot_memori" class="form-control form-control-sm" placeholder="Normal/Error" maxlength="50">
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label small text-muted">LCD</label>
-                                                <input type="text" id="item_kondisi_lcd" class="form-control form-control-sm" placeholder="Vignette/Dead Pixel">
+                                                <input type="text" id="item_kondisi_lcd" class="form-control form-control-sm" placeholder="Vignette/Dead Pixel" maxlength="100">
                                             </div>
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label small text-muted">Tombol</label>
-                                                <input type="text" id="item_kondisi_tombol" class="form-control form-control-sm" placeholder="Normal/Keras/Macet">
+                                                <input type="text" id="item_kondisi_tombol" class="form-control form-control-sm" placeholder="Normal/Keras/Macet" maxlength="50">
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label small text-muted">Flash</label>
-                                                <input type="text" id="item_kondisi_flash" class="form-control form-control-sm" placeholder="Normal / Mati / Berfungsi sebagian">
+                                                <input type="text" id="item_kondisi_flash" class="form-control form-control-sm" placeholder="Normal / Mati / Berfungsi sebagian" maxlength="100">
                                             </div>
                                             <div class="col-md-6 mb-3">
                                                 <label class="form-label small text-muted">Sound / Mic</label>
-                                                <input type="text" id="item_kondisi_sound_mic" class="form-control form-control-sm" placeholder="Normal / Kresek / Mati">
+                                                <input type="text" id="item_kondisi_sound_mic" class="form-control form-control-sm" placeholder="Normal / Kresek / Mati" maxlength="50">
                                             </div>
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label small text-muted">View Finder</label>
-                                            <input type="text" id="item_kondisi_view_finder" class="form-control form-control-sm" placeholder="Bersih / Kotor / Berjamur">
+                                            <input type="text" id="item_kondisi_view_finder" class="form-control form-control-sm" placeholder="Bersih / Kotor / Berjamur" maxlength="50">
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label small text-muted">Kondisi Lain-lain</label>
-                                            <input type="text" id="item_kondisi_lain_lain" class="form-control form-control-sm">
+                                            <textarea id="item_kondisi_lain_lain" class="form-control form-control-sm" rows="3" maxlength="5000" aria-describedby="item_kondisi_lain_lain_help"></textarea>
+                                            <small id="item_kondisi_lain_lain_help" class="text-muted">Maksimal 5.000 karakter.</small>
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label small text-muted fw-bold">Kelengkapan</label>
@@ -522,7 +523,7 @@ $backRoute = route('admin.purchases.show', $pembelian->id);
                     <div class="row g-3">
                         <div class="col-12">
                             <label class="form-label fw-semibold text-secondary small">Nama Customer <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control required-field" maxlength="50" id="customer_nama_modal" name="nama" required data-error-message="Nama customer wajib diisi" autofocus>
+                            <input type="text" class="form-control required-field" id="customer_nama_modal" name="nama" maxlength="50" required data-error-message="Nama customer wajib diisi" autofocus>
                             <div class="invalid-feedback">
                                 Nama customer wajib diisi.
                             </div>
@@ -532,7 +533,7 @@ $backRoute = route('admin.purchases.show', $pembelian->id);
                             <input type="text"
                                    class="form-control required-field"
                                    id="customer_no_telp_modal"
-                                   name="no_telp"
+                                   name="no_telp" maxlength="22"
                                    required
                                    inputmode="numeric"
                                    pattern="[0-9]*"
@@ -555,13 +556,13 @@ $backRoute = route('admin.purchases.show', $pembelian->id);
                         </div>
                         <div class="col-12">
                             <label class="form-label fw-semibold text-secondary small">Alamat</label>
-                            <input type="text" class="form-control" name="alamat">
+                            <input type="text" class="form-control" name="alamat" maxlength="100">
                         </div>
                         <div class="col-md-6">
                             <label class="form-label fw-semibold text-secondary small">No. Identitas (KTP/SIM)</label>
                             <input type="text"
                                    class="form-control"
-                                   name="identitas"
+                                   name="identitas" maxlength="20"
                                    inputmode="numeric"
                                    pattern="[0-9]*"
                                    data-numeric-only
@@ -569,7 +570,7 @@ $backRoute = route('admin.purchases.show', $pembelian->id);
                         </div>
                         <div class="col-md-6">
                             <label class="form-label fw-semibold text-secondary small">Referensi</label>
-                            <input type="text" class="form-control" name="referensi">
+                            <input type="text" class="form-control" name="referensi" maxlength="100">
                         </div>
                         <div class="col-12">
                             <label class="form-label fw-semibold text-secondary small">Keterangan</label>
@@ -606,7 +607,7 @@ $backRoute = route('admin.purchases.show', $pembelian->id);
                     <div class="row g-3">
                         <div class="col-12">
                             <label class="form-label fw-semibold text-secondary small">Nama Customer <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control required-field" maxlength="50" id="edit_customer_nama_modal" name="nama" required data-error-message="Nama customer wajib diisi">
+                            <input type="text" class="form-control required-field" id="edit_customer_nama_modal" name="nama" maxlength="50" required data-error-message="Nama customer wajib diisi">
                             <div class="invalid-feedback">
                                 Nama customer wajib diisi.
                             </div>
@@ -616,7 +617,7 @@ $backRoute = route('admin.purchases.show', $pembelian->id);
                             <input type="text"
                                    class="form-control required-field"
                                    id="edit_customer_no_telp_modal"
-                                   name="no_telp"
+                                   name="no_telp" maxlength="22"
                                    required
                                    inputmode="numeric"
                                    pattern="[0-9]*"
@@ -639,13 +640,13 @@ $backRoute = route('admin.purchases.show', $pembelian->id);
                         </div>
                         <div class="col-12">
                             <label class="form-label fw-semibold text-secondary small">Alamat</label>
-                            <input type="text" class="form-control" name="alamat">
+                            <input type="text" class="form-control" name="alamat" maxlength="100">
                         </div>
                         <div class="col-md-6">
                             <label class="form-label fw-semibold text-secondary small">No. Identitas (KTP/SIM)</label>
                             <input type="text"
                                    class="form-control"
-                                   name="identitas"
+                                   name="identitas" maxlength="20"
                                    inputmode="numeric"
                                    pattern="[0-9]*"
                                    data-numeric-only
@@ -653,7 +654,7 @@ $backRoute = route('admin.purchases.show', $pembelian->id);
                         </div>
                         <div class="col-md-6">
                             <label class="form-label fw-semibold text-secondary small">Referensi</label>
-                            <input type="text" class="form-control" name="referensi">
+                            <input type="text" class="form-control" name="referensi" maxlength="100">
                         </div>
                         <div class="col-12">
                             <label class="form-label fw-semibold text-secondary small">Keterangan</label>

@@ -28,7 +28,11 @@ export default class ItemAPI {
         });
 
         if (!res.ok) {
-            throw new Error(`Request failed with status ${res.status}`);
+            const data = await res.json().catch(() => ({}));
+            const messages = Object.values(data.errors || {}).flat();
+            const error = new Error(messages.join("\n") || data.message || `Gagal memproses permintaan (${res.status}). Silakan coba lagi.`);
+            error.errors = data.errors || {};
+            throw error;
         }
 
         return res.json();

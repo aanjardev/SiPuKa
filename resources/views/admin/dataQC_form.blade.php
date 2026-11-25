@@ -77,7 +77,7 @@
         </label>
         <div class="input-group">
             <span class="input-group-text bg-light border-end-0 text-muted ps-3"><i class="fa-solid fa-tag"></i></span>
-            <input type="text" name="nama_item"
+            <input type="text" name="nama_item" maxlength="200"
                    class="form-control border-start-0 ps-2 dynamic-field"
                    data-field="nama_item"
                    data-lolos-qc-required="true"
@@ -129,7 +129,7 @@
             </label>
             <div class="input-group">
                 <span class="input-group-text bg-light border-end-0 text-muted ps-3"><i class="fa-solid fa-barcode"></i></span>
-                <input type="text" name="kode_sku"
+                <input type="text" name="kode_sku" maxlength="20"
                        class="form-control border-start-0 ps-2 dynamic-field"
                        data-field="kode_sku"
                        data-lolos-qc-required="true"
@@ -147,7 +147,7 @@
             <label class="form-label fw-medium text-secondary small">Serial Number (Body)</label>
             <div class="input-group">
                 <span class="input-group-text bg-light border-end-0 text-muted ps-3"><i class="fa-solid fa-fingerprint"></i></span>
-                <input type="text" name="serial_number"
+                <input type="text" name="serial_number" maxlength="50"
                        class="form-control border-start-0 ps-2 font-monospace"
                        {{ $readonlyAttr }}
                        value="{{ old('serial_number', $item->serial_number) }}">
@@ -157,7 +157,7 @@
             <label class="form-label fw-medium text-secondary small">Serial Number (Lensa)</label>
             <div class="input-group">
                 <span class="input-group-text bg-light border-end-0 text-muted ps-3"><i class="fa-solid fa-fingerprint"></i></span>
-                <input type="text" name="serial_lens"
+                <input type="text" name="serial_lens" maxlength="50"
                        class="form-control border-start-0 ps-2 font-monospace"
                        {{ $readonlyAttr }}
                        value="{{ old('serial_lens', $item->serial_lens) }}">
@@ -185,21 +185,21 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label small text-muted">Kondisi Fisik</label>
-                            <input type="text" name="kondisi_fisik" class="form-control form-control-sm" {{ $readonlyAttr }} value="{{ old('kondisi_fisik', $item->kondisi_fisik) }}">
+                            <input type="text" name="kondisi_fisik" maxlength="100" class="form-control form-control-sm" {{ $readonlyAttr }} value="{{ old('kondisi_fisik', $item->kondisi_fisik) }}">
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label small text-muted">Kondisi Baut</label>
-                            <input type="text" name="kondisi_baut" class="form-control form-control-sm" {{ $readonlyAttr }} value="{{ old('kondisi_baut', $item->kondisi_baut) }}">
+                            <input type="text" name="kondisi_baut" maxlength="50" class="form-control form-control-sm" {{ $readonlyAttr }} value="{{ old('kondisi_baut', $item->kondisi_baut) }}">
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label small text-muted">Tutup USB</label>
-                            <input type="text" name="kondisi_tutup_usb" class="form-control form-control-sm" {{ $readonlyAttr }} value="{{ old('kondisi_tutup_usb', $item->kondisi_tutup_usb) }}">
+                            <input type="text" name="kondisi_tutup_usb" maxlength="50" class="form-control form-control-sm" {{ $readonlyAttr }} value="{{ old('kondisi_tutup_usb', $item->kondisi_tutup_usb) }}">
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label small text-muted">Karet Grip</label>
-                            <input type="text" name="kondisi_grip" class="form-control form-control-sm" {{ $readonlyAttr }} value="{{ old('kondisi_grip', $item->kondisi_grip) }}">
+                            <input type="text" name="kondisi_grip" maxlength="50" class="form-control form-control-sm" {{ $readonlyAttr }} value="{{ old('kondisi_grip', $item->kondisi_grip) }}">
                         </div>
                     </div>
                 </div>
@@ -218,31 +218,31 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label small text-muted">Jamur Lensa</label>
-                            <input type="text" name="kondisi_jamur_lensa" class="form-control form-control-sm" {{ $readonlyAttr }} value="{{ old('kondisi_jamur_lensa', $item->kondisi_jamur_lensa) }}">
+                            <input type="text" name="kondisi_jamur_lensa" maxlength="100" class="form-control form-control-sm" {{ $readonlyAttr }} value="{{ old('kondisi_jamur_lensa', $item->kondisi_jamur_lensa) }}">
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label small text-muted">Jamur Sensor</label>
-                            <input type="text" name="kondisi_jamur_sensor" class="form-control form-control-sm" {{ $readonlyAttr }} value="{{ old('kondisi_jamur_sensor', $item->kondisi_jamur_sensor) }}">
+                            <input type="text" name="kondisi_jamur_sensor" maxlength="100" class="form-control form-control-sm" {{ $readonlyAttr }} value="{{ old('kondisi_jamur_sensor', $item->kondisi_jamur_sensor) }}">
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label small text-muted">Auto Fokus (AF)</label>
-                            <input type="text" name="kondisi_af_lensa" class="form-control form-control-sm" {{ $readonlyAttr }} value="{{ old('kondisi_af_lensa', $item->kondisi_af_lensa) }}">
+                            <input type="text" name="kondisi_af_lensa" maxlength="50" class="form-control form-control-sm" {{ $readonlyAttr }} value="{{ old('kondisi_af_lensa', $item->kondisi_af_lensa) }}">
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label small text-muted">Diafragma (Aperture)</label>
-                            <input type="text" name="kondisi_diafragma_lensa" class="form-control form-control-sm" {{ $readonlyAttr }} value="{{ old('kondisi_diafragma_lensa', $item->kondisi_diafragma_lensa) }}">
+                            <input type="text" name="kondisi_diafragma_lensa" maxlength="50" class="form-control form-control-sm" {{ $readonlyAttr }} value="{{ old('kondisi_diafragma_lensa', $item->kondisi_diafragma_lensa) }}">
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label small text-muted">Zooming</label>
-                            <input type="text" name="kondisi_zoom_lensa" class="form-control form-control-sm" {{ $readonlyAttr }} value="{{ old('kondisi_zoom_lensa', $item->kondisi_zoom_lensa) }}">
+                            <input type="text" name="kondisi_zoom_lensa" maxlength="50" class="form-control form-control-sm" {{ $readonlyAttr }} value="{{ old('kondisi_zoom_lensa', $item->kondisi_zoom_lensa) }}">
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label small text-muted">View Finder</label>
-                            <input type="text" name="kondisi_view_finder" class="form-control form-control-sm" {{ $readonlyAttr }} value="{{ old('kondisi_view_finder', $item->kondisi_view_finder) }}">
+                            <input type="text" name="kondisi_view_finder" maxlength="50" class="form-control form-control-sm" {{ $readonlyAttr }} value="{{ old('kondisi_view_finder', $item->kondisi_view_finder) }}">
                         </div>
                     </div>
                 </div>
@@ -261,36 +261,36 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label small text-muted">Mounting</label>
-                            <input type="text" name="kondisi_mounting" class="form-control form-control-sm" {{ $readonlyAttr }} value="{{ old('kondisi_mounting', $item->kondisi_mounting) }}">
+                            <input type="text" name="kondisi_mounting" maxlength="50" class="form-control form-control-sm" {{ $readonlyAttr }} value="{{ old('kondisi_mounting', $item->kondisi_mounting) }}">
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label small text-muted">Slot Memori</label>
-                            <input type="text" name="kondisi_slot_memori" class="form-control form-control-sm" {{ $readonlyAttr }} value="{{ old('kondisi_slot_memori', $item->kondisi_slot_memori) }}">
+                            <input type="text" name="kondisi_slot_memori" maxlength="50" class="form-control form-control-sm" {{ $readonlyAttr }} value="{{ old('kondisi_slot_memori', $item->kondisi_slot_memori) }}">
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label small text-muted">LCD</label>
-                            <input type="text" name="kondisi_lcd" class="form-control form-control-sm" {{ $readonlyAttr }} value="{{ old('kondisi_lcd', $item->kondisi_lcd) }}">
+                            <input type="text" name="kondisi_lcd" maxlength="100" class="form-control form-control-sm" {{ $readonlyAttr }} value="{{ old('kondisi_lcd', $item->kondisi_lcd) }}">
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label small text-muted">Tombol</label>
-                            <input type="text" name="kondisi_tombol" class="form-control form-control-sm" {{ $readonlyAttr }} value="{{ old('kondisi_tombol', $item->kondisi_tombol) }}">
+                            <input type="text" name="kondisi_tombol" maxlength="50" class="form-control form-control-sm" {{ $readonlyAttr }} value="{{ old('kondisi_tombol', $item->kondisi_tombol) }}">
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label small text-muted">Flash</label>
-                            <input type="text" name="kondisi_flash" class="form-control form-control-sm" {{ $readonlyAttr }} value="{{ old('kondisi_flash', $item->kondisi_flash) }}">
+                            <input type="text" name="kondisi_flash" maxlength="100" class="form-control form-control-sm" {{ $readonlyAttr }} value="{{ old('kondisi_flash', $item->kondisi_flash) }}">
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label small text-muted">Sound / Mic</label>
-                            <input type="text" name="kondisi_sound_mic" class="form-control form-control-sm" {{ $readonlyAttr }} value="{{ old('kondisi_sound_mic', $item->kondisi_sound_mic) }}">
+                            <input type="text" name="kondisi_sound_mic" maxlength="50" class="form-control form-control-sm" {{ $readonlyAttr }} value="{{ old('kondisi_sound_mic', $item->kondisi_sound_mic) }}">
                         </div>
                     </div>
                     <div class="mb-3">
                         <label class="form-label small text-muted">Kondisi Lain-lain</label>
-                        <input type="text" name="kondisi_lain_lain" class="form-control form-control-sm" {{ $readonlyAttr }} value="{{ old('kondisi_lain_lain', $item->kondisi_lain_lain) }}">
+                        <input type="text" name="kondisi_lain_lain" maxlength="5000" class="form-control form-control-sm" {{ $readonlyAttr }} value="{{ old('kondisi_lain_lain', $item->kondisi_lain_lain) }}">
                     </div>
                     <div class="mb-3">
                         <label class="form-label small text-muted fw-bold">Kelengkapan</label>
@@ -372,7 +372,7 @@
                         <label class="form-label fw-medium text-secondary small">Qty</label>
                         <div class="input-group">
                             <span class="input-group-text bg-light border-end-0 text-muted ps-3"><i class="fa-solid fa-cubes"></i></span>
-                            <input type="number" name="qty" class="form-control border-start-0 ps-2" {{ $readonlyAttr }} value="{{ old('qty', $item->qty) }}">
+                            <input type="number" name="qty" step="1" min="1" class="form-control border-start-0 ps-2" {{ $readonlyAttr }} value="{{ old('qty', $item->qty) }}">
                         </div>
                     </div>
 

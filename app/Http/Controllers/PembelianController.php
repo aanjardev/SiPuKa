@@ -268,7 +268,7 @@ class PembelianController extends Controller
             'kondisi_kalibrasi_fokus' => 'nullable|string|max:50',
             'kondisi_flash' => 'nullable|string|max:100',
             'kondisi_sound_mic' => 'nullable|string|max:50',
-            'kondisi_lain_lain' => 'nullable|string|max:255',
+            'kondisi_lain_lain' => 'nullable|string|max:5000',
             'kelengkapan_awal' => 'nullable|string', // Ini dari JS
         ];
 
@@ -295,6 +295,7 @@ class PembelianController extends Controller
             array_merge($itemRules, $parentRules),
             [
                 'perusahaan_cabang_id.exists' => 'Toko tidak tersedia atau sedang non-aktif.',
+                'max.string' => 'Kolom :attribute maksimal :max karakter.',
             ]
         );
 
@@ -367,7 +368,7 @@ class PembelianController extends Controller
             'kondisi_kalibrasi_fokus' => 'nullable|string|max:50',
             'kondisi_flash' => 'nullable|string|max:100',
             'kondisi_sound_mic' => 'nullable|string|max:50',
-            'kondisi_lain_lain' => 'nullable|string|max:255',
+            'kondisi_lain_lain' => 'nullable|string|max:5000',
             'kelengkapan' => 'nullable|string',
         ];
 
@@ -375,7 +376,9 @@ class PembelianController extends Controller
             $request->merge(['kelengkapan' => $request->input('kelengkapan_awal')]);
         }
 
-        $validator = Validator::make($request->all(), $itemRules);
+        $validator = Validator::make($request->all(), $itemRules, [
+            'max.string' => 'Kolom :attribute maksimal :max karakter.',
+        ]);
 
         if ($validator->fails()) {
             return response()->json([

@@ -167,6 +167,7 @@ export default class CustomerEditModal {
         }
 
         this.sanitizePhoneInputs();
+        if (window.FormValidator && !FormValidator.validateForm(this.form)) return;
         const data = Object.fromEntries(new FormData(this.form).entries());
         const id = data.customer_id || this.customerIdInput?.value || "";
         const url = this.buildUrl(this.updateUrlTemplate, id);
@@ -201,6 +202,7 @@ export default class CustomerEditModal {
             this.hideModalSafely();
             this.showAlert("Customer berhasil diperbarui.", "success");
         } else if (!handled && result?.errors) {
+            window.FormValidator?.showErrors(this.form, result.errors);
             const messages = Object.values(result.errors)
                 .flat()
                 .filter(Boolean);

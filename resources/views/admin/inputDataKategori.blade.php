@@ -49,7 +49,7 @@
                                         <i class="fa-solid fa-tag"></i>
                                     </span>
                                     <input type="text"
-                                        name="nama_kategori"
+                                        name="nama_kategori" data-pattern-message="Nama kategori hanya boleh berisi huruf, angka, spasi, garis bawah, titik, koma, dan tanda hubung." pattern="[A-Za-z0-9_\s.,\x2D]+" maxlength="50"
                                         id="nama_kategori"
                                         class="form-control border-start-0 ps-2 required-field @error('nama_kategori') is-invalid @enderror"
                                         style="height: 45px;"

@@ -85,6 +85,7 @@ export default class CustomerModal {
         }
 
         this.sanitizePhoneInputs();
+        if (window.FormValidator && !FormValidator.validateForm(this.form)) return;
         const data = Object.fromEntries(new FormData(this.form).entries());
 
         this.btn.disabled = true;
@@ -121,6 +122,7 @@ export default class CustomerModal {
             this.hideModalSafely();
             this.showAlert("Customer berhasil disimpan.", "success");
         } else if (!handled && result?.errors) {
+            window.FormValidator?.showErrors(this.form, result.errors);
             const messages = Object.values(result.errors)
                 .flat()
                 .filter(Boolean);
