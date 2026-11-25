@@ -24,6 +24,40 @@ Jangan menjalankan `db:seed` atau `migrate:fresh` pada production. Seeder proyek
 
 Jika migration gagal, hentikan deployment dan pulihkan backup database sebelum mengulang. Jangan menjalankan rollback otomatis bila migration berisi transformasi data tanpa terlebih dahulu memeriksa dampaknya.
 
+## Cron dan antrean upload gambar
+
+Gunakan `QUEUE_CONNECTION=database` pada server dan pastikan migration tabel
+`jobs` serta `failed_jobs` sudah diterapkan. Scheduler Laravel sudah memproses
+antrean setiap menit. Daftarkan satu cron pada hosting menggunakan path PHP CLI
+dan direktori aplikasi yang sebenarnya (contoh berikut harus disesuaikan):
+
+```cron
+* * * * * cd /home/USER/aplikasi && /usr/bin/php artisan schedule:run >> /home/USER/aplikasi/storage/logs/scheduler.log 2>&1
+```
+
+Gunakan pengguna OS pemilik aplikasi, bukan root. Pada cPanel, entri yang sama
+dapat dibuat melalui menu Cron Jobs; pada VPS bisa dipasang melalui `crontab -e`
+atau lewat SSH otomatis. Setelah mengganti konfigurasi antrean, perbarui cache
+konfigurasi melalui prosedur deploy di atas.
+
+Worker dijalankan di background dan dibatasi satu proses scheduler pada satu
+server. Job gambar memiliki timeout 300 detik; `retry_after` 360 detik mencegah
+job diambil ulang sebelum timeout. `--max-time=50` membatasi lama worker menerima
+job baru, tetapi job yang sudah berjalan tetap dapat memerlukan 300 detik.
+Pastikan batas proses hosting mengizinkan durasi tersebut serta PHP CLI memiliki
+ekstensi `pcntl` untuk menegakkan timeout. Untuk beberapa server atau antrean besar,
+gunakan satu worker terkelola Supervisor/systemd dan nonaktifkan jadwal worker
+ini agar pengaturan proses tidak tumpang tindih.
+
+Foto produk diproses melalui antrean. Logo, poster, dan screenshot testimoni
+diunggah langsung melalui alur masing-masing. Semua memerlukan konfigurasi R2
+yang benar; cron tidak memperbaiki kredensial R2 dan tidak memindahkan otomatis
+gambar yang sebelumnya tersimpan melalui fallback lokal.
+
+Verifikasi server: `php artisan schedule:list`, log `storage/logs/scheduler.log`,
+dan `php artisan queue:failed`. Jangan menjalankan retry seluruh job gagal tanpa
+meninjau penyebab dan kondisi file sementara terlebih dahulu.
+
 ## Catatan kondisi pembelian
 
 Migration `2026_11_25_000000_expand_purchase_condition_notes` memperluas kolom
